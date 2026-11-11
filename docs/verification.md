@@ -9,6 +9,7 @@ python3 scripts/validate_repo.py
 python3 -m unittest discover -s tests -v
 python3 skills/proof-before-review/scripts/check_packet.py skills/proof-before-review/examples/packet.json
 python3 skills/measure-the-path/scripts/summarize_intervals.py skills/measure-the-path/examples/spans.json
+python3 skills/walk-the-document/scripts/docwalk.py outline skills/walk-the-document/examples/sample-guideline.md --depth 2
 ```
 
 The packet command checks a deliberately synthetic local example. It must not be represented as evidence for a real pull request.
@@ -19,12 +20,14 @@ The packet command checks a deliberately synthetic local example. It must not be
 - Local Markdown link existence, in-folder skill links, and no symlinks.
 - Proof packet malformed inputs, revision drift, missing/changed evidence, failed/not-run/blocked checks, and pass bookkeeping.
 - Interval overlap, nesting, gaps, invalid numbers, and a specified observation window.
+- Document reader: section nesting, exact offsets for find and read, budget cuts with a continuing cursor, page and line ranges, files without headings, non-ASCII text, and refused requests.
 
 ## What remains human or runtime work
 
 - Whether a scenario matches the user's actual goal and the expected output is independent.
 - Whether a test is meaningful, a receipt is authentic, or declared check coverage is complete.
 - Whether a handoff has stopped the old writer; a JSON field is not a lock.
+- Whether reading a document by place improves answers or cost on real long documents; no benchmark result is included.
 - Actual host installation/discovery, model behavior, live provider compatibility, authorization, and spending controls.
 - Confidentiality and legal review. The publication scan flags common patterns but is not a complete secret or privacy audit.
 
