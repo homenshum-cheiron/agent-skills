@@ -87,7 +87,13 @@ These skills do not grant permission to publish, spend, modify production, or se
 - An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines, or character ranges with exact offsets. It does not rank, embed, call a model, or convert PDF or HTML.
 - Repository checks for package structure, the README catalog, and local links, plus unit tests.
 
-**Not implemented:** a live orchestration service, a model router, spend enforcement, distributed locking or fencing, a production monitor, or an auto-fix agent. An example handoff, ledger line, coverage score, or HTML mock does not create those systems.
+**Not implemented:** a live orchestration service, a model router, spend enforcement, distributed locking or fencing, a production monitor, an auto-fix agent, or a recursive self-improvement loop. An example handoff, ledger line, coverage score, or HTML mock does not create those systems.
+
+## What has actually been shown
+
+Use this collection as human-loaded methods plus offline record checks. It does not launch a task loop or an improvement loop. Documentation is present. Deterministic checks are offline and partial. Task autonomy is unknown. Repeated improvement and meta-improvement are not demonstrated. Those are separate claims, not a ladder and not a score. The table, the diagram with no arrows, and the sidecar agree in [the evidence map](docs/autonomy.md). A numeric chart waits until an attempt census exists, including failures. A required human approval is a policy, not a capability failure, and it is not dropped from a human-burden count. Missing logs are unknown, not zero.
+
+If you need an executed harness optimizer or a study of how people supervise agents, use the related work named on that page. Their results are not a rate for this repository.
 
 Run the local checks with Python 3.10+ and no third-party dependencies:
 

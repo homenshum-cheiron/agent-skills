@@ -14,6 +14,7 @@ python3 skills/walk-the-document/scripts/docwalk.py outline skills/walk-the-docu
 python3 skills/measure-the-path/scripts/check_trace_record.py skills/measure-the-path/examples/trace-hypothetical.json
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothetical.json
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothesis-only.json
+python3 scripts/check_autonomy_map.py docs/autonomy-map.json
 ```
 
 The packet command checks a deliberately synthetic local example. The coverage command checks mark arithmetic for another synthetic example. Neither is evidence for a real pull request. Exit 0 from the coverage scorer means the nine marks are well formed. It does not mean every prompt was supported.
@@ -37,6 +38,7 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Whether a handoff has stopped the old writer; a JSON field is not a lock.
 - Whether reading a document by place improves answers or cost on real long documents; no benchmark result is included.
 - Whether a method match improves a real task. `match-methods` ships no runner and no score. Publishing it is not a product improvement.
+- Whether the collection is autonomous or self-improving. `scripts/check_autonomy_map.py` only checks that the qualitative map does not claim a number or a demonstrated path. A passing map is not that proof.
 - Actual host installation/discovery, model behavior, live provider compatibility, authorization, and spending controls.
 - Confidentiality and legal review. The publication scan flags common patterns but is not a complete secret or privacy audit.
 

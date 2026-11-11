@@ -1,0 +1,74 @@
+{
+  "figure_id": "autonomy-map",
+  "as_of": "2026-11-11",
+  "evidence_class": "mixed",
+  "numeric_chart_allowed": false,
+  "collection": {
+    "name": "homenshum-cheiron/agent-skills",
+    "commit": "a493e6374a7b6c31c5baafbbe0224ba6d9c4a56a",
+    "note": "This map describes that pin. The map file itself is a later documentation commit and adds no runtime."
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "Workflow documentation",
+      "status": "documented",
+      "human_intervention_remains": "People still choose, adapt, and load a skill.",
+      "missing_proof": "Publication does not certify that a host follows the text.",
+      "evidence_note": "README catalog and skill folders at the pinned commit."
+    },
+    {
+      "id": 2,
+      "name": "Deterministic contracts",
+      "status": "offline_partial",
+      "human_intervention_remains": "A person still decides whether a passing check is about the right claim.",
+      "missing_proof": "Local checkers do not prove a product gain or grant permission.",
+      "evidence_note": "Offline validators and unit tests described in docs/verification.md."
+    },
+    {
+      "id": 3,
+      "name": "Task autonomy within stated permissions",
+      "status": "unknown",
+      "human_intervention_remains": "Unknown. Missing intervention logs are not zero.",
+      "missing_proof": "No published census of attempts, failures, timeouts, abstentions, or rescues.",
+      "evidence_note": "The runtime sketch in the method notes is an unvalidated hypothesis."
+    },
+    {
+      "id": 4,
+      "name": "Repeated improvement",
+      "status": "not_demonstrated",
+      "human_intervention_remains": "A test, adopt, or rollback would still need an existing authorization gate.",
+      "missing_proof": "No published frozen-target lineage with held-out confirmation.",
+      "evidence_note": "The method is written. An end-to-end promotion lineage is not."
+    },
+    {
+      "id": 5,
+      "name": "Meta-improvement",
+      "status": "not_demonstrated",
+      "human_intervention_remains": "A change to the improvement process would need its own authorization and evaluation.",
+      "missing_proof": "No shown mechanism plus an effect on a later improvement.",
+      "evidence_note": "A prompt edit alone would not establish this claim."
+    }
+  ],
+  "prose_claims": [
+    {"stage_id": 1, "status": "documented"},
+    {"stage_id": 2, "status": "offline_partial"},
+    {"stage_id": 3, "status": "unknown"},
+    {"stage_id": 4, "status": "not_demonstrated"},
+    {"stage_id": 5, "status": "not_demonstrated"}
+  ],
+  "diagram_edges": [],
+  "policy_approval_is_capability_failure": false,
+  "sample": {
+    "n_eligible_attempts": null,
+    "intervention_log_present": false,
+    "interventions": {
+      "policy_approval": null,
+      "rescue": null,
+      "clarification": null,
+      "initial_specification": null,
+      "human_active_seconds": null,
+      "human_wait_seconds": null
+    }
+  }
+}
