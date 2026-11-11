@@ -13,5 +13,6 @@ Start with the smallest tool and context surface that can complete the user's sc
 4. Keep model context separate from operational diagnostics. A health-control field should not accidentally become answer evidence or a prompt instruction.
 5. Test relevant failures: large attachments, duplicate names, stale IDs, partial results, pagination, retries, and interrupted writes. A happy-path example does not establish a complete loader.
 6. Compare the simpler baseline on the same scenario. Measure outcome, latency, tokens, and operational burden before keeping a new layer.
+7. The size of an installed catalog is not the request. Measure the skill bodies and tool definitions actually sent, repeated content, cache use, and selection quality. A prompt-cache hit does not shrink the prompt and does not prove a source is current. Hiding a tool the next turn needs is an anti-fit. Measure misses before omitting tools.
 
 Use [the example](examples/worked.md). A skill can describe a capability that still needs implementation; label that gap instead of claiming the tool exists.

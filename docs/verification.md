@@ -31,6 +31,7 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Whether a test is meaningful, a receipt is authentic, a coverage rationale is true, or declared check coverage is complete.
 - Whether a handoff has stopped the old writer; a JSON field is not a lock.
 - Whether reading a document by place improves answers or cost on real long documents; no benchmark result is included.
+- Whether a method match improves a real task. `match-methods` ships no runner and no score. Publishing it is not a product improvement.
 - Actual host installation/discovery, model behavior, live provider compatibility, authorization, and spending controls.
 - Confidentiality and legal review. The publication scan flags common patterns but is not a complete secret or privacy audit.
 

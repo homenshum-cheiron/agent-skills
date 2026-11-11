@@ -30,6 +30,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | A long answer needs to be scannable | [Scan long answers](skills/scan-long-answers/SKILL.md) |
 | A written procedure and the actual goal disagree, including when people and feelings are the subject | [First principles](skills/first-principles/SKILL.md) |
 | Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
+| A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
@@ -44,6 +45,7 @@ The short version of [the decision log](docs/decisions.md):
 - Proof names the base, the merge-base, and the tip, and it uses the surface the claim needs. Nine pull-request prompts are coverage, reported as supported over applicable. A bot approval is not human approval. Declared project gates still govern review.
 - The working set stays at most 16 rows. Corrections are appended where the next session can retrieve them, including the line they replaced.
 - Judgment is composed for the situation, including feelings and relationships. A longer private list is not part of this publication.
+- An observed failure starts from the usable outcome and the evidence already in hand. Candidates, including no change, are characterized before a heavier method is chosen. A feature firing is not an improved task, and publishing the note is not that improvement.
 
 ## Package
 
@@ -54,7 +56,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/validate_repo.py` checks package structure, local links, the README catalog, and common publication patterns.
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Eighteen workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Nineteen workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -77,7 +79,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Eighteen written workflows, one per folder under `skills/`, each with a worked synthetic example.
+- Nineteen written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
