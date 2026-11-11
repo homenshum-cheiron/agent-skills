@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "reviewed_base_revision": "eb7ddc302fc4fcc120deef2fab4067b1340e4fc4",
+  "recorded_at_utc": "2026-11-11T00:38:05.332681+00:00",
+  "tests": [
+    {
+      "runtime": "Python 3.9.6",
+      "scope": "32 original tests",
+      "status": "passed",
+      "count": 32,
+      "limit": "Below documented supported version."
+    },
+    {
+      "runtime": "Python 3.15.2",
+      "scope": "original plus four independent test methods, before source fix",
+      "status": "failed",
+      "passed": 35,
+      "failed": 1
+    },
+    {
+      "runtime": "Python 3.14.7",
+      "scope": "five focused independent methods, before fix",
+      "status": "failed",
+      "passed": 4,
+      "failed": 1
+    },
+    {
+      "runtime": "Python 3.15.2",
+      "scope": "full local suite after one-line fix",
+      "status": "passed",
+      "count": 37
+    },
+    {
+      "runtime": "Python 3.15.2",
+      "scope": "structure validator",
+      "status": "passed",
+      "skills": 10,
+      "issues": 0
+    }
+  ],
+  "behavior_trials": {
+    "status": "not_run",
+    "prepared_cases": 12,
+    "model_outputs": 0
+  },
+  "source_sha256": {
+    "skills/proof-before-review/scripts/check_packet.py": "cc23ea2e3b6b91baa88bdca005e78de2da8eb7896581a18601e595628ff0351c",
+    "tests/test_empirical_helpers.py": "03519cdbea76ab3d669360766bd193400b1a65392d587cdb4481e3f6751d1404",
+    "evals/cases.json": "846eebb97deb302edbf79617f51e76b8e83fa37d0c70d79ac167eff805423837",
+    "evals/answer-key.json": "498c6772038fa0c9a647811694e7eb1c4a7aba16b0f05ee05d89add0ec64f294"
+  },
+  "limits": [
+    "Deterministic helper checks are not model-effectiveness tests.",
+    "No paid provider calls or live orchestration tests were performed."
+  ]
+}
