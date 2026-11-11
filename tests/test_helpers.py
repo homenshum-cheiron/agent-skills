@@ -19,6 +19,7 @@ def load(name, relative):
 
 
 packet = load("packet", "skills/proof-before-review/scripts/check_packet.py")
+coverage = load("coverage", "skills/proof-before-review/scripts/score_coverage.py")
 timing = load("timing", "skills/measure-the-path/scripts/summarize_intervals.py")
 repo = load("repo", "scripts/validate_repo.py")
 
@@ -210,6 +211,65 @@ class RepositoryTests(unittest.TestCase):
             (root / "README.md").write_text("/" + "Users" + "/example/private")
             errors, _ = repo.validate(root)
             self.assertTrue(any("Publication scan" in error for error in errors))
+
+    def test_readme_catalog_miss_detected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            package = root / "skills" / "example"
+            (package / "examples").mkdir(parents=True)
+            (package / "SKILL.md").write_text('---\nname: example\ndescription: "Example."\n---\n')
+            (package / "examples" / "worked.md").write_text("synthetic\n")
+            (root / "README.md").write_text("No skill link.\n")
+            errors, count = repo.validate(root)
+            self.assertEqual(count, 1)
+            self.assertTrue(any("catalog misses example" in error for error in errors))
+
+
+class CoverageTests(unittest.TestCase):
+    def document(self):
+        return json.loads((ROOT / "skills/proof-before-review/examples/coverage.json").read_text())
+
+    def test_fixture_is_six_of_seven(self):
+        result = coverage.score(self.document())
+        self.assertEqual(result["status"], "scored")
+        self.assertEqual(result["supported"], 6)
+        self.assertEqual(result["applicable"], 7)
+        self.assertEqual(result["missing"], ["live_evidence"])
+        self.assertEqual(len(result["na"]), 2)
+        self.assertEqual(result["report"], "6/7 applicable, plus 2 N/A with reasons")
+        self.assertIn("quality", result["limit"])
+
+    def test_fixed_nine_claim_is_invalid(self):
+        document = self.document()
+        document["claimed_report"] = "6/9 with two N/A"
+        result = coverage.score(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertIn("6/7 applicable, plus 2 N/A with reasons", result["findings"][0])
+
+    def test_na_without_rationale_is_invalid(self):
+        document = self.document()
+        document["items"][2]["rationale"] = " "
+        result = coverage.score(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("rationale" in finding for finding in result["findings"]))
+
+    def test_omitted_prompt_is_invalid(self):
+        document = self.document()
+        document["items"] = [item for item in document["items"] if item["id"] != "live_evidence"]
+        document.pop("claimed_report")
+        result = coverage.score(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("live_evidence" in finding for finding in result["findings"]))
+
+    def test_malformed_coverage_cli(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = Path(tmp) / "bad.json"
+            bad.write_text("{")
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "skills/proof-before-review/scripts/score_coverage.py"), str(bad)],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 3)
+            self.assertEqual(json.loads(result.stdout)["status"], "invalid")
 
 
 if __name__ == "__main__":

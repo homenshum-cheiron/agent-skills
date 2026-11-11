@@ -78,6 +78,20 @@ def validate(root=ROOT):
             errors.append(f"Entrypoint too large: {path.relative_to(root)}")
         if not (path.parent / "examples" / "worked.md").is_file():
             errors.append(f"Worked example missing: {path.parent.name}")
+    if skills:
+        readme_path = root / "README.md"
+        if not readme_path.is_file():
+            errors.append("README catalog missing: README.md")
+        else:
+            try:
+                catalog = readme_path.read_text()
+            except (UnicodeError, OSError):
+                errors.append("README catalog unreadable: README.md")
+            else:
+                for path in skills:
+                    token = f"skills/{path.parent.name}/SKILL.md"
+                    if token not in catalog:
+                        errors.append(f"README catalog misses {path.parent.name}")
     return errors, len(skills)
 
 

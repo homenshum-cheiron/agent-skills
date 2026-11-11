@@ -6,6 +6,8 @@ Safe parallel work: API writer implements the accepted schema; UI writer builds 
 
 Unsafe shortcut: coordinator edits the schema in a second worktree while the API writer is still running, then asks everyone to rebase.
 
-Handoff output: “API writer stopped at revision demo-v3 with a clean worktree. Receiver checked it, accepted ownership, and will add the timeout case. UI writer remains read-only on schema files. Reviewer has not approved.”
+Handoff output: “API writer stopped at revision demo-v3 with a clean worktree. Receiver checked that SHA, accepted ownership, and will add the timeout case. UI writer remains read-only on schema files. Reviewer has not approved. No compare-and-swap authority is configured, so a second session does not take the branch automatically. The handoff does not grant a merge or a message send.”
 
-This is an example of what to verify, not evidence that a real process has stopped.
+A docs typo can start on a sibling branch while demo-v3 is occupied. It does not push onto the API writer's branch. If the API writer's stop cannot be verified, the sibling session keeps reading.
+
+This is an example of what to verify, not evidence that a real process has stopped, and not a lock.

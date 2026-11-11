@@ -2,6 +2,8 @@
 
 Start with one concrete failure or costly ambiguity. Explain the decision the skill should change, give a small input/output example, and remove advice that an ordinary competent agent already knows.
 
+If a lesson extends a workflow this repository already has, change that skill. Add a new folder only when the outcome is distinct. Do not give the same workflow a second name.
+
 A skill needs a `SKILL.md` with `name` and `description` frontmatter. Add a reference or script only when it helps the actual task. Keep linked resources inside the skill folder so a single folder can be copied safely.
 
 For changes to scripts, add a regression test that would fail under the old behavior. Test negative and inconclusive outcomes as well as success. Never call a fixture result a live integration result.

@@ -8,22 +8,25 @@ The included checks can establish local package consistency and helper behavior.
 python3 scripts/validate_repo.py
 python3 -m unittest discover -s tests -v
 python3 skills/proof-before-review/scripts/check_packet.py skills/proof-before-review/examples/packet.json
+python3 skills/proof-before-review/scripts/score_coverage.py skills/proof-before-review/examples/coverage.json
 python3 skills/measure-the-path/scripts/summarize_intervals.py skills/measure-the-path/examples/spans.json
 ```
 
-The packet command checks a deliberately synthetic local example. It must not be represented as evidence for a real pull request.
+The packet command checks a deliberately synthetic local example. The coverage command checks mark arithmetic for another synthetic example. Neither is evidence for a real pull request. Exit 0 from the coverage scorer means the nine marks are well formed. It does not mean every prompt was supported.
 
 ## What the checks cover
 
 - Frontmatter names and required descriptions; bounded entrypoint size; every skill has a worked example.
+- The root README links to every skill entrypoint.
 - Local Markdown link existence, in-folder skill links, and no symlinks.
 - Proof packet malformed inputs, revision drift, missing/changed evidence, failed/not-run/blocked checks, and pass bookkeeping.
+- Coverage marks: unknown or duplicate prompts, N/A without a rationale, a claimed report that does not match supported/applicable, and the fixture's 6/7 result.
 - Interval overlap, nesting, gaps, invalid numbers, and a specified observation window.
 
 ## What remains human or runtime work
 
 - Whether a scenario matches the user's actual goal and the expected output is independent.
-- Whether a test is meaningful, a receipt is authentic, or declared check coverage is complete.
+- Whether a test is meaningful, a receipt is authentic, a coverage rationale is true, or declared check coverage is complete.
 - Whether a handoff has stopped the old writer; a JSON field is not a lock.
 - Actual host installation/discovery, model behavior, live provider compatibility, authorization, and spending controls.
 - Confidentiality and legal review. The publication scan flags common patterns but is not a complete secret or privacy audit.
