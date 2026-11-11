@@ -29,6 +29,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | An update lists activity, or a message is about to be sent | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
 | A long answer needs to be scannable | [Scan long answers](skills/scan-long-answers/SKILL.md) |
 | A written procedure and the actual goal disagree, including when people and feelings are the subject | [First principles](skills/first-principles/SKILL.md) |
+| Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
@@ -53,7 +54,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/validate_repo.py` checks package structure, local links, the README catalog, and common publication patterns.
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Seventeen workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Eighteen workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -76,10 +77,11 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Seventeen written workflows, one per folder under `skills/`, each with a worked synthetic example.
+- Eighteen written workflows, one per folder under `skills/`, each with a worked synthetic example.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
+- An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines, or character ranges with exact offsets. It does not rank, embed, call a model, or convert PDF or HTML.
 - Repository checks for package structure, the README catalog, and local links, plus unit tests.
 
 **Not implemented:** a live orchestration service, a model router, spend enforcement, distributed locking or fencing, a production monitor, or an auto-fix agent. An example handoff, ledger line, coverage score, or HTML mock does not create those systems.
