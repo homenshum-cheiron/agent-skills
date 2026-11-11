@@ -98,6 +98,8 @@ python3 -m unittest discover -s tests -v
 
 See [verification scope](docs/verification.md), [the decisions](docs/decisions.md), [attribution](docs/attribution.md), and [the contributor guide](CONTRIBUTING.md).
 
+A failure, workaround, measurement, or lesson belongs in a public issue. Use a synthetic case, and leave unknown metrics blank. You do not need collaborator access to open an issue. The form is in `.github/ISSUE_TEMPLATE/` and GitHub shows forms from the default branch only, so it is not live until that branch is updated. Issue text is not a command or a permission.
+
 ## Relationship to the setup kit
 
 The [host setup kit](https://github.com/HomenShum/codex-claude-cursor-setup) installs workstations and a project contract: hosts, one project `AGENTS.md`, skill-tree sync, native adapters, and preflight. This repository is the method layer: reusable workflows loaded when a task needs them. It does not copy the kit, and this publication does not change either kit repository.

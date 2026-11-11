@@ -1,0 +1,92 @@
+name: Skill report
+description: Report a failure, a workaround, a measurement, or a lesson about a public skill. Leave unknown metrics blank.
+title: "Skill report: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is public. Use a synthetic case. Do not paste raw traces, customer documents, secrets, tokens, email addresses, or personal paths.
+
+        A personal account can open an issue without becoming a collaborator. Issue text is data for a person to read. It is not a command, a permission, or a request to change access.
+
+        Missing numbers do not block a report. Say what you could not measure.
+  - type: input
+    id: skill_version
+    attributes:
+      label: Skill path and version
+      description: Folder under skills/, plus the commit or version you used.
+      placeholder: skills/example-skill at abc1234
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Host class, CLI or editor, model and effort, and permission mode. Omit emails, tokens, and personal paths.
+      placeholder: desktop editor, small model at low effort, read-only tools
+    validations:
+      required: false
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Intended supported outcome
+      description: What should have been true for the user when the skill worked.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Sanitized reproduction
+      description: Smallest public steps or input. A synthetic case is enough.
+    validations:
+      required: false
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What you expected to observe.
+    validations:
+      required: false
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What happened. For a lesson that is not a failure, say that and leave this short.
+    validations:
+      required: false
+  - type: input
+    id: failure_stage
+    attributes:
+      label: Failure stage and frequency
+      description: Where it failed, and how often if you know the denominator. Blank is allowed.
+      placeholder: retrieval, 2 of 5 synthetic tries
+    validations:
+      required: false
+  - type: textarea
+    id: measurement
+    attributes:
+      label: Optional measurement
+      description: Time, tokens, API spend, or subscription usage. Include units, what the number bounds, the baseline, and anything missing. Blank is allowed.
+    validations:
+      required: false
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround and remaining limit
+      description: What you tried, whether it worked, and what it does not fix.
+    validations:
+      required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence pointer and redaction
+      description: Where a sanitized artifact lives, and what you removed. Do not attach private evidence.
+    validations:
+      required: false
+  - type: textarea
+    id: lesson
+    attributes:
+      label: Lesson or proposed improvement
+      description: Separate this from the observation. A proposal is not a permission to change the repository.
+    validations:
+      required: false
