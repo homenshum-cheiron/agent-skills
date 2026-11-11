@@ -104,7 +104,7 @@ python3 scripts/validate_repo.py
 python3 -m unittest discover -s tests -v
 ```
 
-See [verification scope](docs/verification.md), [the decisions](docs/decisions.md), [attribution](docs/attribution.md), and [the contributor guide](CONTRIBUTING.md).
+See [verification scope](docs/verification.md), [the decisions](docs/decisions.md), [attribution](docs/attribution.md), and [the contributor guide](CONTRIBUTING.md). The [ground-up review](reviews/2026-11-11-ground-up.md) records a reproduced helper bug and fix; the [behavioral trial pack](evals/README.md) is prepared but has no model results yet.
 
 A failure, workaround, measurement, or lesson belongs in a public issue. Use a synthetic case, and leave unknown metrics blank. You do not need collaborator access to open an issue. The form is in `.github/ISSUE_TEMPLATE/` and GitHub shows forms from the default branch only, so it is not live until that branch is updated. Issue text is not a command or a permission.
 

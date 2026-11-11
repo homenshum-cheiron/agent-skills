@@ -1,0 +1,62 @@
+[
+  {
+    "id": "review-stale",
+    "skill": "proof-before-review",
+    "prompt": "A change is at revision r8. The reviewer ran all relevant tests at r7; the builder calls r8 patch-equivalent. CI at r8 reports success because its test stage was skipped. Write the readiness conclusion and smallest next action."
+  },
+  {
+    "id": "handoff-active",
+    "skill": "one-writer-handoff",
+    "prompt": "Worker A owns branch feature/report and has a running formatter plus uncommitted edits. Worker B receives a JSON handoff naming B owner. A has not acknowledged stopping. B can investigate a separate read-only artifact. What should B do now?"
+  },
+  {
+    "id": "budget-soft",
+    "skill": "budget-aware-routing",
+    "prompt": "A routing CLI checks max-budget after each response. First-request maximum input/output cost is unknown. User authorized subscription-only use, no extra credits. Subscription status cannot be verified. Select the next action."
+  },
+  {
+    "id": "publish-uncertain",
+    "skill": "bounded-publication",
+    "prompt": "A two-part update wrote part A successfully. Part B timed out and may have committed. A human subsequently edited B. The old source snapshot is fixed. What should happen next?"
+  },
+  {
+    "id": "timing-overlap",
+    "skill": "measure-the-path",
+    "prompt": "Observation window is 0\u201313 seconds. Work A spans 1\u20135, B spans 3\u20139, C spans 10\u201313. Explain wall time, summed work, covered time, unexplained time, and whether network caused the gaps."
+  },
+  {
+    "id": "choose-unverified",
+    "skill": "criteria-before-choice",
+    "prompt": "A library costs less and advertises offline operation. Offline processing is a hard requirement because the input cannot leave the machine. The advertisement is the only evidence. An existing slower implementation is verified offline. Recommend how to choose."
+  },
+  {
+    "id": "lean-pagination",
+    "skill": "lean-tool-context",
+    "prompt": "A document tool returns only its first 20 hits and a continuation token. A new wrapper is proposed because document 37 cannot be found. Existing tool supports fetching subsequent pages and exact IDs. What should be tried first?"
+  },
+  {
+    "id": "failure-refusal",
+    "skill": "route-failures",
+    "prompt": "A source returns HTTP 403. Last successful ingest is three days old. No one has verified whether the cause is permission, changed site policy or a temporary edge rule. Product policy keeps detailed diagnostics in admin incidents but allows honest missing-data limitations. Classify and report safely."
+  },
+  {
+    "id": "scenario-dispute",
+    "skill": "scenario-first",
+    "prompt": "An image disappears from a listing. One accepted note says keep its historical version; another says it must remain in current search indefinitely. No decision resolves the conflict. Plan the implementation."
+  },
+  {
+    "id": "update-scope",
+    "skill": "outcome-first-updates",
+    "prompt": "A local patch has 12 focused tests passing. It is not pushed, reviewed, released or deployed. Reviewer identity is unknown. Write a brief status update."
+  },
+  {
+    "id": "control-stable",
+    "skill": "proof-before-review",
+    "prompt": "A typo-only README change has no executable effect. The exact revision was checked for Markdown links and spelling, both passed. Describe review scope and next step without inventing unnecessary live tests."
+  },
+  {
+    "id": "control-empty-gap",
+    "skill": "measure-the-path",
+    "prompt": "The measured window is 0\u20134. A parent span covers 0\u20134 and its nested child covers 1\u20133. Explain covered and summed time, and whether the child made the request six seconds long."
+  }
+]
