@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "export_policy": "minimal",
+  "hypothetical": true,
+  "ledger": [
+    {
+      "generation_id": "g-direct",
+      "component": "input",
+      "tokens": 12,
+      "class": "measured",
+      "counts_once": true
+    }
+  ],
+  "spans": [
+    {"id": "queue", "kind": "wait", "start_ms": 0, "end_ms": 4, "first_token_ms": null, "clock": "monotonic"},
+    {"id": "model", "kind": "model", "start_ms": 4, "end_ms": 9, "first_token_ms": 6, "clock": "monotonic"}
+  ],
+  "claimed_wall_ms": 9,
+  "figures": [
+    {"id": "wall", "name": "wall_ms", "class": "derived", "value": 9, "basis": "span_merge"},
+    {"id": "ttft", "name": "ttft", "class": "measured", "value": 6, "basis": "first_token_ms"}
+  ],
+  "actions": [
+    {"id": "next", "kind": "recommendation", "authority": "not_granted", "authority_source": "recommendation"}
+  ]
+}

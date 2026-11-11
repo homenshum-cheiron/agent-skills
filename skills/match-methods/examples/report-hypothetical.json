@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "method-comparison",
+  "hypothetical": true,
+  "audience": "app_qa",
+  "data_status": "toy",
+  "current": {"behavior": "direct answer, no extra fetch"},
+  "desired": {"behavior": "same answer with the deciding sentence visible"},
+  "figures": [
+    {"id": "wait", "name": "queue_ms", "class": "measured", "value": 4, "basis": "toy span"}
+  ],
+  "prose_claims": [
+    {"figure_id": "wait", "class": "measured", "value": 4}
+  ],
+  "visuals": [
+    {
+      "type": "comparison_matrix",
+      "units": "toy milliseconds",
+      "denominator": "one hypothetical supported answer",
+      "sample_size": 1,
+      "class": "hypothetical",
+      "table": [{"id": "no-change", "queue_ms": 4}],
+      "series": [{"id": "no-change", "queue_ms": 4}]
+    }
+  ],
+  "actions": [
+    {"id": "next", "kind": "recommendation", "authority": "not_granted", "authority_source": "recommendation"}
+  ]
+}

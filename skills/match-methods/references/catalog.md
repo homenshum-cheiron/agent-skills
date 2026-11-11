@@ -48,6 +48,17 @@ Rules, existing classifiers, and small bounded calls come before a training prop
 
 The [A2A specification](https://a2a-protocol.org/latest/specification/), fetched the same day, is an interoperability protocol for independently deployed agents. In that text, Send Message may be idempotent and may use `messageId` to detect duplicates. Cancel is described as idempotent, and the cancel operation also says success is not guaranteed. This read did not show a mandatory transport idempotency key. Public tracker titles, not comment experiments: [issue 1893](https://github.com/a2aproject/A2A/issues/1893) is a closed proposal for a standard idempotency-key header, and [issue 1987](https://github.com/a2aproject/A2A/issues/1987) is an open idempotency and safe-retry epic. A reported retry count from a comment on that epic was not re-read and is not cited.
 
+## More candidates, not prescriptions
+
+Each item below is something to test against no change. None is a universal fix. Overlapping savings are not added. No benefit figure is claimed here.
+
+- A floor on fetches that are actually on the path, versus extra fetches.
+- A URL the tool already showed, versus another lookup by id.
+- A growing conversation or tool payload, versus a static prefix.
+- Queue, sandbox, or rate-limit wait, versus model delay.
+- Delivery time, versus a tail of persistence or grading.
+- Cache reuse, path changes, deferred tool definitions, reuse of a parsed source, independent batching, and a bounded retry of a blocked source. Each can fail its anti-fit. Measure before keeping one.
+
 ## What was left out on purpose
 
 A RAG-paper claim that BM25 won on FEVER, a 2016-versus-2018 index swap, a prompt-cache header dated 2026-10-21, a closed community issue about `git status` in a cached prefix, a Hacker News cost anecdote, and a Reddit thread whose comments were not retrieved are omitted. They were not needed, or they were not confirmed in this pass.

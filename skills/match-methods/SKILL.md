@@ -25,7 +25,7 @@ Internal causes include the tool, schema, what was loaded, prompts, rules, data,
 
 Keep current behavior. Add a method only when its mechanism fits this failure. Drop a hard-constraint or known anti-fit failure. A missing prerequisite is a separate costed proposal.
 
-For each survivor record mechanism, fit, anti-fit, prerequisites, evidence and its transfer limit, tradeoffs, composition, and the cheapest rejecting check. Fields and re-read public figures are in [the catalog](references/catalog.md). A citation is not proof a pipeline ran here.
+For each survivor record mechanism, fit, anti-fit, prerequisites, evidence and its transfer limit, tradeoffs, composition, and the cheapest rejecting check. Fields, extra candidates, and re-read public figures are in [the catalog](references/catalog.md). A citation is not proof a pipeline ran here. An unvalidated two-loop sketch is in [loops](references/loops.md). Honest report shapes are in [report formats](references/reports/README.md). A recommendation there is not permission.
 
 Compare quality, latency, throughput, usage, and maintenance without inventing a rank. Combine methods only across stages, and watch interference. Prefer a lean design when heavier benefit is unevidenced. Say what would change the pick. Test competing causes separately. A unit cost needs an explicit denominator.
 

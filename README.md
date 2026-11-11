@@ -83,6 +83,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
+- A trace-record checker and a report checker. They reject a few dishonest shapes. They do not run an architecture or certify a result.
 - An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines, or character ranges with exact offsets. It does not rank, embed, call a model, or convert PDF or HTML.
 - Repository checks for package structure, the README catalog, and local links, plus unit tests.
 
