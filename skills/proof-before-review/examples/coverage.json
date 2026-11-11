@@ -1,0 +1,14 @@
+{
+  "items": [
+    {"id": "plain_summary", "mark": "supported"},
+    {"id": "how_it_works", "mark": "supported"},
+    {"id": "flowchart", "mark": "na", "rationale": "Comment-only typo fix. No runtime path change."},
+    {"id": "test_command", "mark": "supported"},
+    {"id": "structured_io", "mark": "na", "rationale": "No structured-data contract on a comment-only change."},
+    {"id": "code_lines", "mark": "supported"},
+    {"id": "live_evidence", "mark": "missing"},
+    {"id": "unproven_risks", "mark": "supported"},
+    {"id": "stack_position", "mark": "supported"}
+  ],
+  "claimed_report": "6/7 applicable, plus 2 N/A with reasons"
+}

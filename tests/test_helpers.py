@@ -19,7 +19,10 @@ def load(name, relative):
 
 
 packet = load("packet", "skills/proof-before-review/scripts/check_packet.py")
+coverage = load("coverage", "skills/proof-before-review/scripts/score_coverage.py")
 timing = load("timing", "skills/measure-the-path/scripts/summarize_intervals.py")
+trace = load("trace", "skills/measure-the-path/scripts/check_trace_record.py")
+report = load("report", "skills/match-methods/scripts/check_report.py")
 repo = load("repo", "scripts/validate_repo.py")
 
 
@@ -210,6 +213,166 @@ class RepositoryTests(unittest.TestCase):
             (root / "README.md").write_text("/" + "Users" + "/example/private")
             errors, _ = repo.validate(root)
             self.assertTrue(any("Publication scan" in error for error in errors))
+
+    def test_readme_catalog_miss_detected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            package = root / "skills" / "example"
+            (package / "examples").mkdir(parents=True)
+            (package / "SKILL.md").write_text('---\nname: example\ndescription: "Example."\n---\n')
+            (package / "examples" / "worked.md").write_text("synthetic\n")
+            (root / "README.md").write_text("No skill link.\n")
+            errors, count = repo.validate(root)
+            self.assertEqual(count, 1)
+            self.assertTrue(any("catalog misses example" in error for error in errors))
+
+
+class CoverageTests(unittest.TestCase):
+    def document(self):
+        return json.loads((ROOT / "skills/proof-before-review/examples/coverage.json").read_text())
+
+    def test_fixture_is_six_of_seven(self):
+        result = coverage.score(self.document())
+        self.assertEqual(result["status"], "scored")
+        self.assertEqual(result["supported"], 6)
+        self.assertEqual(result["applicable"], 7)
+        self.assertEqual(result["missing"], ["live_evidence"])
+        self.assertEqual(len(result["na"]), 2)
+        self.assertEqual(result["report"], "6/7 applicable, plus 2 N/A with reasons")
+        self.assertIn("quality", result["limit"])
+
+    def test_fixed_nine_claim_is_invalid(self):
+        document = self.document()
+        document["claimed_report"] = "6/9 with two N/A"
+        result = coverage.score(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertIn("6/7 applicable, plus 2 N/A with reasons", result["findings"][0])
+
+    def test_na_without_rationale_is_invalid(self):
+        document = self.document()
+        document["items"][2]["rationale"] = " "
+        result = coverage.score(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("rationale" in finding for finding in result["findings"]))
+
+    def test_omitted_prompt_is_invalid(self):
+        document = self.document()
+        document["items"] = [item for item in document["items"] if item["id"] != "live_evidence"]
+        document.pop("claimed_report")
+        result = coverage.score(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("live_evidence" in finding for finding in result["findings"]))
+
+    def test_malformed_coverage_cli(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = Path(tmp) / "bad.json"
+            bad.write_text("{")
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "skills/proof-before-review/scripts/score_coverage.py"), str(bad)],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 3)
+            self.assertEqual(json.loads(result.stdout)["status"], "invalid")
+
+
+class TraceRecordTests(unittest.TestCase):
+    def document(self):
+        return json.loads((ROOT / "skills/measure-the-path/examples/trace-hypothetical.json").read_text())
+
+    def test_hypothetical_record_is_ok(self):
+        result = trace.check_trace(self.document())
+        self.assertEqual(result["status"], "ok")
+        self.assertIn("does not", result["limit"])
+
+    def test_missing_first_token_is_not_zero(self):
+        document = self.document()
+        document["spans"][1]["first_token_ms"] = None
+        document["figures"][1] = {"id": "ttft", "name": "ttft", "class": "measured", "value": 0, "basis": "invented"}
+        result = trace.check_trace(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("first-token" in finding for finding in result["findings"]))
+
+    def test_missing_class_rejects_a_number(self):
+        document = self.document()
+        document["figures"].append({"id": "gap", "name": "unexplained", "class": "missing", "value": 0})
+        self.assertEqual(trace.check_trace(document)["status"], "invalid")
+
+    def test_overlap_is_not_wall_time(self):
+        document = self.document()
+        document["spans"] = [
+            {"id": "a", "kind": "wait", "start_ms": 0, "end_ms": 6, "first_token_ms": None},
+            {"id": "b", "kind": "wait", "start_ms": 2, "end_ms": 8, "first_token_ms": None},
+        ]
+        document["claimed_wall_ms"] = 12
+        result = trace.check_trace(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("Overlapping" in finding for finding in result["findings"]))
+
+    def test_child_tokens_are_not_counted_twice(self):
+        document = self.document()
+        document["ledger"].append({
+            "generation_id": "g-child", "component": "input", "tokens": 12,
+            "class": "measured", "counts_once": True, "already_inside": "g-direct"})
+        self.assertEqual(trace.check_trace(document)["status"], "invalid")
+
+    def test_hypothesis_is_not_measured(self):
+        document = self.document()
+        document["figures"][0]["basis"] = "hypothesis"
+        document["figures"][0]["class"] = "measured"
+        self.assertEqual(trace.check_trace(document)["status"], "invalid")
+
+    def test_verdict_is_not_permission(self):
+        document = self.document()
+        document["actions"][0]["authority"] = "granted"
+        document["actions"][0]["authority_source"] = "judge"
+        self.assertEqual(trace.check_trace(document)["status"], "invalid")
+
+    def test_minimal_export_rejects_a_prompt_body(self):
+        document = self.document()
+        document["prompt_body"] = "synthetic unauthorized body"
+        result = trace.check_trace(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("prompt_body" in finding for finding in result["findings"]))
+
+
+class ReportRecordTests(unittest.TestCase):
+    def document(self):
+        return json.loads((ROOT / "skills/match-methods/examples/report-hypothetical.json").read_text())
+
+    def test_hypothetical_report_is_ok(self):
+        self.assertEqual(report.check_report(self.document())["status"], "ok")
+
+    def test_hypothesis_only_fixture_is_ok(self):
+        document = json.loads((ROOT / "skills/match-methods/examples/report-hypothesis-only.json").read_text())
+        self.assertEqual(report.check_report(document)["status"], "ok")
+
+    def test_prose_must_match_the_figure(self):
+        document = self.document()
+        document["prose_claims"][0]["value"] = 9
+        self.assertEqual(report.check_report(document)["status"], "invalid")
+
+    def test_chart_must_match_its_table(self):
+        document = self.document()
+        document["visuals"][0]["series"] = [{"id": "no-change", "queue_ms": 9}]
+        result = report.check_report(document)
+        self.assertEqual(result["status"], "invalid")
+        self.assertTrue(any("series" in finding for finding in result["findings"]))
+
+    def test_hypothesis_only_rejects_a_numeric_chart(self):
+        document = self.document()
+        document["data_status"] = "hypothesis-only"
+        self.assertEqual(report.check_report(document)["status"], "invalid")
+
+    def test_hypothesis_labeled_measured_is_invalid(self):
+        document = self.document()
+        document["figures"][0]["basis"] = "hypothesis"
+        document["figures"][0]["class"] = "measured"
+        self.assertEqual(report.check_report(document)["status"], "invalid")
+
+    def test_recommendation_is_not_permission(self):
+        document = self.document()
+        document["actions"][0]["authority"] = "granted"
+        document["actions"][0]["authority_source"] = "recommendation"
+        self.assertEqual(report.check_report(document)["status"], "invalid")
 
 
 if __name__ == "__main__":

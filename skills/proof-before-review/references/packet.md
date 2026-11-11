@@ -14,4 +14,6 @@ Run `python3 scripts/check_packet.py path/to/packet.json` from the skill folder,
 
 Output states and exit codes: `complete` (0), `failed` (1), `inconclusive` (2), or `invalid` (3). Revision mismatch, blocked checks, and missing/changed evidence are inconclusive. Invalid fields are invalid. A declared failure remains failed unless the packet itself is invalid.
 
-**Limits:** the checker validates consistency and bytes, not whether a command ran, evidence is authentic, the test is relevant, or the listed checks cover the claim. Even `complete` is not “approved” or “merge-ready.” Human review and release permission remain separate.
+Naming the target base, the merge-base, and the tip in the review write-up is separate from this schema. The checker still compares `artifact_revision` with `reviewed_revision` only. It does not parse three SHAs, and it does not decide whether a live-proof N/A is justified.
+
+**Limits:** the checker validates consistency and bytes, not whether a command ran, evidence is authentic, the test is relevant, or the listed checks cover the claim. Even `complete` is not “approved” or “merge-ready.” Human review and release permission remain separate. Coverage arithmetic for a pull-request body lives in `score_coverage.py` and is also not a quality score.

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Investigation report sidecar",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "kind", "current", "desired", "figures", "actions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"enum": ["decision-brief", "method-comparison", "trace-diagnosis", "experiment-result", "negative-result"]},
+    "audience": {"enum": ["company", "product", "app_qa", "pipeline"]},
+    "data_status": {"type": "string"},
+    "hypothetical": {"type": "boolean"},
+    "current": {"type": "object"},
+    "desired": {"type": "object"},
+    "figures": {"type": "array"},
+    "prose_claims": {"type": "array"},
+    "visuals": {"type": "array"},
+    "actions": {"type": "array"}
+  },
+  "description": "Field list only. Semantic rules live in check_report.py. A valid document is not permission to act."
+}

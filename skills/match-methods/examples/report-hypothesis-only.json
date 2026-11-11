@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "trace-diagnosis",
+  "hypothetical": true,
+  "data_status": "hypothesis-only",
+  "current": {"known": "the deciding sentence was not in the worker context"},
+  "desired": {"unvalidated": "a neighbor read might supply it"},
+  "figures": [
+    {"id": "ttft", "name": "ttft", "class": "missing", "value": null, "basis": "not_recorded"}
+  ],
+  "prose_claims": [
+    {"figure_id": "ttft", "class": "missing", "value": null}
+  ],
+  "visuals": [],
+  "actions": [
+    {"id": "next", "kind": "recommendation", "authority": "not_granted", "authority_source": "recommendation"}
+  ]
+}

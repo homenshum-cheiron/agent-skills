@@ -25,6 +25,7 @@ Once a document is in hand, stop searching it and start reading it by place.
 - It does not judge which section is right when several match. That is the reader's decision; record the reason.
 - Headings can mislead. A row can sit under a heading that contradicts it. Read the row and the text that refers to it.
 - Scanned pages, script-loaded pages and broken extraction need a faithful text copy first. Check that the copy holds the passage before trusting an empty find.
+- This is query-time reading by place. It is not index-time contextual retrieval, which prepends chunk-specific context before embedding or lexical indexing, and it is not a graph. Widen one step when the text points beside the hit. Do not load the whole document because a neighbor might matter.
 
 ## Helper
 

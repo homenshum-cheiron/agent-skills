@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trace-record.schema.json",
+  "title": "Hypothetical trace record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "ledger", "spans", "figures", "actions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "export_policy": {"enum": ["minimal", "authorized_sample"]},
+    "sample_reason": {"type": "string"},
+    "hypothetical": {"type": "boolean"},
+    "claimed_wall_ms": {"type": ["number", "null"]},
+    "ledger": {"type": "array"},
+    "spans": {"type": "array"},
+    "figures": {"type": "array"},
+    "actions": {"type": "array"}
+  },
+  "description": "Field list only. Semantic rules live in check_trace_record.py. This schema does not accept a trace as true or complete."
+}

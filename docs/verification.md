@@ -8,26 +8,37 @@ The included checks can establish local package consistency and helper behavior.
 python3 scripts/validate_repo.py
 python3 -m unittest discover -s tests -v
 python3 skills/proof-before-review/scripts/check_packet.py skills/proof-before-review/examples/packet.json
+python3 skills/proof-before-review/scripts/score_coverage.py skills/proof-before-review/examples/coverage.json
 python3 skills/measure-the-path/scripts/summarize_intervals.py skills/measure-the-path/examples/spans.json
 python3 skills/walk-the-document/scripts/docwalk.py outline skills/walk-the-document/examples/sample-guideline.md --depth 2
+python3 skills/measure-the-path/scripts/check_trace_record.py skills/measure-the-path/examples/trace-hypothetical.json
+python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothetical.json
+python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothesis-only.json
+python3 scripts/check_autonomy_map.py docs/autonomy-map.json
 ```
 
-The packet command checks a deliberately synthetic local example. It must not be represented as evidence for a real pull request.
+The packet command checks a deliberately synthetic local example. The coverage command checks mark arithmetic for another synthetic example. Neither is evidence for a real pull request. Exit 0 from the coverage scorer means the nine marks are well formed. It does not mean every prompt was supported.
 
 ## What the checks cover
 
 - Frontmatter names and required descriptions; bounded entrypoint size; every skill has a worked example.
+- The root README links to every skill entrypoint.
 - Local Markdown link existence, in-folder skill links, and no symlinks.
 - Proof packet malformed inputs, revision drift, missing/changed evidence, failed/not-run/blocked checks, and pass bookkeeping.
+- Coverage marks: unknown or duplicate prompts, N/A without a rationale, a claimed report that does not match supported/applicable, and the fixture's 6/7 result.
 - Interval overlap, nesting, gaps, invalid numbers, and a specified observation window.
 - Document reader: section nesting, exact offsets for find and read, budget cuts with a continuing cursor, page and line ranges, files without headings, non-ASCII text, and refused requests.
+- Trace records: missing time or tokens stored as a number, overlapping spans reported as wall time, a hypothesis labeled measured, a verdict treated as permission, and a prompt body exported under the minimal policy.
+- Report records: prose that disagrees with a figure, a chart series that disagrees with its table, a numeric chart on a hypothesis-only report, and a recommendation treated as permission.
 
 ## What remains human or runtime work
 
 - Whether a scenario matches the user's actual goal and the expected output is independent.
-- Whether a test is meaningful, a receipt is authentic, or declared check coverage is complete.
+- Whether a test is meaningful, a receipt is authentic, a coverage rationale is true, or declared check coverage is complete.
 - Whether a handoff has stopped the old writer; a JSON field is not a lock.
 - Whether reading a document by place improves answers or cost on real long documents; no benchmark result is included.
+- Whether a method match improves a real task. `match-methods` ships no runner and no score. Publishing it is not a product improvement.
+- Whether the collection is autonomous or self-improving. `scripts/check_autonomy_map.py` only checks that the qualitative map does not claim a number or a demonstrated path. A passing map is not that proof.
 - Actual host installation/discovery, model behavior, live provider compatibility, authorization, and spending controls.
 - Confidentiality and legal review. The publication scan flags common patterns but is not a complete secret or privacy audit.
 
