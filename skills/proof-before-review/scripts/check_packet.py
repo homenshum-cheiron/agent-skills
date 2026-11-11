@@ -112,7 +112,7 @@ def main():
     args = parser.parse_args()
     try:
         result = evaluate(json.loads(args.packet.read_text()), args.packet.parent)
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeError, ValueError) as exc:
         result = {"status": "invalid", "findings": [str(exc)]}
     print(json.dumps(result, indent=2))
     return STATES[result["status"]]

@@ -50,7 +50,7 @@ python3 scripts/validate_repo.py
 python3 -m unittest discover -s tests -v
 ```
 
-See [verification scope](docs/verification.md), [the decisions](docs/decisions.md), and [the contributor guide](CONTRIBUTING.md).
+See [verification scope](docs/verification.md), [the decisions](docs/decisions.md), and [the contributor guide](CONTRIBUTING.md). The [ground-up review](reviews/2026-11-11-ground-up.md) records a reproduced helper bug and fix; the [behavioral trial pack](evals/README.md) is prepared but has no model results yet.
 
 ## Relationship to the setup kit
 
