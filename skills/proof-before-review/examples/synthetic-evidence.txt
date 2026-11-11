@@ -1,0 +1,1 @@
+SYNTHETIC EXAMPLE ONLY. The example fixture has one declared successful check.

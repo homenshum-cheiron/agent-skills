@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "artifact_revision": "synthetic-demo-v1",
+  "reviewed_revision": "synthetic-demo-v1",
+  "scope": "Synthetic packet-format demonstration only.",
+  "checks": [
+    {
+      "id": "example-fixture",
+      "status": "passed",
+      "command": "synthetic example, not a real test execution",
+      "exit_code": 0,
+      "evidence": [
+        {
+          "path": "synthetic-evidence.txt",
+          "sha256": "f1b65402de96d509ac304115dabd1ff9b04d9521b7c9fbd38d7315a7364acc8e"
+        }
+      ]
+    }
+  ]
+}
