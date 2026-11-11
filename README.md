@@ -95,6 +95,8 @@ Use this collection as human-loaded methods plus offline record checks. It does 
 
 If you need an executed harness optimizer or a study of how people supervise agents, use the related work named on that page. Their results are not a rate for this repository.
 
+An optional prompt for a long task is [finish within authority](docs/prompts/finish-within-authority.md). It keeps the ambition and the research, and it bounds "until finished" by the budget and the permissions already in force. Naming a strong model there, including Fable 5.2, is an illustration. The prompt does not grant authority and does not demonstrate autonomy.
+
 Run the local checks with Python 3.10+ and no third-party dependencies:
 
 ```sh
