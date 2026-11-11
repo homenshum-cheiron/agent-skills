@@ -18,6 +18,7 @@ This is Homen Shum's collection of working methods for coding agents: start with
 | Planner/worker routing costs more than expected | [Budget-aware routing](skills/budget-aware-routing/SKILL.md) |
 | A recap could overwrite a newer result | [Bounded publication](skills/bounded-publication/SKILL.md) |
 | An update says lots of activity but no outcome | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
+| Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the linked examples or references relevant to the task. The examples are synthetic, not disclosures of private projects.
 
@@ -34,9 +35,10 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Ten written workflows, each with a worked example.
+- Eleven written workflows, each with a worked example.
 - An offline proof-packet checker that verifies declared check status, revision, and local evidence hashes. It does **not** independently judge the evidence.
 - An interval calculator that separates summed work from wall-clock coverage.
+- An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines or character ranges with exact offsets. It does **not** rank, embed, call a model, or convert PDF or HTML.
 - Repository checks for package structure and local links, plus unit tests.
 
 **Not implemented:** a live orchestration service, a model router, spend enforcement, distributed locking, a production monitor, or an auto-fix agent. An example handoff or incident record does not create those systems.
