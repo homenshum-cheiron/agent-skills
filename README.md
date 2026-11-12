@@ -30,6 +30,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | A long answer needs to be scannable | [Scan long answers](skills/scan-long-answers/SKILL.md) |
 | A written procedure and the actual goal disagree, including when people and feelings are the subject | [First principles](skills/first-principles/SKILL.md) |
 | Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
+| A remembered fact may have been replaced, or memory notes have lost their evidence | [Self-organized linked memory](skills/self-organized-linked-memory/SKILL.md) |
 | A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
@@ -56,7 +57,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/validate_repo.py` checks package structure, local links, the README catalog, and common publication patterns.
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Nineteen workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Twenty workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -79,7 +80,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Nineteen written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Twenty written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.

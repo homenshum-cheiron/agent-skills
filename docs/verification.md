@@ -11,6 +11,7 @@ python3 skills/proof-before-review/scripts/check_packet.py skills/proof-before-r
 python3 skills/proof-before-review/scripts/score_coverage.py skills/proof-before-review/examples/coverage.json
 python3 skills/measure-the-path/scripts/summarize_intervals.py skills/measure-the-path/examples/spans.json
 python3 skills/walk-the-document/scripts/docwalk.py outline skills/walk-the-document/examples/sample-guideline.md --depth 2
+python3 skills/self-organized-linked-memory/scripts/linkmem.py validate skills/self-organized-linked-memory/examples/workspace
 python3 skills/measure-the-path/scripts/check_trace_record.py skills/measure-the-path/examples/trace-hypothetical.json
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothetical.json
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothesis-only.json
@@ -27,6 +28,7 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Proof packet malformed inputs, revision drift, missing/changed evidence, failed/not-run/blocked checks, and pass bookkeeping.
 - Coverage marks: unknown or duplicate prompts, N/A without a rationale, a claimed report that does not match supported/applicable, and the fixture's 6/7 result.
 - Interval overlap, nesting, gaps, invalid numbers, and a specified observation window.
+- Linked memory: refused edits (missing evidence, unknown source, bad time, broken or misplaced link, path escape, supersede cycle, Core over its limit, changed source, silent deletion), accepted appends with creation order kept, rebuilt views, the walk from an old unit or a raw record to the current unit, and whole-block budget cuts. The writer that organises real memory is not included or tested.
 - Document reader: section nesting, exact offsets for find and read, budget cuts with a continuing cursor, page and line ranges, files without headings, non-ASCII text, and refused requests.
 - Trace records: missing time or tokens stored as a number, overlapping spans reported as wall time, a hypothesis labeled measured, a verdict treated as permission, and a prompt body exported under the minimal policy.
 - Report records: prose that disagrees with a figure, a chart series that disagrees with its table, a numeric chart on a hypothesis-only report, and a recommendation treated as permission.
