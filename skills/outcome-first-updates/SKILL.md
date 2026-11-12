@@ -23,4 +23,6 @@ Tell the reader what changed and what they need to do, not how many agents were 
   - For an owner who reads later, use a checklist: each open item has an owner and a next action. List the decisions needed separately, each with its options and the default if nobody answers.
 - Humans send. Draft the recipient, the channel, and the full body, then stop. For a short ask, use a warm specific question, optional details, and two short bullets. A declined or blocked send is final. Do not retry it through another tool, script, or account. Loading this skill does not grant permission to send, tag, publish, or change pull-request state.
 
+For a saved report, page or long write-up, pick one document shape and validate existing reports against it; see [report shape and validation](references/report-shape.md).
+
 Use [the worked example](examples/worked.md). Match the recipient and channel rather than filling a template. This skill does not require a particular typography. A long answer that only needs scanning is a formatting pass, not a status.
