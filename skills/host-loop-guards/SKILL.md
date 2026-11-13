@@ -15,21 +15,21 @@ Related skills, by name only: `one-writer-handoff`, `proof-before-review`, and `
 - **Cursor:** rules, `hooks.json` (shell, MCP, stop, session start), local and cloud or background agents. Local hooks may not run on a cloud agent.
 - **Other hosts:** skills, subagents, permission or auto-review layers, and routines can stand in for hooks. A missing Stop-hook API is not a reason to invent a second runtime.
 
-Reuse the existing handoff format (`STATE.md`, `EPOCH-N.md`, `LAST.md`, or the session handoff you already write). Do not add a second file format for the same job.
+Reuse the existing handoff format (`STATE.md`, `EPOCH-N.md`, or `LAST.md`). Do not add a second file format for the same job.
 
 ## Adopt (drafts only; do not write live settings from this skill)
 
 ### 1. Same-command stall stop, then handoff
 
-If the *same command* or plan fails twice with the *same error*, and nothing about the attempt changed, write what was tried into the existing handoff file and stop. If the agent changed the command or plan, let it continue. Do not hard-code a universal retry cap. Confirm on your own logs first: a second identical retry sometimes recovers, and a later success is often a changed plan, not a third identical try.
+If the *same command* or plan fails twice with the *same error*, and nothing about the attempt changed, write what was tried into the existing handoff file and stop. If the agent changed the command or plan, let it continue. Do not hard-code a universal retry cap. Confirm on your own logs first: a later success is often a changed plan, not a third identical try.
 
 ### 2. Protect the check from edits
 
-Deny or ask on edits to the check script, CI workflows, and gold fixtures. A green check is worthless if the agent can weaken it. Prefer a hook or permission rule over a standing-file line the model can ignore. This skill only describes the draft; it does not grant permissions.
+Deny or ask on edits to the check script, CI workflows, and gold fixtures. A green check is worthless if the agent can weaken it. Prefer a hook or permission rule over a standing-file line the model can ignore. This skill describes the draft; it does not grant permissions.
 
 ### 3. Worktree-aware hook and permissions audit
 
-Any stop or check hook must run from the hook working directory, not from a project-root variable that may still point at the main checkout. Honor any official "stop hook already active" flag and any block cap. Review `allow` / `ask` / `deny` by undo cost, independent of model confidence. Use a script as `done` only where it actually measures the claim.
+Any stop or check hook must run from the hook working directory, not from a project-root variable that may still point at the main checkout. Honor any official "stop hook already active" flag and any block cap. Review `allow` / `ask` / `deny` by undo cost. Use a script as `done` only where it actually measures the claim.
 
 ## Skip
 
@@ -51,7 +51,15 @@ Claude Code, project or user `settings.json` (review before any install):
 ```json
 {
   "permissions": {
-    "deny": ["Edit(check.sh)", "Write(check.sh)", "Edit(.github/workflows/**)", "Write(.github/workflows/**)"]
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Edit(check.sh)",
+      "Write(check.sh)",
+      "Edit(.github/workflows/**)",
+      "Write(.github/workflows/**)"
+    ]
   },
   "hooks": {
     "Stop": [
@@ -59,7 +67,7 @@ Claude Code, project or user `settings.json` (review before any install):
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -x ./check.sh ]; then ./check.sh; else exit 0; fi",
+            "command": "if [ -x ./check.sh ]; then ./check.sh; rc=$?; [ \"$rc\" -eq 0 ] && exit 0; exit 2; else exit 0; fi",
             "timeout": 30
           }
         ]
@@ -69,7 +77,7 @@ Claude Code, project or user `settings.json` (review before any install):
 }
 ```
 
-Run `./check.sh` from the hook working directory. Do not prefix it with a project-root variable that may point at the wrong checkout. A Stop hook that exits 2 is a nudge, not proof of success, and must not loop on a fuzzy condition.
+Run the check from the hook working directory. Map a failed check to **exit 2**; exit 1 is usually non-blocking. A Stop hook is a nudge, not proof of success, and must not loop on a fuzzy condition. See [references/verification-deny-and-standing-files.md](references/verification-deny-and-standing-files.md) for exit codes, deny-before-classifier, sandbox, and shrinking standing files.
 
 Codex: add the same deny or guard as a PreToolUse hook, keep `codex exec -s workspace-write -C <repo> -o <dir>/LAST.md`, and write the stall into `LAST.md` or the existing epoch file. Do not turn a CI-repair hook that *continues* on a failed check into a stall stop; they solve different problems.
 
