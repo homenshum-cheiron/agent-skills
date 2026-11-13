@@ -25,7 +25,7 @@ If the *same command* or plan fails twice with the *same error*, and nothing abo
 
 ### 2. Protect the check from edits
 
-Deny or ask on edits to the check script, CI workflows, and gold fixtures. A green check is worthless if the agent can weaken it. Prefer a hook or permission rule over a standing-file line the model can ignore. This skill describes the draft; it does not grant permissions.
+Deny or ask on edits to the check script, CI workflows, and gold fixtures. A green check is worthless if the agent can weaken it. Prefer a hook or permission rule over a standing-file line the model can ignore. This skill does not grant permissions.
 
 ### 3. Worktree-aware hook and permissions audit
 
