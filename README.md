@@ -30,6 +30,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | A long answer needs to be scannable | [Scan long answers](skills/scan-long-answers/SKILL.md) |
 | A written procedure and the actual goal disagree, including when people and feelings are the subject | [First principles](skills/first-principles/SKILL.md) |
 | Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
+| A big feature or new service needs one proposal a reviewer can take without asking | [System design proposal](skills/system-design-proposal/SKILL.md) |
 | A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
