@@ -48,3 +48,5 @@ Before training a keep-or-drop decision, try a rule or a small bounded call. A r
 Agent-to-agent interop fits separate runtimes, not a shared account. Protocol completion is not product approval. Read the current spec for retry and cancel before shipping identity, consent, duplicate-work policy, hop limits, and partial-failure tests.
 
 Report the problem, hypotheses, eliminations, allowed check, and state separately. After an authorized run, adopt, revise, reject, or stop, and say why. The [hypothetical examples](examples/worked.md) are not traces and not permission to build.
+
+When the candidate is a model swap, or a failure is about to be blamed on the model, also use the research-first ladder in [references/research-first-model-swap.md](references/research-first-model-swap.md): hard gates and desk research first, predictions before tests, then the cheapest discriminating rung. A full eval is last.
