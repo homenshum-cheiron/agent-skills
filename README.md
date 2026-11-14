@@ -7,7 +7,6 @@ This is Homen Shum's public collection. The recipes are original rewrites of wor
 Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiron/agent-skills).
 
 ## Start here
-
 | When the work gets stuck | Use |
 |---|---|
 | The plan is a list of components, not an outcome | [Scenario first](skills/scenario-first/SKILL.md) |
@@ -32,6 +31,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
 | A big feature or new service needs one proposal a reviewer can take without asking | [System design proposal](skills/system-design-proposal/SKILL.md) |
 | A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
+| A paper, a card, or a design doc is about to be built or evaluated before it is decoded | [Validate a proposal before building](skills/validate-proposal-before-build/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
