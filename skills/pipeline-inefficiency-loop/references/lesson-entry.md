@@ -24,8 +24,12 @@ What changes so the next scan catches it?
   Skill: <which skill text changed, if any>
 
 Replay check on stored traces from earlier laps:
-  Flags this lap's rows: <n of n>
-  Flags earlier rows that were clean: <n of n>  (a flood means the detector is too broad)
+  Earlier clean rows flagged: <n of n>, false-flag ceiling <n>  (over the ceiling: the detector is too broad; do not use it)
+  This lap's rows flagged: <n of n>  (sanity check only: the detector was built from these rows)
+  Applies from: lap <n+1>. Steps 1 to 5 of this lap used the old definitions.
+
+Confirmation in a later lap (fill in when it happens):
+  Fresh rows the detector flagged, and how many were real: <..>, lap <..>
 
 If the verdict was reject or skip: which assumption failed, and why did the finding look promising?
 Open clue still unchecked, and its cheapest check: <..>
@@ -39,8 +43,10 @@ A lesson that changes nothing the next scan reads is not encoded. Write "not enc
 |---|---|
 | Detector queries and log signals | The grader or the answer key |
 | The register: FM IDs, keywords, component splits | The case list used for adopt decisions |
-| The per-lap scan checklist | The budget, the stop rules, the human gates |
+| The per-lap scan checklist | The budget, the lap cap, the premise threshold, the false-flag ceiling, the stop rules, the human gates |
 | Skill text, through the normal review path | Production settings |
+
+Changes in the left column take effect from the next lap. A lap's own adopt decision is counted under the definitions it started with.
 
 ## Lap summary (one block per lap, for the owner)
 

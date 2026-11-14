@@ -27,15 +27,12 @@ A baseline is the latest graded run on the same version. Older figures are refer
 
 ## Self-review before anyone reads it
 
-Answer each question in the finding text:
+Run the self-review questions in `component-sla-register` first (component, measured or guessed, same-version baseline, owner, rows dropped by a scoring rule, detection next time). Then answer these loop-specific ones in the finding text:
 
-- Which component exactly, and is it the most upstream broken contract?
 - Which model exactly? Cheaper than what?
 - Production traffic or development traffic?
-- Is the baseline on the same version?
 - "Not covered" how: no cases, no grader, or no volume?
-- Did a scoring rule drop rows that still belong in the FM count?
-- Who acts?
-- How would this be detected next time without a person reading the row? (Step 6 of the loop must answer this.)
+- Does any estimate decide whether the finding crosses the premise threshold? If so, it goes to the owner with its arithmetic.
+- Is this the only change the lap will make?
 
 A finding is a draft. It does not authorize a paid run, a production change, or a message to an owner.

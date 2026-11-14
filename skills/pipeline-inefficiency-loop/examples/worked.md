@@ -6,13 +6,16 @@ Everything here is invented for illustration: the pipeline, the hosts, the count
 
 A pipeline, `triage`, reads a support ticket, fetches the relevant policy page, and routes the ticket to a team. A shared fetch tool, `shared.tool.web_fetch`, is also used by a second pipeline, `faq`.
 
-## Step 0: bounds
+## Step 0: bounds (the owner read them)
 
-- Budget: $20 for the whole loop, $8 per lap. Four hours of agent time per lap.
-- Human gates: the platform owner approves each paid run and each merge.
+- Budget: $20 for the whole loop, $8 per lap. Lap cap: 5.
 - Premise threshold: 100 harmful outcomes avoided a year, or $500 a year saved.
-- Stop rules: budget spent; two laps in a row with nothing above the threshold; a fix that cannot be shown on a same-version baseline; the owner says stop.
-- Frozen: grader v3, the 40-case eval, these bounds.
+- False-flag ceiling: a new detector may flag at most 2 earlier clean rows.
+- Human gates: the platform owner approves each paid run and each merge.
+- Stop rules: budget or lap cap reached; two laps in a row with nothing above the threshold; no same-version baseline for the top finding; the owner says stop.
+- Frozen: grader v3, the 40-case eval used for adopt decisions, these bounds.
+
+"Confident-wrong" here means a ticket routed to the wrong team with no "needs review" flag.
 
 ## Lap 1
 
@@ -20,19 +23,24 @@ A pipeline, `triage`, reads a support ticket, fetches the relevant policy page, 
 
 | FM ID | Rows | Status before this lap |
 |---|---|---|
-| `FM-shared.tool.web_fetch-01`: status 200 with an empty body, treated as "no policy" | 5 | untracked (new ID added this lap) |
-| `FM-triage.prompt.route-01`: right policy, wrong team chosen | 3 | tracked and posted |
+| `FM-shared.tool.web_fetch-01`: status 200 with an empty body, treated as "no policy" | 5 | untracked (ID added to the register before the finding was written) |
+| `FM-triage.prompt.route-01`: right policy, wrong team chosen | 3 (2 of them confident-wrong) | tracked and posted |
 | unattributed (trace missing) | 1 | n/a |
 
 A scoring rule ("failed only because the source is unreachable") had removed 4 of the 5 fetch rows from the accuracy score. They still count under the FM ID.
 
-**Premise.** 50,000 tickets a year (OBS, ticket system count). 1.2% of fetch spans over 7 days are status 200 with an empty body (OBS, trace query). That is about 600 tickets a year routed without the policy (DER). About half of those are misrouted (EST, from the 5 eval rows and a 20-row trace sample). So about 300 misroutes a year (DER from EST). The fix adds a check and costs about $0 a year, so the risk direction is safe. 300 is above the threshold of 100. `FM-triage.prompt.route-01` comes to about 90 a year (EST) and ranks second.
+**Premise.**
 
-**Validate.** Options: (a) treat an empty 200 as a typed `empty` error, retry once, then state the gap in the answer; (b) switch the fetch library; (c) do nothing. The fetch library's docs say some sites return an empty shell that a script fills in later. Option (b) would not change that. Verdict: build (a).
+- `FM-shared.tool.web_fetch-01`: 50,000 tickets a year (OBS, ticket system count). 1.2% of tickets had at least one fetch with status 200 and an empty body (OBS, 7-day trace query grouped by ticket). That is about 600 tickets a year routed without the policy (DER). About half of those are misrouted (EST, from a 20-ticket sample), so about 300 misroutes a year (DER from EST). The estimate decides the threshold: the finding crosses 100 if more than 1 in 6 are misrouted. The owner checked the sample and agreed. The fix adds a check and costs about $0 a year, so the risk direction is safe.
+- `FM-triage.prompt.route-01`: the eval cases are chosen to be hard, so 3 of 40 does not scale to production. Instead: 0.18% of tickets were reassigned by a person when the policy had been present (OBS, 90-day reassignment log). 50,000 × 0.0018 = 90 a year (DER). Below the threshold.
 
-**Lean test.** Rung 3 replays the 5 stored rows with the typed-error check, at $0: 4 of 5 now route correctly. Rung 4 to 6: those 5 cases plus 2 controls from `faq`, which shares the tool, at 3 runs each, with the reference on the same cases. That is 7 cases × 3 runs × 2 arms = 42 runs. At an illustrative $0.10 a run, that is about $4.20 of the $8 lap cap. The owner read the plan first and approved the paid rungs.
+Rank: the fetch finding first.
 
-**Fix.** On the same stamp apart from the change, `FM-shared.tool.web_fetch-01` goes from 5 rows to 1. No measure gets worse on `triage` or `faq`, and confident-wrong answers stay at 0. The owner approves the merge. Older results are marked stale.
+**Validate (desk steps).** Options: (a) treat an empty 200 as a typed `empty` error, retry once, then state the gap in the answer; (b) switch the fetch library; (c) do nothing. The fetch library's docs say some sites return an empty shell that a script fills in later. Option (b) would not change that. Option (a) is worth testing.
+
+**Lean test.** Rung 3 replays the 5 stored rows with the typed-error check, at $0: 4 of 5 now route correctly. Rungs 4 to 6: those 5 cases plus 2 controls from `faq`, which shares the tool, at 3 runs each, with the reference on the same cases. That is 7 cases × 3 runs × 2 arms = 42 runs. At an illustrative $0.10 a run, that is about $4.20 of the $8 lap cap. The owner read the plan first and approved the paid rungs.
+
+**Fix.** On the same stamp apart from the change, and under the register definitions the lap started with, `FM-shared.tool.web_fetch-01` goes from 5 rows to 1. No measure gets worse on `triage` or `faq`. Confident-wrong rows stay at 2, both under `FM-triage.prompt.route-01`. The owner approves the merge. Older results are marked stale.
 
 **Lesson.**
 
@@ -40,29 +48,37 @@ A scoring rule ("failed only because the source is unreachable") had removed 4 o
 - Detector: a daily count of empty-200 fetches per host, added to the scan.
 - Register: the FM status becomes "tracked and posted".
 - Scan checklist: "count rows that scoring rules drop, per FM ID".
-- Replay on stored traces from the two earlier evals: it flags all 5 rows from this lap and 0 of 310 earlier rows that passed.
+- Replay on the two earlier 40-case evals (80 rows, 69 passed): it flags 0 of the 69, under the ceiling of 2. It flags all 5 of this lap's rows, which is a sanity check only.
+- Applies from lap 2.
 
 ## Lap 2
 
-**Scan.** The new detector flags a second host with empty-200 fetches. The lap-1 fix already covers it: 0 failed rows. That confirms the change generalizes, but it is not a new finding. The top new finding is cost: `triage.tool.policy_lookup` fetches the same page about 3 times per run. At $0.003 a run (OBS) × 50,000 runs (OBS), that is $150 a year (DER). It is below the $500 threshold, so it is downgraded and logged, not built.
+**Scan.** The new detector flags 3 fresh empty-200 fetches from a second host since the merge. All 3 were real empties, and the lap-1 check handled all 3 (typed error, retry, gap stated). That is consistent with the change working beyond the first host. It is not proof. It is not a new finding either.
 
-**Lesson.** Why not sooner: there was no per-run duplicate-fetch metric. Detector: duplicate fetches per run, added to the scan. Verdict: parked. Revisit if volume grows by about 4 times.
+The top new finding is cost. `triage.tool.policy_lookup` fetches the same page about 3 times per run. The two duplicate fetches cost $0.003 per run (OBS, span cost × 2). $0.003 × 50,000 runs = $150 a year (DER). That is below the $500 threshold, so the finding is parked, not built.
+
+**Lesson.** Why not sooner: there was no per-run duplicate-fetch metric. Detector: duplicate fetches per run, added to the scan from lap 3. Replay: 0 earlier clean rows flagged (the metric is about cost, not correctness). Revisit if volume grows about 4 times.
 
 ## Lap 3 and stop
 
-`FM-triage.prompt.route-01` was re-estimated with the new counts at about 90 a year (EST), still below the threshold. Nothing is above the threshold for the second lap in a row, so the stop rule fires. Spend: about $4.20 of $20.
+**Scan.** Under the lap-2 detectors, no new FM appears. The top finding is still `FM-triage.prompt.route-01` at about 90 a year (DER), below the threshold.
+
+**Lesson.** No new gap, so nothing is encoded. The entry says "not encoded: nothing new found" instead of claiming a lesson.
+
+Laps 2 and 3 both found nothing above the threshold, so the stop rule fires. Spend: about $4.20 of $20. Laps used: 3 of 5.
 
 ## Lap summaries the owner sees
 
 ```
 Lap 1: empty-200 fetch read as "no policy" (shared.tool.web_fetch, FM-shared.tool.web_fetch-01)
-  Premise: 50,000/yr · ~$0 · risk safe · ~300 misroutes/yr avoided (EST)
+  Premise: 50,000/yr · ~$0 · risk safe · ~300 misroutes/yr avoided (DER from EST, owner checked)
   Test: replay, then 42 runs, $4.20 of $8
-  Verdict: adopted; FM count 5 -> 1 on aaaa111+fix
-  Lesson: signal unread, rows hidden by a scoring rule -> daily empty-200 count per host
+  Verdict: adopted; FM count 5 -> 1 on aaaa111 + fix
+  Lesson: signal unread, rows hidden by a scoring rule -> daily empty-200 count per host (from lap 2)
 Lap 2: duplicate policy fetches (triage.tool.policy_lookup), $150/yr, below threshold, parked
-  Lesson: no duplicate-fetch metric -> per-run duplicate count added
-Lap 3: nothing above threshold. Stop (two laps in a row).
+  Confirmation: lap-1 detector flagged 3 fresh rows, 3 real, all handled
+  Lesson: no duplicate-fetch metric -> per-run duplicate count (from lap 3)
+Lap 3: nothing above threshold; not encoded. Stop (two laps in a row).
 ```
 
 What this example does not show: that the loop works on a real pipeline. That needs real laps, recorded with their failures, and a held-out check.
