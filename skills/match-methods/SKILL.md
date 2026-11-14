@@ -49,4 +49,4 @@ Agent-to-agent interop fits separate runtimes, not a shared account. Protocol co
 
 Report the problem, hypotheses, eliminations, allowed check, and state separately. After an authorized run, adopt, revise, reject, or stop, and say why. The [hypothetical examples](examples/worked.md) are not traces and not permission to build.
 
-When the candidate is a model swap, or a failure is about to be blamed on the model, also use the research-first ladder in [references/research-first-model-swap.md](references/research-first-model-swap.md): hard gates and desk research first, predictions before tests, then the cheapest discriminating rung. A full eval is last.
+For a model swap, or before blaming the model, follow the [research-first ladder](references/research-first-model-swap.md): hard gates and desk research, predictions, cheapest discriminating test, full eval last.
