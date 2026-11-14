@@ -19,6 +19,10 @@ Once a document is in hand, stop searching it and start reading it by place.
 5. **Respect a budget.** Each read has a size limit. A cut read returns a cursor for the rest. Count every read, including the outline, against the task's total. Large budgets hide bad navigation.
 6. **Cite by offset.** Quote only text returned by a read, with its character range, line range, page and section path. An outline entry, a summary or a remembered phrase is never the cited span. After stitching several reads, keep each piece's own range.
 
+## When the reading feeds a research answer
+
+Infer a vague scope, run it, then confirm it. Cite a secondary summary only after a logged primary attempt with workarounds. Write claims with quotes before prose. Repair unsourced sentences instead of labelling them. Write "No rule found in:" with a nested list of linked sources, never "no rule exists". See [the research-claims rules](references/research-claims.md).
+
 ## What this does not settle
 
 - It does not find the document. Use search for that.

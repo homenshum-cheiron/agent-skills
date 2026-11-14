@@ -21,6 +21,8 @@ Name the stage and the contrast that would change the method: identifier versus 
 
 Internal causes include the tool, schema, what was loaded, prompts, rules, data, permissions, filters, and context assembly. External causes include a poor method, missed prior art, or the wrong metric. They can interact. Also keep nulls: thin telemetry, wrong gold, a bad judge, contamination, an environment failure, or ordinary variance. Follow the chain from parser output to worker input, verifier input, and the persisted result. Name the observation that would reject the leading candidate.
 
+Ask "why" again only where the evidence points. Branch when two causes contribute, and stop at a cause someone can act on, or at missing evidence, and say which. A fixed count of whys is not the method. Label each link observed or inferred.
+
 ## Candidates, including no change
 
 Keep current behavior. Add a method only when its mechanism fits this failure. Drop a hard-constraint or known anti-fit failure. A missing prerequisite is a separate costed proposal.

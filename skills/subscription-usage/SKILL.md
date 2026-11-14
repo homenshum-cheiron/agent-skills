@@ -15,7 +15,8 @@ Name the billing path you actually checked. "It is not a separate API bill" is s
 3. A billed API path does not always mean the user supplied an API key. Host-billed and provider-billed paths exist. Check the path in front of you.
 4. Write "this is not a separate API bill" only when the configured path and the overage facts support that sentence.
 5. Spend personal budget only when the owner asked. A skill, a plan, or a matrix does not create permission.
-6. When you report a run, include the host, a generic account class, the model, the effort, and which source you read.
+6. Attribute each run to whoever or whatever started it: a person, a schedule, CI, or another team. Runs someone else started are not yours. A run with no owner tag is "unattributed", not assumed yours.
+7. When you report a run, include the host, a generic account class, the model, the effort, and which source you read.
 
 An unsupported guess is unproven. This skill does not start a paid run or open a billing change.
 
