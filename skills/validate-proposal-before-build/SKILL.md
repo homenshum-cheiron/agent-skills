@@ -6,7 +6,7 @@ description: "Use when a paper, card, design doc, transcript, or teammate propos
 
 Spend no build or eval time on a change until you know what it intends, how it would run, what is already known, and which test would settle it. Do not dismiss a new idea without looking for the case where it really wins. End with a learning entry so the next scan is sharper.
 
-Related skills in this repository, by name only: `criteria-before-choice` for tool or model selection, `match-methods` when a failure is about to be met with a new model or a heavier pipeline, and `system-design-proposal` when the verdict is to write the full design.
+Related skills in this repository, by name only: `criteria-before-choice` for tool or model selection, `match-methods` when a failure is about to be met with a new model or a heavier pipeline, `system-design-proposal` when the verdict is to write the full design, and `component-sla-register` for the failure-mode IDs a proposal must name.
 
 ## 0. Intake
 
@@ -25,6 +25,8 @@ Write, in plain words:
 ## 2. Map to what already exists
 
 For each touched piece: does a host, skill, hook, test, or workflow already cover it? What is the current baseline and its noise? If a touched piece has no check, say so; it cannot advance past a desk review until it has one.
+
+Name the failure-mode IDs the proposal moves, from a component SLA register (`component-sla-register`). For each: the current count or rate with its version stamp, the predicted change, and the signal that will show it. A proposal that cannot name an FM ID either targets an untracked failure (add it and its detection signal to the register first) or is not yet specific enough to test. If it moves a contract another team owns, name that owner.
 
 ## 3. Research the space (time-boxed, free first)
 
