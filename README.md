@@ -32,6 +32,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | A big feature or new service needs one proposal a reviewer can take without asking | [System design proposal](skills/system-design-proposal/SKILL.md) |
 | A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
 | A paper, a card, or a design doc is about to be built or evaluated before it is decoded | [Validate a proposal before building](skills/validate-proposal-before-build/SKILL.md) |
+| A coding-agent loop card is about to be pasted into hooks or standing files | [Host-loop guards](skills/host-loop-guards/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
