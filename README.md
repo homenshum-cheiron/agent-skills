@@ -150,6 +150,7 @@ The short version of [the decision log](docs/decisions.md):
 - [docs/decisions.md](docs/decisions.md) is why the small choices look like this. It is the only decision log.
 - [docs/verification.md](docs/verification.md) is what the local checks do and do not prove.
 - [docs/attribution.md](docs/attribution.md) lists inspirations and citations.
+- [docs/videos/all-code-is-slop-except-mine.md](docs/videos/all-code-is-slop-except-mine.md) is a notes page on Lauren Tan's November 2026 AI Engineer talk, mapping that argument to skills in this collection. The talk is not affiliated with this repository, and its figures are the speaker's.
 - `scripts/validate_repo.py` checks package structure, local links, the README catalog, and common publication patterns.
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
@@ -219,5 +220,7 @@ Use the canonical pin unless you have a reason to study the earlier snapshot. If
 ## Inspiration and license
 
 [Benji Taylor's skills repository](https://github.com/benjitaylor/skills/tree/299140fafd08df55a9c234e610c3f64af3f45531) is the packaging inspiration: a skill can ship references, examples, a small tool, and a verification loop together. This collection uses that shape for engineering and coordination habits. The writing and code here are original. No text or assets from that repository are copied.
+
+A public talk, [All Code Is Slop (Except Mine)](https://www.youtube.com/watch?v=O_zcc6Xl12g) by Lauren Tan at AI Engineer (14 Nov 2026), is summarized in [these notes](docs/videos/all-code-is-slop-except-mine.md). The notes are original. The talk is not copied, and its reported figures are not results for this repository.
 
 Original content is [MIT licensed](LICENSE). External projects retain their own licenses and trademarks. See [attribution](docs/attribution.md).
