@@ -1,12 +1,104 @@
 # Agent skills
 
-Recipes for finishing useful work with coding agents, and the small decisions behind them.
+One person can direct work across several accounts, coding hosts, models, and effort levels, and share context, skills, and setup between them. That is the access and the leverage this collection is for: a limit on one lane does not have to stop the task, a reading-heavy job does not have to occupy the strongest model, and a judge can stay a short, isolated call.
 
-This is Homen Shum's public collection. The recipes are original rewrites of working habits: start from a scenario, write direction only while something is still unclear, choose model and effort from a fresh supported read, keep one writer on a mutable branch, prove the claim on the surface that matters, and report the outcome. They are public methods for selective loading. They are not a turnkey cross-host runtime, and they have not been installed or certified on every host.
+This is Homen Shum's public collection. The recipes are original rewrites of working habits: start from a scenario, write direction only while something is still unclear, choose account, host, model, and effort from a fresh supported read, keep one writer on a mutable branch, prove the claim on the surface that matters, and report the outcome. They are public methods for selective loading. They are not a turnkey cross-host runtime, and they have not been installed or certified on every host.
 
 Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiron/agent-skills).
 
-## Start here
+## Direct the work
+
+The usual unit of work is still one task and one outcome. The unusual part is the workshop around it: more than one subscription account, more than one host (for example Claude Code, Codex, Cursor, a cloud agent, or another coding agent), and a model-and-effort pair chosen for this request rather than pinned to a role.
+
+Nothing in that workshop has a fixed job. There is no permanent planner lane, worker lane, or cheap lane. A smaller listed model is a fit when the inputs and the verifier are already clear. It is not the default because it is cheaper. A stronger listed model is a fit when judgment or a tight failure cost requires it. It is not automatic because the task "looks hard."
+
+This repository describes the method. It does not run a scheduler, lock a model, enforce a spend cap, or take write ownership of a branch.
+
+### Delegation flow
+
+```mermaid
+flowchart TD
+  preflight["1. Usage and lane preflight"]
+  choose["2. Pick account, host, model, and effort"]
+  handoff["3. Hand off context through files and shared skills"]
+  run["4. Run the task"]
+  review["5. Independent review"]
+  report["6. Report the outcome"]
+  switch["Switch account or host"]
+  readonly["Stay read-only, or open a new branch"]
+
+  preflight --> room{"Room, and a free writer?"}
+  room -->|"No: account or host is at a limit"| switch --> choose
+  room -->|"No: that branch already has a writer"| readonly --> choose
+  room -->|"Yes"| choose
+  choose --> handoff --> run --> review --> report
+```
+
+1. **Usage and lane preflight.** Read remaining capacity on the accounts and hosts you are allowed to use, and see which branches and sessions already have a writer. Leave a reserve for a verify pass and a handoff note.
+2. **Pick account, host, model, and effort.** Choose them together from a fresh supported read, the task, the risk, and the remaining capacity. Report the host, a generic account class, the model, the effort, and which source you read. Point a host at another logged-in config when you switch accounts, for example with `CLAUDE_CONFIG_DIR` for Claude Code. Do not copy credentials or config files that hold secrets.
+3. **Hand off context through files and shared skills.** Give the next session the outcome, the accepted decisions, the rejected approaches, the artifact boundary, the revision, and handles to the rest. Do not paste the transcript. Load the same skill folders and project contract the destination already uses.
+4. **Run the task.** Readers may run in parallel. Writers do not share a mutable branch.
+5. **Independent review.** A second look is a separate decision. Prefer an empirical check on the named revision over a stronger model plus a new judge.
+6. **Report the outcome.** Lead with what changed, what the evidence actually shows, and the next decision. Include what the run spent and, when a cap is in force, what that spend bought.
+
+### Quick start
+
+In about five minutes you can practice the method without installing a runtime:
+
+1. Read the diagram above.
+2. For the next request, use [Budget-aware routing](skills/budget-aware-routing/SKILL.md): read today's supported models and remaining capacity, pick a model and an effort together, and write down the host and account class. If the first account is at a limit, name a second account or host instead of waiting.
+3. If the work will continue in another session, write a short handoff with [One-writer handoff](skills/one-writer-handoff/SKILL.md) and keep at most 16 working rows with [Working set](skills/working-set/SKILL.md). Link files and revisions; do not paste the chat.
+4. To load a skill into a host you already use, follow [Try one skill](#try-one-skill). Copy one complete folder, or point the agent at that folder's `SKILL.md`. This repository does not configure host discovery.
+
+### Choose the lane dynamically
+
+- Read supported models and efforts from the host or account's sanctioned usage or capability surface this turn. If you cannot, say that freshness is unknown.
+- Read shared capacity: session, all-model, and model-specific caps that draw on one account. Several sessions on one account are still one budget.
+- Inherited knobs stay visible. Do not silently drop a model, effort, or account the owner already chose.
+- Account, host, model, and effort can all change mid-task when capacity, a hang, or the shape of the work changes. The handoff file is what makes that change cheap. The next session should not have to be re-briefed from memory.
+- Spend included subscription allocation and confirmed overage or hybrid dollars as different facts from a list-price hypothetical. A skill, a plan, or a matrix is not permission to start a paid run. See [Subscription usage](skills/subscription-usage/SKILL.md).
+
+### Share context, skills, and setup
+
+Context moves as files, not as a copied conversation: a handoff record, a working set of at most 16 rows, and durable handles to evidence. After a handoff or restart, [Context check](skills/context-check/SKILL.md) reloads those sources rather than trusting a summary alone.
+
+Skills stay in sync by being the same folders on each host, loaded when the task needs them. Keep each skill independently usable. A project-level contract such as `AGENTS.md` can name the shared conventions; this collection does not install that contract for you.
+
+The [host setup kit](https://github.com/HomenShum/codex-claude-cursor-setup) is the workstation layer: hosts, one project contract, skill-tree sync, native adapters, and preflight. This repository is the method layer. It does not copy the kit, and this publication does not change either kit repository.
+
+Do not send the whole conversation to every worker. Supply the task, the accepted decisions, the necessary artifacts, ownership, and verification, and retrieve the rest on demand. See [Lean tool context](skills/lean-tool-context/SKILL.md).
+
+### Everyday leverage
+
+These are usage shapes that should apply in any workshop with more than one account or host. They are not a claim about a particular team, and they are not features this repository executes. The "after" column is what one instruction can look like once the method is in use.
+
+| Situation | Before: the manual friction | After: one instruction |
+|---|---|---|
+| The main coding assistant hits its limit mid-task | You notice the pause, copy the chat, sign into another account or host, and re-explain where the work stood. | Continue the task. Preflight sees the limit, routes the rest to account B or another host, and the handoff file carries the working set, the revision, and the next action. |
+| An overnight dependency-upgrade sweep across several repositories | In the morning you open each repo, read changelogs, and review diffs by hand, or you babysit one long session that mixes reading with judgment. | Overnight, a smaller listed model does the reading and drafting on the lanes that have room; a stronger listed model reviews; you get one morning summary with evidence links. |
+| A weekly notes or inbox digest | You first check which tool still has room, then repaste last week's prompt into whichever app is free. | Run the digest on whichever lane has room left. The prompt, the skill, and the output path stay the same; only the account or host changes. |
+| Grading, eval checks, or other repeated judgments | The judge runs inside a long project session, so each call carries tools, hooks, and accumulated context. | Each check is its own isolated fresh call with the rubric and the item, and no project hooks. In one measured isolation pass, each grading call stayed around 1,000 tokens, versus a few hundred thousand tokens per call when the same judge ran inside a loaded session. Treat those figures as an example, not a guarantee. |
+| A hung CLI mid-run | Hours later you find the process still sitting there, kill it, and reconstruct what had finished. | A host hook or watchdog detects the hang, restarts within a documented cap, and writes a handoff if the same command fails twice in the same way. This repository does not ship that watchdog; [Host-loop guards](skills/host-loop-guards/SKILL.md) is the draft method. |
+| A long run can waste a weekly limit | You discover after the fact that a retry loop or an oversized prompt burned the room you needed for other work. | Each step logs what it spent and what that bought, and it stops at a pre-set cap with a reserve still held for review and a report. |
+
+### Skills that carry this method
+
+| Need | Skill |
+|---|---|
+| Choose model and effort from a fresh read, with no fixed roles | [Budget-aware routing](skills/budget-aware-routing/SKILL.md) |
+| Say what a run actually spent, and which billing class it belongs to | [Subscription usage](skills/subscription-usage/SKILL.md) |
+| Keep one writer on a branch and hand off the rest as a record | [One-writer handoff](skills/one-writer-handoff/SKILL.md) |
+| Carry at most 16 working rows; retrieve everything else by handle | [Working set](skills/working-set/SKILL.md) |
+| Avoid sending the whole conversation to every worker | [Lean tool context](skills/lean-tool-context/SKILL.md) |
+| Reload decisions after a handoff or restart | [Context check](skills/context-check/SKILL.md) |
+| Draft stall stops, hook and permission guards, per host | [Host-loop guards](skills/host-loop-guards/SKILL.md) |
+| Measure tokens, time, and cost with a comparable baseline | [Measure the path](skills/measure-the-path/SKILL.md) |
+| Review on the named revision, with evidence, not a stronger model by default | [Proof before review](skills/proof-before-review/SKILL.md) |
+| Report the outcome, the evidence limit, and the next decision | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
+
+The catalog below is the rest of the collection: scenario, direction, proof, measurement, and the other stuck-point recipes. A later public skill could cover the preflight across accounts and live sessions, mid-task host or account switching, and isolated fresh-context calls as one package. Those methods are described here; they are not yet a standalone folder in this repository.
+
+## When the work gets stuck
 | When the work gets stuck | Use |
 |---|---|
 | The plan is a list of components, not an outcome | [Scenario first](skills/scenario-first/SKILL.md) |
