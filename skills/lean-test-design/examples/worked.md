@@ -33,15 +33,15 @@ Seven behaviors. Cost per run is illustrative and the same for every arm here.
 
 | Case | Multi-doc | Multi-step | Table | Scan | Long history | First-turn tool | Non-English | $ per run | Minutes |
 |---|---|---|---|---|---|---|---|---|---|
-| c04 | ✓ | | ✓ | | | ✓ | | 0.25 | 4 |
-| c19 | | | | | ✓ | ✓ | ✓ | 0.25 | 3 |
+| c04 | ✓ | | ✓ | | | ✓ | | 0.25 | 3 |
+| c19 | | | | | ✓ | ✓ | ✓ | 0.25 | 4 |
 | c31 | ✓ | ✓ | | | ✓ | | | 0.25 | 6 |
 | c40 | | | ✓ | | | | ✓ | 0.25 | 3 |
 
 Greedy order:
 
-1. c04 adds 3 (multi-doc, table, first-turn tool).
-2. c19 and c31 each add 2. The tie goes to c19, which is faster. c19 adds long history and non-English.
+1. c04, c19, and c31 each cover 3. The tie goes to c04, which is fastest. c04 adds multi-doc, table, and first-turn tool.
+2. c19 and c31 each add 2. The tie goes to c19 (4 minutes against 6). c19 adds long history and non-English.
 3. c31 adds 1 (multi-step).
 4. c40 adds nothing new and goes to tier 2.
 
