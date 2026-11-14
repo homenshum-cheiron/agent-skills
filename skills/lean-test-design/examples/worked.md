@@ -10,50 +10,63 @@ Naive plan: 5 arms × 48 cases × 3 runs = 720 runs. At an illustrative $0.25 pe
 
 ## Step 0: question and decision value
 
-"Does any arm raise answer accuracy by at least 5 points without lowering citation accuracy? A 5-point gain would justify the change; anything smaller is not worth the maintenance." Stamp: commit `aaaa111`, prompt v7, skills v3, tool set v2, model `model-a`, grader v4.
+"Does any arm raise answer accuracy by at least 5 points without lowering citation accuracy?" Decision value (illustrative): the pipeline answers about 20,000 questions a year, so 5 points is about 1,000 fewer wrong answers a year. That justifies the maintenance of a change. A smaller gain does not.
+
+Stamp: commit `aaaa111`, prompt v7, skills v3, tool set v2, model `model-a`, grader v4.
 
 ## Step 1: research
 
-| Arm | Change | Research result | Label |
-|---|---|---|---|
-| A1 | Swap to `model-b` | The migration guide says `model-b` rejects a forced tool choice. The pipeline forces one on the first turn. | official |
-| A2 | Rewrite the search tool's description | Two independent issue threads report better tool selection with explicit "when to use" lines. No official source. | issue ×2 |
-| A3 | Raise effort from medium to high | The model card says higher effort mainly helps multi-step reasoning. The eval has 9 such cases. | official |
-| A4 | Add "be concise" to the answer prompt | One forum post. No mechanism in an official source. | anecdote ×1 |
-
-A1 is settled without a run: the forced tool choice is a code fix, not an eval question. It returns to the queue after the fix. A4 stays in, but at low priority.
+| Arm | Change | Research result | Label | Outcome |
+|---|---|---|---|---|
+| A1 | Swap to `model-b` | The migration guide says `model-b` rejects a forced tool choice. The pipeline forces one on the first turn. | official | Settled: a code fix, not an eval question. After the fix it goes through the model-swap ladder in `match-methods`. |
+| A2 | Rewrite the search tool's description | Two independent issue threads report better tool selection with explicit "when to use" lines. The vendor's tool-use guide recommends the same pattern. | issue ×2, official | Test |
+| A3 | Raise effort from medium to high | The model card says higher effort mainly helps multi-step reasoning. The eval has 9 multi-step cases. | official | Test, on multi-step cases only |
+| A4 | Add "be concise" to the answer prompt | One forum post. No mechanism in an official source. | anecdote ×1 | Parked: one anecdote with no mechanism does not earn a paid run |
 
 ## Step 2: non-model factors
 
-The prompt and the skills are held equal across A2 and A3. The dry run in rung 2 shows that A2's build still loads the old tool description from a cached skill bundle. The feature would not have fired. The bundle is rebuilt before any paid rung. Without the dry run, A2 would have looked like "no effect".
+The prompt and the skills are held equal across A2, A3, and the reference. The dry run in rung 2 shows that A2's build still loads the old tool description from a cached skill bundle. The feature would not have fired. The bundle is rebuilt before any paid rung. Without the dry run, A2 would have looked like "no effect".
 
 ## Step 3: coverage and the minimal set
 
-Six behaviors: multi-document answer, table reading, scanned page, long history, tool choice on the first turn, non-English question.
+Seven behaviors. Cost per run is illustrative and the same for every arm here.
 
-| Case | Multi-doc | Table | Scan | Long history | First-turn tool | Non-English |
-|---|---|---|---|---|---|---|
-| c04 | ✓ | ✓ | | | ✓ | |
-| c19 | | | | ✓ | ✓ | ✓ |
-| c31 | ✓ | | | ✓ | | |
-| c40 | | ✓ | | | | ✓ |
+| Case | Multi-doc | Multi-step | Table | Scan | Long history | First-turn tool | Non-English | $ per run | Minutes |
+|---|---|---|---|---|---|---|---|---|---|
+| c04 | ✓ | | ✓ | | | ✓ | | 0.25 | 4 |
+| c19 | | | | | ✓ | ✓ | ✓ | 0.25 | 3 |
+| c31 | ✓ | ✓ | | | ✓ | | | 0.25 | 6 |
+| c40 | | | ✓ | | | | ✓ | 0.25 | 3 |
 
-Greedy order: c04 (3 new), c19 (2 new), c31 (adds nothing new, kept as a second multi-step case for A3). Named gap: no case covers a scanned page. c40 goes to tier 2.
+Greedy order:
+
+1. c04 adds 3 (multi-doc, table, first-turn tool).
+2. c19 and c31 each add 2. The tie goes to c19, which is faster. c19 adds long history and non-English.
+3. c31 adds 1 (multi-step).
+4. c40 adds nothing new and goes to tier 2.
+
+Named gap: no case covers a scanned page.
 
 ## Step 4: cases per arm
 
 | Arm | Cases | Why |
 |---|---|---|
 | Reference | c04, c19, c31 | Full minimal set |
-| A2 tool description | c04, c19 | Only first-turn tool choice can change; c04 is the anchor |
-| A3 effort | c04, c31 | Multi-step cases; c04 is the anchor |
-| A4 concise | c04 | Anchor only, until it shows a difference |
+| A2 tool description | c04, c19 | Only first-turn tool choice can change. c04 is the anchor. |
+| A3 effort | c04, c31 | c31 is the multi-step case. c04 is the anchor. |
 
 ## Steps 5 and 6: ladder, caps, owner read
 
-Caps: $3 per arm, $10 total. The plan costs about 8 runs at rung 5 plus up to 12 repeats at rung 6, about $5 at the illustrative rate, against about $180 naive. The owner read the plan before rung 4.
+Caps: $3 per arm, $10 total. The owner read the plan and approved paid rungs 4 to 6 up to the $10 cap. A full eval is outside that approval.
 
-Illustrative outcome: at rung 4, A4 matched the reference on c04 and stopped there. A2 and A3 differed, so they ran the minimal set and then three repeats. A3's gain did not repeat. It was inside the rerun noise from the repeats, so it was reported as "no detected difference". A2's gain repeated on c04 and c19. A2 goes forward to a full eval sized for a 5-point gap, which needs a separate approval.
+| Rung | Runs | Illustrative cost |
+|---|---|---|
+| 4: c04 on reference, A2, A3 | 3 | $0.75 |
+| 5: the remaining minimal-set cases, one run each | 4 | $1.00 |
+| 6: two more runs per case on A2, A3, and the reference on the same cases | 14 | $3.50 |
+| Total | 21 | $5.25, against about $180 naive |
+
+Illustrative outcome: A2 and A3 both differed from the reference at rung 4, so both climbed. At rung 6, the reference's own repeats showed how much a case moves between reruns. A3's gain stayed inside that rerun noise, so it is reported as "no detected difference", not "no effect". A2's gain held on c04 and c19 across all three runs. A2 goes forward to a full eval sized for a 5-point gap, which needs a new approval.
 
 ## Step 7: stamping
 
@@ -61,6 +74,6 @@ All results carry the stamp above. A week later, the grader moved to v5. Every r
 
 ## What the reader of the report sees
 
-- 4 arms planned: 1 settled by research, 1 stopped at one case, 1 no detected difference, 1 forward to a sized full eval.
-- Spend: about $5 of a $10 cap, against about $180 naive (all illustrative).
+- 4 arms planned: 1 settled by research, 1 parked at research, 1 no detected difference, 1 forward to a sized full eval.
+- Spend: about $5.25 of a $10 cap, against about $180 naive (all illustrative).
 - Gap: no scanned-page case. That behavior is untested by this plan.

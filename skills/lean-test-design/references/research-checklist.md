@@ -37,6 +37,6 @@ For each factor, write "held equal" or "varied on purpose", and how you checked.
 | Safety classifiers and silent fallback | A flagged request may be refused or rerouted to another model | Search stream logs for reroutes and refusals |
 | Provider and region | Feature parity is not guaranteed across providers | Check the per-endpoint table; replay one case per provider |
 
-## Predictions
+## Model swaps
 
-Before the first test, write per graded measure: expected direction, the mechanism (which factor), confidence, and which existing labelled cases should show it. After the tests, score each prediction hit or miss.
+When the arm is a model swap, use the research-first ladder in the `match-methods` skill (its model-swap reference) for the hard gates, the candidate card, and the per-measure predictions. This checklist does not repeat them.

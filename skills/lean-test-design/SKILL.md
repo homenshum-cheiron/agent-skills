@@ -40,27 +40,27 @@ Climb only as far as needed. Stop at the first rung that settles the question.
 3. Replay or stub: replay stored traces with model calls stubbed, and force rare paths in eval-only config so the feature actually fires ($0).
 4. One representative paid case on the arms that matter most.
 5. The minimal set at one run per case.
-6. Repeats and the next tier, only on arms that differ from the reference. Use the repeats to measure rerun noise.
+6. Repeats and the next tier, only on arms that differ from the reference, plus the reference on the same cases. Use the repeats to measure rerun noise.
 
 A full eval comes last. It needs the decision value from step 0, a size that has the power to detect that gap given measured noise, and the owner's approval.
 
 ## 6. Caps, owner read, and stop rule
 
-Set a cap per arm and a total cap. Report the plan's cost next to the naive cost (all arms × all cases × all repeats). The owner reads the written plan before the first paid run. Stop and report when:
+Set a cap per arm and a total cap. Report the plan's cost next to the naive cost (all arms × all cases × all repeats). The owner reads the written plan before the first paid run. Reading is not approval: each paid rung still needs whatever spend approval the destination project requires. Stop and report when:
 
 - a cap is hit;
 - tracing, grading, or the feature switch looks wrong;
 - the one-case rung shows no arm differs from the reference;
 - the remaining budget cannot reach the repeats the leading arms need.
 
-A one-run difference is noise until it repeats.
+A one-run difference is noise until it repeats. A one-run match is also noise: an arm that shows no difference at the one-case rung is parked, not ruled out.
 
 ## 7. Stamp, stale, same-version baseline
 
-Stamp every result with the pipeline version: commit, prompts, skills, tool set, model ID, and grader version. When any of these changes, earlier results become references, not baselines. Mark them stale. Compare a result only with a baseline on the same version, apart from the one factor under test. Grade every arm with the same frozen grader, and record it.
+Stamp every result with the pipeline version: commit, prompts, skills, tool set, model ID, and grader version. When any of these changes, mark earlier results stale; they are references, not baselines. Compare only with a same-version baseline, apart from the one factor under test. Grade every arm with the same frozen grader.
 
 ## Related skills
 
-By name, in this repository: `validate-proposal-before-build` decides whether a change is worth testing at all. `match-methods` holds a research-first ladder for model swaps. `criteria-before-choice` sets the non-negotiables and the premise check. `measure-the-path` covers speed and cost claims. `component-sla-register` names the failure modes an arm should move.
+By name: `validate-proposal-before-build` (is it worth testing?), `match-methods` (model-swap ladder), `criteria-before-choice` (premise check), `measure-the-path` (speed and cost claims), `component-sla-register` (failure modes an arm should move).
 
 See the [synthetic worked example](examples/worked.md).
