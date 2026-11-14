@@ -25,8 +25,9 @@ What changes so the next scan catches it?
 
 Replay check on stored traces from earlier laps:
   Earlier clean rows flagged: <n of n>, false-flag ceiling <n>  (over the ceiling: the detector is too broad; do not use it)
+                              or "not applicable: <reason>" for a metric that is not a row flag, such as a per-run cost count
   This lap's rows flagged: <n of n>  (sanity check only: the detector was built from these rows)
-  Applies from: lap <n+1>. Steps 1 to 5 of this lap used the old definitions.
+  Applies from: lap <n+1>. Steps 2 to 5 of this lap used the definitions frozen after step 1. An FM ID added while pinning in step 1 is the only exception.
 
 Confirmation in a later lap (fill in when it happens):
   Fresh rows the detector flagged, and how many were real: <..>, lap <..>
@@ -55,6 +56,7 @@ Lap <n>: <finding> (<component>, <FM ID>)
   Premise: <volume/yr> · <change/yr> · risk <direction> · harm <units>
   Test: <rungs climbed>, spend <amount> of cap <amount>
   Verdict: <..>; FM count <before> -> <after> on <version>
+  Confirmation: <earlier detector's fresh flags this lap, and how many were real | none yet>
   Lesson: <why not sooner> -> <what the detector now catches>
   Next: <next lap's top finding | stop, and which stop rule fired>
 ```
