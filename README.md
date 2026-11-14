@@ -33,6 +33,7 @@ Repository: [homenshum-cheiron/agent-skills](https://github.com/homenshum-cheiro
 | A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
 | A pipeline failure is about to be blamed on the last component that touched it, or a fix is proposed without naming the failure it moves | [Component SLA register](skills/component-sla-register/SKILL.md) |
 | A paper, a card, or a design doc is about to be built or evaluated before it is decoded | [Validate a proposal before building](skills/validate-proposal-before-build/SKILL.md) |
+| An eval is about to run every arm on every case, or a paid run is about to start before research and a written plan | [Lean test design](skills/lean-test-design/SKILL.md) |
 | A coding-agent loop card is about to be pasted into hooks or standing files | [Host-loop guards](skills/host-loop-guards/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
@@ -59,7 +60,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/validate_repo.py` checks package structure, local links, the README catalog, and common publication patterns.
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Twenty-three workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Twenty-four workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -82,7 +83,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Twenty-three written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Twenty-four written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
