@@ -140,6 +140,7 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | Someone asks whether a run cost extra money | [Subscription usage](skills/subscription-usage/SKILL.md) |
 | A recap could overwrite a newer result, or a finding needs to stay retrievable | [Bounded publication](skills/bounded-publication/SKILL.md) |
 | The owner corrects a fact and the next session will need it | [Encode corrections](skills/encode-corrections/SKILL.md) |
+| A search hits an older rule that may have been replaced | [Encode corrections](skills/encode-corrections/SKILL.md) |
 | A handoff, a restart, or a contradicting fact may have dropped a decision | [Context check](skills/context-check/SKILL.md) |
 | An update lists activity, or a message is about to be sent | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
 | A long answer needs to be scannable | [Scan long answers](skills/scan-long-answers/SKILL.md) |
