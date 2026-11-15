@@ -92,6 +92,7 @@ These are usage shapes that should apply in any workshop with more than one acco
 | Avoid sending the whole conversation to every worker | [Lean tool context](skills/lean-tool-context/SKILL.md) |
 | Reload decisions after a handoff or restart | [Context check](skills/context-check/SKILL.md) |
 | Draft stall stops, hook and permission guards, per host | [Host-loop guards](skills/host-loop-guards/SKILL.md) |
+| Set up a long job nobody will watch: effort ceiling, pass/fail done, pre-authorized places, final report | [Unattended run setup](skills/unattended-run-setup/SKILL.md) |
 | Measure tokens, time, and cost with a comparable baseline | [Measure the path](skills/measure-the-path/SKILL.md) |
 | Review on the named revision, with evidence, not a stronger model by default | [Proof before review](skills/proof-before-review/SKILL.md) |
 | Report the outcome, the evidence limit, and the next decision | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
@@ -128,6 +129,8 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | An eval is about to run every arm on every case, or a paid run is about to start before research and a written plan | [Lean test design](skills/lean-test-design/SKILL.md) |
 | Pipeline gaps keep being found one review at a time, or the same kind of gap comes back after a fix | [Pipeline inefficiency loop](skills/pipeline-inefficiency-loop/SKILL.md) |
 | A coding-agent loop card is about to be pasted into hooks or standing files | [Host-loop guards](skills/host-loop-guards/SKILL.md) |
+| A component's method changed and its old tests fail for a correct change, or pass while checking nothing | [Modernize tests after a method change](skills/modernize-tests-after-method-change/SKILL.md) |
+| Standing instructions contradict each other, outgrow a loader limit, or promise methods that never fire | [Instruction hygiene review](skills/instruction-hygiene-review/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
