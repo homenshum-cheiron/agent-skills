@@ -44,6 +44,14 @@ class InstallSkillsTests(unittest.TestCase):
         self.assertFalse(own.exists() or own.is_symlink())
         self.assertTrue((mine / "SKILL.md").is_file())
 
+    def test_rejects_path_like_names_and_missing_values(self):
+        done = self.run_script("--apply", "--skill", "../skills/working-set")
+        self.assertIn("not a plain skill name", done.stderr)
+        self.assertFalse((self.home / ".claude/skills").exists())
+        done = self.run_script("--skill")
+        self.assertEqual(done.returncode, 2)
+        self.assertIn("needs a value", done.stderr)
+
     def test_env_override_and_copy(self):
         target = self.home / "custom"
         self.env["CODEX_SKILLS_DIR"] = str(target)

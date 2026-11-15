@@ -24,8 +24,10 @@ while [ $# -gt 0 ]; do
     --apply) APPLY=1 ;;
     --copy) COPY=1 ;;
     --remove) REMOVE=1 ;;
-    --host) shift; HOSTS="$HOSTS $1" ;;
-    --skill) shift; SKILLS="$SKILLS $1" ;;
+    --host|--skill)
+      [ $# -ge 2 ] || { echo "$1 needs a value" >&2; exit 2; }
+      if [ "$1" = --host ]; then HOSTS="$HOSTS $2"; else SKILLS="$SKILLS $2"; fi
+      shift ;;
     -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
@@ -54,11 +56,13 @@ fi
 for h in $HOSTS; do
   t=$(target_for "$h")
   for s in $SKILLS; do
+    case "$s" in */*|.*|"") echo "skip $s: not a plain skill name" >&2; continue ;; esac
     src="$REPO/skills/$s"; dst="$t/$s"
     [ -f "$src/SKILL.md" ] || { echo "skip $s: not a skill in this repository" >&2; continue; }
     if [ $REMOVE -eq 1 ]; then
       if [ -L "$dst" ] && [ "$(readlink -- "$dst")" = "$src" ]; then
-        echo "remove link $dst"; [ $APPLY -eq 1 ] && rm -- "$dst"
+        echo "remove link $dst"
+        if [ $APPLY -eq 1 ]; then rm -- "$dst"; fi
       fi
       continue
     fi

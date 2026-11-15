@@ -2,7 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
   Example macOS user agent: run the offline instruction scan every Sunday at 18:00 local time.
-  1. Set AGENT_SKILLS_DIR below to where you cloned this repository (the path is read through $HOME).
+  1. If you cloned somewhere other than ~/agent-skills, change the default inside "${AGENT_SKILLS_DIR:-$HOME/agent-skills}"
+     below (launchd does not expand $HOME in EnvironmentVariables, so the path is resolved by /bin/sh).
+     Create the log folder once: mkdir -p ~/.local/state/instruction-hygiene
   2. cp weekly-scan.launchd.plist ~/Library/LaunchAgents/com.example.instruction-hygiene.plist
   3. launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.instruction-hygiene.plist
   Remove: launchctl bootout gui/$(id -u)/com.example.instruction-hygiene, then delete the file.
@@ -15,7 +17,7 @@
   <array>
     <string>/bin/sh</string>
     <string>-c</string>
-    <string>exec /usr/bin/env python3 -B "${AGENT_SKILLS_DIR:-$HOME/agent-skills}/skills/instruction-hygiene-review/scripts/scan_instructions.py"</string>
+    <string>mkdir -p "$HOME/.local/state/instruction-hygiene" &amp;&amp; exec /usr/bin/env python3 -B "${AGENT_SKILLS_DIR:-$HOME/agent-skills}/skills/instruction-hygiene-review/scripts/scan_instructions.py"</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
@@ -24,5 +26,7 @@
   <key>StartCalendarInterval</key>
   <dict><key>Weekday</key><integer>0</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>0</integer></dict>
   <key>RunAtLoad</key><false/>
+  <key>StandardOutPath</key><string>/tmp/instruction-hygiene-weekly.log</string>
+  <key>StandardErrorPath</key><string>/tmp/instruction-hygiene-weekly.log</string>
 </dict>
 </plist>
