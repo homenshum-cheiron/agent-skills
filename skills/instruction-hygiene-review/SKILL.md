@@ -20,6 +20,8 @@ Run a script that writes a dated report (Markdown plus JSON) with:
 
 The scan proposes nothing on its own. It lists candidates with evidence.
 
+A ready offline scanner covers checks 1 to 4 and duplicate copies: [`scripts/scan_instructions.py`](scripts/scan_instructions.py). It needs only Python 3.9+, reads only the folders you name (default: common host locations under `$HOME`), and writes a dated Markdown and JSON report without overwriting earlier ones. Configure it with `--root`, `--out`, `--limit NAME=BYTES`, and `--effort-cap`, or the `INSTRUCTION_SCAN_*` environment variables listed in its header. Checks 5 and 6 need your host's logs and are left to you. To run it weekly, adapt the [launchd example](examples/schedule/weekly-scan.launchd.plist) or the [crontab line](examples/schedule/weekly-scan.crontab).
+
 ## Stage 2: judged pass
 
 Use a reviewer in a fresh session, which reads the report and the cited lines, not the history of the files.

@@ -48,7 +48,30 @@ In about five minutes you can practice the method without installing a runtime:
 1. Read the diagram above.
 2. For the next request, use [Budget-aware routing](skills/budget-aware-routing/SKILL.md): read today's supported models and remaining capacity, pick a model and an effort together, and write down the host and account class. If the first account is at a limit, name a second account or host instead of waiting.
 3. If the work will continue in another session, write a short handoff with [One-writer handoff](skills/one-writer-handoff/SKILL.md) and keep at most 16 working rows with [Working set](skills/working-set/SKILL.md). Link files and revisions; do not paste the chat.
-4. To load a skill into a host you already use, follow [Try one skill](#try-one-skill). Copy one complete folder, or point the agent at that folder's `SKILL.md`. This repository does not configure host discovery.
+4. To load a skill into a host you already use, follow [Set up on your machine](#set-up-on-your-machine) or [Try one skill](#try-one-skill). Copy one complete folder, or point the agent at that folder's `SKILL.md`.
+
+### Set up on your machine
+
+Prerequisites: `git`, Python 3.12 or newer for the full test suite (standard library only; the scripts themselves run on 3.9+), a POSIX shell, and at least one agent host such as Claude Code, Codex CLI, or Cursor. Nothing here needs an API key, a network call, or a background service.
+
+```bash
+git clone https://github.com/homenshum-cheiron/agent-skills.git "$HOME/agent-skills"
+cd "$HOME/agent-skills"
+python3 scripts/validate_repo.py                 # structure, links, catalog, publication scan
+python3 -m unittest discover -s tests            # offline unit tests
+scripts/install_skills.sh                        # dry run: prints what it would link
+scripts/install_skills.sh --apply                # link every skill into each host found
+```
+
+`install_skills.sh` links each folder under `skills/` into the skill folders of the hosts it finds: `~/.claude/skills` (Claude Code), `${CODEX_HOME:-~/.codex}/skills` (Codex), `~/.cursor/skills` (Cursor), and `~/.agents/skills` (a shared folder some hosts also read). It only uses folders whose parent already exists, never overwrites an existing skill, and `--remove --apply` deletes only the links it made. Use `--host claude` (repeatable) to pick hosts, `--skill NAME` to install one skill, `--copy` for hosts that do not follow links, and `CLAUDE_SKILLS_DIR`, `CODEX_SKILLS_DIR`, `CURSOR_SKILLS_DIR`, or `AGENTS_SKILLS_DIR` to point at other folders. Skill folders differ between host versions, so check your host's current documentation. If your host has no skill folder, paste the path of one `SKILL.md` into the request instead.
+
+To check that a host sees a skill, start a fresh session and ask it to name the skills it can load, or ask for one by name, for example: "Use `unattended-run-setup` to plan this job." Update later with `git pull`; links pick up changes, copies need `--copy --apply` again after you delete the old copy.
+
+Optional extras:
+
+- **Weekly instruction scan.** [Instruction hygiene review](skills/instruction-hygiene-review/SKILL.md) ships an offline scanner and launchd and cron examples. It writes reports under `~/.local/state/instruction-hygiene` and changes no instruction file.
+- **Per-session plugins.** When a skill points at a third-party plugin, such as the test principles from Anthropic's `code-modernization` plugin credited in [Modernize tests after a method change](skills/modernize-tests-after-method-change/SKILL.md), prefer loading it for one session from a local clone (`claude --plugin-dir <path-to-plugin>`) over a user-scope install, read its hooks first, and turn its telemetry off with the switches its documentation lists.
+- **Your own rules.** Keep personal standing rules (model choices, folders an agent may write, approval rules) in your own host files, not in shared or employer repositories. [Unattended run setup](skills/unattended-run-setup/SKILL.md) lists what to write down.
 
 ### Choose the lane dynamically
 
@@ -155,14 +178,15 @@ The short version of [the decision log](docs/decisions.md):
 - [docs/attribution.md](docs/attribution.md) lists inspirations and citations.
 - [docs/videos/all-code-is-slop-except-mine.md](docs/videos/all-code-is-slop-except-mine.md) is a notes page on Lauren Tan's November 2026 AI Engineer talk, mapping that argument to skills in this collection. The talk is not affiliated with this repository, and its figures are the speaker's.
 - `scripts/validate_repo.py` checks package structure, local links, the README catalog, and common publication patterns.
+- `scripts/install_skills.sh` is an optional, dry-run-by-default installer that links or copies skill folders into host skill folders. See [Set up on your machine](#set-up-on-your-machine).
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Twenty-five workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Twenty-eight workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
 1. Inspect the skill and its scripts.
-2. Copy **one complete folder** from `skills/` into the skill directory your host already uses, or give the agent that folder's `SKILL.md` path. This repository does not configure host discovery.
+2. Copy **one complete folder** from `skills/` into the skill directory your host already uses, or give the agent that folder's `SKILL.md` path. The optional installer only links folders; it does not change host settings.
 3. Try the example request. Check the result, not whether the agent recited the instructions.
 4. Adapt the practice to the destination repository's commands, risks, and permissions.
 
@@ -180,12 +204,14 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Twenty-five written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Twenty-eight written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
 - A trace-record checker and a report checker. They reject a few dishonest shapes. They do not run an architecture or certify a result.
 - An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines, or character ranges with exact offsets. It does not rank, embed, call a model, or convert PDF or HTML.
+- An offline instruction scanner for the weekly hygiene review: size against loader limits, effort above a configured cap, past-dated pending lines, missing home paths, banned-versus-allowed pairs, and duplicated copies. It reports candidates; it does not edit or judge them.
+- An optional skill installer that never overwrites and removes only its own links.
 - Repository checks for package structure, the README catalog, and local links, plus unit tests.
 
 **Not implemented:** a live orchestration service, a model router, spend enforcement, distributed locking or fencing, a production monitor, an auto-fix agent, or a recursive self-improvement loop. `pipeline-inefficiency-loop` is a written procedure for a person or an agent to follow lap by lap. It does not run a loop, and it does not demonstrate repeated improvement. An example handoff, ledger line, coverage score, or HTML mock does not create those systems.

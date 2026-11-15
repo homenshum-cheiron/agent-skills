@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Example macOS user agent: run the offline instruction scan every Sunday at 18:00 local time.
+  1. Set AGENT_SKILLS_DIR below to where you cloned this repository (the path is read through $HOME).
+  2. cp weekly-scan.launchd.plist ~/Library/LaunchAgents/com.example.instruction-hygiene.plist
+  3. launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.instruction-hygiene.plist
+  Remove: launchctl bootout gui/$(id -u)/com.example.instruction-hygiene, then delete the file.
+  The scan writes reports only. It makes no model or network calls and changes no instruction file.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.example.instruction-hygiene</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>exec /usr/bin/env python3 -B "${AGENT_SKILLS_DIR:-$HOME/agent-skills}/skills/instruction-hygiene-review/scripts/scan_instructions.py"</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Weekday</key><integer>0</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>0</integer></dict>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>
