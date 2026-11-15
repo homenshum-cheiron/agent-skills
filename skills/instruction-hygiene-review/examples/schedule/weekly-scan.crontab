@@ -1,0 +1,4 @@
+# Example crontab line (Linux or macOS): run the offline instruction scan every Sunday at 18:00.
+# Install with `crontab -e` and paste the line. Change AGENT_SKILLS_DIR to your clone.
+# Optional: INSTRUCTION_SCAN_ROOTS, INSTRUCTION_SCAN_OUT, INSTRUCTION_SCAN_LIMITS, INSTRUCTION_SCAN_EFFORT_CAP.
+0 18 * * 0 AGENT_SKILLS_DIR="$HOME/agent-skills"; mkdir -p "$HOME/.local/state/instruction-hygiene" && /usr/bin/env python3 -B "$AGENT_SKILLS_DIR/skills/instruction-hygiene-review/scripts/scan_instructions.py" >> "$HOME/.local/state/instruction-hygiene/cron.log" 2>&1

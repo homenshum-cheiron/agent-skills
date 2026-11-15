@@ -30,6 +30,8 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Document reader: section nesting, exact offsets for find and read, budget cuts with a continuing cursor, page and line ranges, files without headings, non-ASCII text, and refused requests.
 - Trace records: missing time or tokens stored as a number, overlapping spans reported as wall time, a hypothesis labeled measured, a verdict treated as permission, and a prompt body exported under the minimal policy.
 - Report records: prose that disagrees with a figure, a chart series that disagrees with its table, a numeric chart on a hypothesis-only report, and a recommendation treated as permission.
+- Instruction scan: effort above a configurable cap (negated and quoted mentions ignored), non-instruction files skipped, past-dated pending lines, missing home paths, banned-versus-allowed pairs, duplicated copies, loader-size warnings, dated reports that never overwrite, and the `--fail-on-findings` exit code. Synthetic files only.
+- Skill installer: dry run changes nothing, only existing host folders are used by default, existing folders are never overwritten, `--remove` deletes only its own links, and folder overrides and `--copy` work. Uses a temporary `HOME`.
 
 ## What remains human or runtime work
 
