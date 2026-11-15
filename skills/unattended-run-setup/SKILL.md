@@ -35,7 +35,7 @@ Before the start, ask every decision the run needs in one message. When a person
 
 ## 5. State what a subagent costs
 
-Each subagent reads its own context, and the lead re-reads its result. One field report measured a lead plus workers at about 1.7 times a single session on a small feature (*video*); telling the lead what a subagent costs roughly halved how many it started (vendor guidance). Put this in the lead's brief: "Start a subagent only for work that can run at the same time. A plan with fewer than two independent items stays in one session." Pin a model in every subagent definition; an unpinned subagent can inherit the lead's most expensive model.
+Each subagent reads its own context, and the lead re-reads its result. One field report measured a lead plus workers at about 1.7 times a single session on a small feature (*video*); telling the lead what a subagent costs roughly halved how many it started (vendor guidance). Put this in the lead's brief: "Start parallel workers only for work that can run at the same time. Do a plan with fewer than two independent items yourself." Treat this as a cost heuristic, not a ban: one required fresh-context reviewer, or another dependent role that must run after the work exists, is always allowed, and a lead may do bounded work itself when no worker is warranted. Pin a model in every subagent definition; an unpinned subagent can inherit the lead's most expensive model.
 
 Write a short task-to-model table in the host instruction file (lead, hard build, simple build, search and log reading, fresh-context review). Keep it a dated, per-host choice, re-read against live capacity (see `budget-aware-routing`).
 

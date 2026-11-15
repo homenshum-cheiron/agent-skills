@@ -7,7 +7,8 @@ A team replaced a packet validator's hash check with a stricter schema-first che
 - 46 behavior-pinning, 3 coverage-theater, 3 implementation-coupled, 1 over-strict.
 - Coverage-theater example: `test_empty_evidence_is_inconclusive` writes an empty evidence file. The empty file also changes the hash, so the hash-mismatch branch still returns `inconclusive` even if the "empty file" branch is deleted.
 - Implementation-coupled example: `test_na_without_rationale_is_invalid` edits `items[2]` by index and asserts only that some finding contains "rationale". Setting a blank rationale on a different item makes the test pass through a different rule.
-- Over-strict example: `test_fixed_claim_is_invalid` pins `findings[0]` to the exact message text.
+- Over-strict example: `test_fixed_claim_is_invalid` pins `findings[0]` to the exact message text. The validator's documented contract promises a status and a finding per failed rule, not message wording or order, and no consumer parses the text; that check is cited in the classification. Had the message been a documented user-facing code, the exact assertion would have stayed.
+- Mutation checks run in a temporary copy of the module; each records the test's exit status on the mutant (fail) and on restored code (pass).
 
 ## Spot-check by script (3 of 7 flagged)
 
