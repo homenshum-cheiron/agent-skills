@@ -15,3 +15,5 @@ Do not describe a lock, merge gate, budget meter, or router as if this repositor
 Follow the destination project's declared review gates. Do not invent a stricter public rule.
 
 Do not republish an uncleared private collection, including a longer personal list of principles. Examples stay synthetic.
+
+PR bodies, team-channel posts and reports back to the owner follow the bluf-notes engineering write-up format. See [skills/bluf-notes/SKILL.md](skills/bluf-notes/SKILL.md).

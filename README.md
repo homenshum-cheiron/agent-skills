@@ -161,6 +161,7 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | An eval result is one pooled score, or a speedup comes from a sum of durations | [Eval scorecard](skills/eval-scorecard/SKILL.md) |
 | Meeting or conference notes are only readable by the person who wrote them | [BLUF notes](skills/bluf-notes/SKILL.md) |
 | A pipeline needs a layer table a newcomer can follow, with a test and a key per layer | [Pipeline layer breakdown](skills/pipeline-layer-breakdown/SKILL.md) |
+| A pull request body, team-channel post, or coding-agent report needs background, cause, status and docs a newcomer can follow | [BLUF notes](skills/bluf-notes/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
