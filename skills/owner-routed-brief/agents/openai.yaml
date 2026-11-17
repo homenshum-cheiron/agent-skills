@@ -1,0 +1,4 @@
+interface:
+  display_name: "Owner-routed brief"
+  short_description: "Turn the day's signals into a ranked brief where each owner sees only their cards; Daily (read, learn, execute, reflect) and Nightly (self-contained handoff) modes; every eval card carries a metrics block. Drafts only."
+  default_prompt: "Use $owner-routed-brief. Read config.example.yaml for owners and sources, sweep and verify, rank with shown math, write one file per owner from references/card-template.md, fill the metrics block (the eval-scorecard skill computes it) for any eval card, then write the Daily and Nightly briefs. Send nothing."

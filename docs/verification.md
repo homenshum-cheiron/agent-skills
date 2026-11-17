@@ -15,6 +15,7 @@ python3 skills/measure-the-path/scripts/check_trace_record.py skills/measure-the
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothetical.json
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothesis-only.json
 python3 scripts/check_autonomy_map.py docs/autonomy-map.json
+python3 skills/eval-scorecard/scripts/scorecard.py skills/eval-scorecard/examples/cases.csv --cost-scope "model only"
 ```
 
 The packet command checks a deliberately synthetic local example. The coverage command checks mark arithmetic for another synthetic example. Neither is evidence for a real pull request. Exit 0 from the coverage scorer means the nine marks are well formed. It does not mean every prompt was supported.
