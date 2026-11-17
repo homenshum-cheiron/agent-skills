@@ -1,0 +1,67 @@
+# owner-routed-brief deployment config (example, fictional values).
+# The skill reads names, sources and delivery from here. Keep secrets out of this file:
+# connectors and tokens are bound by each host, never written here.
+
+principal:
+  name: "Alex Rivera"            # who approves every send
+  timezone: "America/Los_Angeles"
+  out_of_office:                  # dates the principal cannot answer
+    - { from: "2030-03-12", to: "2030-03-16", back: "2030-03-17" }
+
+owners:                           # one entry per person who gets a file
+  - slug: alex
+    name: "Alex Rivera"
+    lanes: ["evals", "agent architecture"]
+    team: home
+  - slug: sam
+    name: "Sam Okafor"
+    lanes: ["provider layer", "eval platform"]
+    team: home
+  - slug: min
+    name: "Min Park"
+    lanes: ["crawlers", "deploys"]
+    team: remote
+    timezone: "Asia/Seoul"
+    out_of_office: []
+ownership_sources:                # how to resolve "who owns this"
+  - "CODEOWNERS"                  # path patterns to people
+  - "ticket assignee"
+  - "last substantive author in the thread"
+
+sources:
+  chat:
+    workspace_mentions: true      # search every owner's mentions, not only listed channels
+    channels: ["#eng", "#qa", "#domain-experts"]
+    include_threads: true
+  calendar: { window_days: 7 }
+  code: { repos: ["example-org/app"], include_ci: true, closed_since_hours: 24 }
+  tickets: { project: "APP", updated_since_hours: 24 }
+  evals: { exports: ["evals/latest/cases.csv"], cost_scope: "model only" }
+  notes: ["notes/2030-03-10-conference.md"]
+  research: { long_doc_reader: "context-walk" }
+
+ranking:
+  basis: ["dollars", "hours saved", "risk"]
+  tie_break: ["deadline", "people unblocked"]
+
+modes:
+  daily:
+    audience: home
+    deliver_at: "08:30"           # principal's time zone
+    sections: ["read", "learn", "execute", "reflect", "teammates", "resolved", "unswept"]
+  nightly:
+    audience: remote
+    deliver_at: "17:30"           # principal's time zone, before the home team signs off
+    must_include: ["inputs", "steps", "done_when", "who_to_ask", "do_not_touch"]
+
+delivery:                         # drafts only; a person approves each send
+  mode: draft
+  targets:
+    daily: { kind: "file", path: "briefs/daily-{date}.md" }
+    nightly: { kind: "file", path: "briefs/nightly-{date}.md" }
+    per_owner: { kind: "file", path: "briefs/owners/{slug}.md" }
+
+hard_rules:
+  never_send_without_principal_yes: true
+  never_invent_numbers_or_names: true
+  never_include: ["secrets", "api keys", "health details", "customer personal data"]
