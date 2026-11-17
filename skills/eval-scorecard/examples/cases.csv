@@ -1,0 +1,7 @@
+case_id,verdict,duration_s,cost_usd,finished,cache_write_usd
+S-01,passed,240,3.10,true,1.20
+S-02,passed,410,4.05,true,1.60
+S-03,failed,380,3.90,true,1.50
+S-04,inconclusive,1260,9.80,false,4.10
+S-05,unverified,,,,
+S-06,failed,720,5.25,true,2.00
