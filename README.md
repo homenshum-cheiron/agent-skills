@@ -156,6 +156,9 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | A component's method changed and its old tests fail for a correct change, or pass while checking nothing | [Modernize tests after a method change](skills/modernize-tests-after-method-change/SKILL.md) |
 | Standing instructions contradict each other, outgrow a loader limit, or promise methods that never fire | [Instruction hygiene review](skills/instruction-hygiene-review/SKILL.md) |
 
+| Meeting or conference notes are only readable by the person who wrote them | [BLUF notes](skills/bluf-notes/SKILL.md) |
+| A pull request body, team-channel post, or coding-agent report needs background, cause, status and docs a newcomer can follow | [BLUF notes](skills/bluf-notes/SKILL.md) |
+
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
 ## What these lessons protect
@@ -182,7 +185,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/install_skills.sh` is an optional, dry-run-by-default installer that links or copies skill folders into host skill folders. See [Set up on your machine](#set-up-on-your-machine).
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Twenty-eight workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Twenty-nine workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -205,7 +208,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Twenty-eight written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Twenty-nine written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
