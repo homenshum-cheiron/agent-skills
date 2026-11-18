@@ -17,6 +17,30 @@ BLUF card:
 - **Next step:** Priya writes the helper into the rollout design this week.
 - **Confidence:** Inference. The advice is a paraphrase, and the design is a proposal.
 
+## Findings: Before, GAP, FIX PLAN, After
+
+Finding: The coordinator both reuses a cached prompt and runs shell commands in the same process.
+
+- **Before:** At `abc1234`, `coordinator.run` loads the cached prompt and calls `run_shell` in-process (see `coordinator.py` at that commit).
+  - **GAP:** Shell side effects evict or poison the prompt cache, so later turns pay the full prompt again. Our read: the cache and the shell share one process lifetime.
+    - **FIX PLAN:** Priya adds a sandboxed helper and a test that the coordinator's cache hit rate stays high after a shell call. Proof: a unit test runs a shell stub, then a second prompt, and checks a cache hit.
+- **After (proposed):** The coordinator only plans and talks; the helper owns shell and files. Label stays proposed until the test and a replay against last week's traces both pass.
+
+First-mention labels used above: Priya (rollout owner). The lunch vendor is unnamed in the notes, so no company label is invented.
+
+## Visual artifact (outline)
+
+A one-page artifact for this finding would open with the bottom line, list Priya as the owner, then show this Before / GAP / FIX PLAN / After block plus a sources panel. The system design diagram is:
+
+```mermaid
+flowchart TD
+    user[Caller] -->|prompt and tools| coordinator[Coordinator]
+    coordinator -->|cached prompt reuse| cache[Prompt cache]
+    coordinator -.->|proposed: shell and files| helper[Sandboxed helper]
+```
+
+Search the team's existing artifacts first and match their layout. The chat post is one line for the finding, plus the GAP and FIX PLAN, and a link to the page.
+
 ## Engineering write-up
 
 Headline: Fix the date parser in the literature-search client so one research query stops retrying every five minutes; needs one review.
