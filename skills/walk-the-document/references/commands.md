@@ -6,13 +6,13 @@ Add `--numbered` to any command to treat lines such as `3.2 Title` as headings a
 
 ## outline
 
-`outline FILE [--depth N]`
+`outline examples/sample-guideline.md [--depth N]`
 
 Returns `source` (`headings`, or `windows` when the file has no headings and 80-line windows are used), totals, and one row per section:
 
 | Field | Meaning |
 |---|---|
-| `id` | Position in the tree, for example `1.2.2`. Not the number printed in the title |
+| `id` | Position in the tree, for example the dotted section id of a nested heading. Not the number printed in the title |
 | `path` | Titles from the root to this section |
 | `line_start`, `line_end` | 1-based, inclusive. A parent's range covers its children |
 | `char_start`, `char_end` | Offsets into the text, end exclusive |
@@ -21,13 +21,13 @@ Returns `source` (`headings`, or `windows` when the file has no headings and 80-
 
 ## find
 
-`find FILE PATTERN [--regex] [--ignore-case] [--limit 20]`
+`find examples/sample-guideline.md PATTERN [--regex] [--ignore-case] [--limit 20]`
 
 The pattern is literal unless `--regex` is given. Returns `total`, `shown`, and for each hit its line, character range, page, section id, section path and the line text (first 240 characters). `total` is the true count even when fewer are shown.
 
 ## read
 
-`read FILE` with exactly one range:
+`read examples/sample-guideline.md` with exactly one range:
 
 | Option | Reads |
 |---|---|

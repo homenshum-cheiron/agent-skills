@@ -1,6 +1,6 @@
-<!-- Portable, single-file version of the owner-routed-brief skill. Paste into AGENTS.md, a rules file or a system prompt on hosts without skill folders. -->
-
 # Owner-routed brief
+
+This is the portable, single-file version of this skill. Paste it into AGENTS.md, a rules file, or a system prompt on hosts without skill folders.
 
 Goal: every person opens one file and finds only what is theirs, ranked by what it is worth, readable by someone who missed every meeting. Fill the names, channels, sources and times from a deployment config (see config.example.yaml); keep them out of this recipe.
 

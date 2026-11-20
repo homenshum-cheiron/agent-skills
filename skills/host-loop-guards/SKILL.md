@@ -1,6 +1,6 @@
 ---
 name: host-loop-guards
-description: "Use when configuring how a coding agent starts, retries, and stops a task: stall stops, handoff files, protecting the check from edits, and worktree-aware hooks or permissions. Apply per host. Do not install a viral checklist."
+description: "Use when configuring how a coding agent starts, retries, and stops a task: stall stops, handoff files, protected checks, and worktree-aware hooks. Apply per host. Do not install a viral checklist."
 ---
 # Host-loop guards
 
@@ -10,12 +10,12 @@ Related skills, by name only: `one-writer-handoff`, `proof-before-review`, and `
 
 ## Already native (do not rebuild)
 
-- **Claude Code:** hooks, including a Stop hook whose exit 2 can continue the turn; `allow` / `ask` / `deny`; worktrees (`isolation: worktree`); subagents; `CLAUDE.md`. A Stop hook may fire at end of turn. Consecutive blocks can cap. A missing Stop script is often non-blocking. After entering a worktree, `${CLAUDE_PROJECT_DIR}` may still point at the main checkout while the hook working directory follows the worktree.
-- **Codex CLI:** sandbox modes (commonly `codex exec -s workspace-write`), approval modes, `AGENTS.md`, `codex exec -o` for a turn artifact, and command hooks. Confirm today's hook contract before treating a hook as a hard gate.
-- **Cursor:** rules, `hooks.json` (shell, MCP, stop, session start), local and cloud or background agents. Local hooks may not run on a cloud agent.
+- **Claude Code:** hooks, including a Stop hook whose exit 2 can continue the turn; `allow` / `ask` / `deny`; worktrees (`isolation: worktree`); subagents; a project instruction file. A Stop hook may fire at end of turn. Consecutive blocks can cap. A missing Stop script is often non-blocking. After entering a worktree, `${CLAUDE_PROJECT_DIR}` may still point at the main checkout while the hook working directory follows the worktree.
+- **Codex CLI:** sandbox modes (commonly `codex exec -s workspace-write`), approval modes, a project instruction file, `codex exec -o` for a turn artifact, and command hooks. Confirm today's hook contract before treating a hook as a hard gate.
+- **Cursor:** rules, a hooks config (shell, MCP, stop, session start), local and cloud or background agents. Local hooks may not run on a cloud agent.
 - **Other hosts:** skills, subagents, permission or auto-review layers, and routines can stand in for hooks. A missing Stop-hook API is not a reason to invent a second runtime.
 
-Reuse the existing handoff format (`STATE.md`, `EPOCH-N.md`, or `LAST.md`). Do not add a second file format for the same job.
+Reuse the existing handoff format (a state file, an epoch file, or a last-turn file). Do not add a second file format for the same job.
 
 ## Adopt (drafts only; do not write live settings from this skill)
 
@@ -34,7 +34,7 @@ Any stop or check hook must run from the hook working directory, not from a proj
 ## Skip
 
 - Pasting a whole "harness loop" card into a standing file or into a named model "tonight."
-- Auto-appending repeated failures into `CLAUDE.md`, `AGENTS.md`, or editor rules. Promote a repeat into a hook, lint rule, or test, and keep standing files short. Owner-approved corrections belong in a ledger, not an automatic append.
+- Auto-appending repeated failures into a project instruction file or editor rules. Promote a repeat into a hook, lint rule, or test, and keep standing files short. Owner-approved corrections belong in a ledger, not an automatic append.
 - Treating script green as done for work a script cannot grade.
 - A new DAG or worktree framework when the host already isolates worktrees or subagents.
 
@@ -46,40 +46,9 @@ Any stop or check hook must run from the hook working directory, not from a proj
 
 ## Config drafts (illustrative; adapt names to the repo)
 
-Claude Code, project or user `settings.json` (review before any install):
+See the illustrative Claude Code settings draft in [references/verification-deny-and-standing-files.md](references/verification-deny-and-standing-files.md) for exit codes, deny-before-classifier, sandbox, shrinking standing files, and a review-before-install settings sketch. Run the check from the hook working directory. Map a failed check to **exit 2**; exit 1 is usually non-blocking. A Stop hook is a nudge, not proof of success, and must not loop on a fuzzy condition.
 
-```json
-{
-  "permissions": {
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)",
-      "Edit(check.sh)",
-      "Write(check.sh)",
-      "Edit(.github/workflows/**)",
-      "Write(.github/workflows/**)"
-    ]
-  },
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if [ -x ./check.sh ]; then ./check.sh; rc=$?; [ \"$rc\" -eq 0 ] && exit 0; exit 2; else exit 0; fi",
-            "timeout": 30
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-Run the check from the hook working directory. Map a failed check to **exit 2**; exit 1 is usually non-blocking. A Stop hook is a nudge, not proof of success, and must not loop on a fuzzy condition. See [references/verification-deny-and-standing-files.md](references/verification-deny-and-standing-files.md) for exit codes, deny-before-classifier, sandbox, and shrinking standing files.
-
-Codex: add the same deny or guard as a PreToolUse hook, keep `codex exec -s workspace-write -C <repo> -o <dir>/LAST.md`, and write the stall into `LAST.md` or the existing epoch file. Do not turn a CI-repair hook that *continues* on a failed check into a stall stop; they solve different problems.
+Codex: add the same deny or guard as a PreToolUse hook, keep `codex exec -s workspace-write -C <repo> -o` pointed at a last-turn file, and write the stall into that file or the existing epoch file. Do not turn a CI-repair hook that *continues* on a failed check into a stall stop; they solve different problems.
 
 Cursor: put the stall rule in a project rule, and add a shell or file-edit guard if the hook API can deny. Do not assume a cloud agent will run that hook.
 

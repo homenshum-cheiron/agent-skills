@@ -1,6 +1,6 @@
 ---
 name: pipeline-layer-breakdown
-description: "Use when breaking an agent pipeline into layers, a layer table, a node map, or a stage-by-stage explanation that a reader with no context can follow, including how to build an isolated test and an answer key for each layer."
+description: "Use when breaking an agent pipeline into layers, a layer table, a node map, or a stage-by-stage explanation a newcomer can follow, including an isolated test and an answer key for each layer."
 ---
 
 # Pipeline layer breakdown

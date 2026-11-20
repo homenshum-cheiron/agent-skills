@@ -1,6 +1,6 @@
 ---
 name: instruction-hygiene-review
-description: "Use weekly, or when agents act on contradictory or outdated standing instructions: scan instruction files and skills for size-limit truncation, conflicting model or effort pins, superseded dates, dead references, and never-used skills; retire stale rules into an archive instead of deleting them; and run an underuse review that finds methods which should have fired but did not, with a trigger rule for each."
+description: "Use weekly, or when agents act on contradictory or outdated standing instructions: scan for truncation, conflicting pins, stale dates, dead references, and unused skills; archive stale rules."
 ---
 
 # Instruction hygiene review
@@ -20,7 +20,7 @@ Run a script that writes a dated report (Markdown plus JSON) with:
 
 The scan proposes nothing on its own. It lists candidates with evidence.
 
-A ready offline scanner covers checks 1 to 4 and duplicate copies: [`scripts/scan_instructions.py`](scripts/scan_instructions.py). It needs only Python 3.9+, reads only the folders you name (default: common host locations under `$HOME`), and writes a dated Markdown and JSON report without overwriting earlier ones. Configure it with `--root`, `--out`, `--limit NAME=BYTES`, and `--effort-cap`, or the `INSTRUCTION_SCAN_*` environment variables listed in its header. Checks 5 and 6 need your host's logs and are left to you. To run it weekly, adapt the [launchd example](examples/schedule/weekly-scan.launchd.plist) or the [crontab line](examples/schedule/weekly-scan.crontab).
+A ready offline scanner covers checks 1 to 4 and duplicate copies: [`scripts/scan_instructions.py`](scripts/scan_instructions.py). It needs only Python 3.9+, reads only the folders you name (default: common host locations under `$HOME`), and writes a dated Markdown and JSON report without overwriting earlier ones. Configure it with `--root`, `--out`, `--limit NAME=BYTES`, and `--effort-cap`, or the `INSTRUCTION_SCAN_*` environment variables listed in its header. Checks 5 and 6 need your host's logs and are left to you. To run it weekly, review the optional operator examples that ship beside this skill in its schedule-examples folder. Those examples are installed only by the operator, with explicit consent. This skill does not write a login item or a home-directory agent by itself. The scanner's default report folder is an overridable output path (`--out`).
 
 ## Stage 2: judged pass
 

@@ -1,6 +1,6 @@
 ---
 name: owner-routed-brief
-description: "Use when turning the day's signals (chat, calendar, pull requests and CI, tickets, eval results, meeting or conference notes, research) into one ranked, owner-routed brief where each owner sees only their cards. Two modes: Daily, for the principal and the home-time-zone team (read, learn, execute, reflect), and Nightly, a self-contained handoff for a team that works while the home team sleeps. Drafts only; nothing is sent."
+description: "Use when turning the day's signals into one ranked, owner-routed brief where each owner sees only their cards; Daily for the home team, Nightly for a timezone handoff. Drafts only; nothing is sent."
 ---
 
 # Owner-routed brief
