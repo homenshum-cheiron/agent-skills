@@ -1,6 +1,6 @@
 ---
 name: bluf-notes
-description: "Use when condensing notes, conference takeaways, research or status into something readable at a glance, and when writing pull request bodies, team-channel posts, or a coding agent's report back to its owner: bottom line first, an owner on every card, and the background, cause, status and docs a newcomer needs."
+description: "Use when condensing notes, takeaways, research, or status into a glanceable write-up, pull request body, or owner report: bottom line first, owner on every card, and the background a newcomer needs."
 ---
 
 # BLUF notes

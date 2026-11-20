@@ -36,11 +36,11 @@ Infer a vague scope, run it, then confirm it. Cite a secondary summary only afte
 The [offline helper](scripts/docwalk.py) works on one local text or Markdown file. It needs Python 3.10+ and no packages. It prints JSON.
 
 ```sh
-python3 scripts/docwalk.py outline FILE --depth 2
-python3 scripts/docwalk.py find FILE "B.4.c"
-python3 scripts/docwalk.py read FILE --section 1.2.2
-python3 scripts/docwalk.py read FILE --line 31 --scope parent
-python3 scripts/docwalk.py read FILE --chars 812:2400 --max-chars 4000
+python3 scripts/docwalk.py outline examples/sample-guideline.md --depth 2
+python3 scripts/docwalk.py find examples/sample-guideline.md "B.4.c"
+python3 scripts/docwalk.py read examples/sample-guideline.md --section 2.2
+python3 scripts/docwalk.py read examples/sample-guideline.md --line 31 --scope parent
+python3 scripts/docwalk.py read examples/sample-guideline.md --chars 812:2400 --max-chars 4000
 ```
 
 See [the commands](references/commands.md) and [a worked example](examples/worked.md) on a [synthetic guideline](examples/sample-guideline.md).

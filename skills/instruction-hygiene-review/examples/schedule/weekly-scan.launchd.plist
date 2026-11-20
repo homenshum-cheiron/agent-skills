@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-  Example macOS user agent: run the offline instruction scan every Sunday at 18:00 local time.
-  1. If you cloned somewhere other than ~/agent-skills, change the default inside "${AGENT_SKILLS_DIR:-$HOME/agent-skills}"
-     below (launchd does not expand $HOME in EnvironmentVariables, so the path is resolved by /bin/sh).
-     Create the log folder once: mkdir -p ~/.local/state/instruction-hygiene
-  2. cp weekly-scan.launchd.plist ~/Library/LaunchAgents/com.example.instruction-hygiene.plist
-  3. launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.instruction-hygiene.plist
-  Remove: launchctl bootout gui/$(id -u)/com.example.instruction-hygiene, then delete the file.
-  The scan writes reports only. It makes no model or network calls and changes no instruction file.
--->
 <plist version="1.0">
 <dict>
   <key>Label</key><string>com.example.instruction-hygiene</string>
