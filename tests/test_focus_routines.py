@@ -60,11 +60,49 @@ class Folder(unittest.TestCase):
                          "scripts/design_gate.py", "scripts/tier_route.py"):
             self.assertTrue((SKILL / relative).is_file(), relative)
 
-    def test_frontmatter_and_ten_principles(self):
+    def test_frontmatter_and_principle_index(self):
         text = (SKILL / "SKILL.md").read_text()
         front = re.match(r"\A---\n(.*?)\n---\n", text, re.S).group(1)
         self.assertIn("name: focus-routines", front)
-        self.assertEqual(len(re.findall(r"(?m)^\d+\. \*\*", text)), 10)
+        indexed = re.findall(r"\(\*\*(principle-[a-z0-9-]+)\*\*\)", text)
+        self.assertEqual(sorted(indexed), [p.parent.name for p in PRINCIPLES])
+        self.assertEqual(len(indexed), 11)
+
+
+PRINCIPLES = sorted((ROOT / "skills").glob("principle-*/SKILL.md"))
+FOCUS_PRINCIPLES = [p for p in PRINCIPLES if "focus-routines" in p.read_text()]
+
+
+class Principles(unittest.TestCase):
+    """One principle per skill, pstack-style: short body, Apply-when trigger, named check, synthetic example."""
+
+    def test_every_principle_skill_belongs_to_focus_routines(self):
+        self.assertEqual(PRINCIPLES, FOCUS_PRINCIPLES)
+        self.assertEqual(len(PRINCIPLES), 11)
+
+    def test_frontmatter_parses(self):
+        for path in PRINCIPLES:
+            text = path.read_text()
+            front = re.match(r"\A---\n(.*?)\n---\n", text, re.S)
+            self.assertIsNotNone(front, path)
+            fields = dict(line.split(": ", 1) for line in front.group(1).splitlines())
+            self.assertEqual(set(fields), {"name", "description", "disable-model-invocation"}, path)
+            self.assertEqual(fields["name"], path.parent.name)
+            self.assertEqual(fields["disable-model-invocation"], "true")
+            desc = json.loads(fields["description"])
+            self.assertTrue(desc.startswith("Apply "), path)
+
+    def test_short_body_names_its_check(self):
+        for path in PRINCIPLES:
+            body = path.read_text().split("---\n", 2)[2]
+            self.assertLess(len(body.split()), 220, path)
+            self.assertRegex(body, r"\*\*Check:\*\* .*\*\*focus-routines\*\*", path)
+
+    def test_worked_example_synthetic_and_listed_in_readme(self):
+        readme = (ROOT / "README.md").read_text()
+        for path in PRINCIPLES:
+            self.assertIn("synthetic", (path.parent / "examples" / "worked.md").read_text().splitlines()[0])
+            self.assertIn(f"skills/{path.parent.name}/SKILL.md", readme)
 
     def test_worked_example_is_labelled_synthetic(self):
         self.assertIn("synthetic", (SKILL / "examples" / "worked.md").read_text().splitlines()[0])

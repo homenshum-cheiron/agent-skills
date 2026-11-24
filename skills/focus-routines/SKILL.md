@@ -9,18 +9,34 @@ Goal: one phase of work moves to done before the next one opens, and every rule 
 
 This folder is a method plus local checks. It schedules nothing, sends nothing, and selects no model. The reader's host owns schedules and permissions.
 
-## The ten principles
+## Principles
 
-1. **Finish one phase before you switch.** An unfinished job keeps part of your attention after you leave it (attention residue, Sophie Leroy, 2009). Interruptions cost depth, not only minutes (Gloria Mark and colleagues). Keep exactly one active phase.
-2. **Busy is not progress.** Judge the day by whether the one important thing moved, not by how many threads were touched.
-3. **Plan from real past durations.** People underestimate their own jobs even when they know earlier ones ran long (the planning fallacy: Kahneman and Tversky; Buehler, Griffin and Ross). Look up how long the last similar job took, end to end, and add time for rework.
-4. **Deep work goes in the best-energy hours.** Give the important job whole blocks. Put messages and chores in low-energy time.
-5. **The best model goes on the hardest part.** In a deep block the top model tier belongs to the active phase. Side jobs take a smaller tier. This one is ours, not from the research above.
-6. **Write done, stuck, next step before you stop.** An open job with no written next step keeps running in your head. Three lines close it.
-7. **Start with an if-then first step.** "At 9:30, at the desk, open the failing parser test" beats "work on the parser" (implementation intentions, Peter Gollwitzer).
-8. **Fixed times for messages.** Decide once when messages get read. Do not decide again on every ping.
-9. **Say no, or say when.** Ask for the deadline and the importance first. "I am on X; I can look after 3 PM" is a complete answer.
-10. **Design before code; critic apart from planner.** A short design file lands before the first code commit. A fresh-context critic ranks the day without reading the plan, and a person sees both when they disagree.
+Eleven short skills, one principle each. Read the leaf skill in full for any principle you apply. Each entry names when it applies, then the rule.
+
+**Attention**
+
+- **Finish One Phase Before Switching** (**principle-finish-one-phase-before-switching**). A second job is about to open while the first is unfinished. Keep one active phase with a hard end time.
+- **Busy Is Not Progress** (**principle-busy-is-not-progress**). A day is judged by threads touched. Judge it by whether the one important thing moved.
+- **Fixed Times for Messages** (**principle-fixed-times-for-messages**). Pings keep arriving during focused work. Decide once when messages get read.
+- **Say No, or Say When** (**principle-say-no-or-say-when**). An ask arrives that is not the active phase. Ask for the deadline and importance, then answer with no or a time.
+
+**Planning**
+
+- **Plan From Past Durations** (**principle-plan-from-past-durations**). Estimating or promising a date. Use what similar jobs really took, plus rework.
+- **Deep Work in the Best Hours** (**principle-deep-work-in-best-hours**). Laying out a day. Give the important job whole blocks in your best hours.
+- **Start With an If-Then Step** (**principle-start-with-an-if-then-step**). Writing a first step. Name when, where and the first action.
+- **Write the Next Step Before Stopping** (**principle-write-the-next-step-before-stopping**). End of a block, a day or a handoff. Done, stuck on, next step.
+
+**Delegation**
+
+- **Best Model on the Hardest Part** (**principle-best-model-on-the-hardest-part**). A run starts in a deep block. Only the active phase gets the top tier.
+- **Critic Apart From Planner** (**principle-critic-apart-from-planner**). One agent plans and judges. A fresh-context critic ranks without reading the plan.
+
+**Verification**
+
+- **Design Before Code** (**principle-design-before-code**). Code is about to start. A short design file lands first.
+
+The idea that each rule needs a check that can fail follows [pstack](https://github.com/cursor/plugins/tree/main/pstack) and the talk [All Code Is Slop (Except Mine)](https://www.youtube.com/watch?v=O_zcc6Xl12g).
 
 ## The routines
 
@@ -28,19 +44,19 @@ Seven designs, each with a trigger, inputs, an output and one check: [routine de
 
 | Routine | Protects | Check |
 |---|---|---|
-| Priority critic | 2, 10 | `critic_blind` |
-| Phase pick | 1, 3, 7 | `one_active`, `done_picture` |
-| Say-no gate and switch counter | 8, 9 | `no_interrupt`, `switch_cap` |
-| Residual snapshot | 6 | `snapshot_fresh` |
-| Tier routing at peak | 4, 5 | `model_tier` |
-| Design-first gate | 10 | `design_gate.py` |
-| Weekly reality review | 3 | the review's own row count |
+| Priority critic | critic apart from planner, busy is not progress | `critic_blind` |
+| Phase pick | finish one phase, past durations, if-then step | `one_active`, `done_picture` |
+| Say-no gate and switch counter | fixed message times, say no or say when | `no_interrupt`, `switch_cap` |
+| Residual snapshot | next step before stopping | `snapshot_fresh` |
+| Tier routing at peak | best hours, best model on the hardest part | `model_tier` |
+| Design-first gate | design before code | `design_gate.py` |
+| Weekly reality review | past durations | the review's own row count |
 
 Adopt one routine at a time. Start with the phase pick and the residual snapshot: they need no hook and no other routine.
 
 ## Slim before you add
 
-A new routine spends attention and usage. Before adding one, list what already runs, how often, and what each run costs. Cut or merge first: move a filter into the trigger so a run never starts, drop overnight and weekend runs nobody reads, replace a status list with the snapshot. Add the new routine only with the room that frees. Give every routine a review-by date, and keep, change or drop it from its pass and fail log. Details are in the routine designs.
+A new routine spends attention and usage. List what already runs and what each run costs, cut or merge first, and add only with the room that frees. Give every routine a review-by date. Details are in the routine designs.
 
 ## The checks
 

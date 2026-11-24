@@ -10,7 +10,7 @@ A person who directs several coding agents can open ten threads in a morning and
 
 One portable folder that gives a person or an agent:
 
-1. Ten short principles, each tied to a named, published idea.
+1. Eleven short principle skills, one principle each, beside this folder. Each names when it applies and the check that can fail it, and links its public source where it has one.
 2. Seven routine designs. Each one has a trigger, what it reads, what it writes, and one check that can fail.
 3. Local scripts for those checks. They read small state files and git history. They call no provider and start nothing.
 
@@ -18,7 +18,8 @@ One portable folder that gives a person or an agent:
 
 | File | Purpose |
 |---|---|
-| `SKILL.md` | The principles and when to use each routine. |
+| `SKILL.md` | The routines and an index of the principle skills, grouped, one line each. |
+| `../principle-*/SKILL.md` (eleven sibling skills) | One principle each, with a synthetic `examples/worked.md`. |
 | `references/routines.md` | The seven routine designs and the "slim before you add" rule. |
 | `references/state-files.md` | State file shapes and settings. |
 | `scripts/focus_check.py` | Seven checks over the state files. Three verdicts: passed, failed, unverified. |
@@ -40,6 +41,9 @@ One portable folder that gives a person or an agent:
 - **The hook is an example, not an installer.** The reader copies it by hand into one repository after reading it. Nothing here edits git settings.
 - **Tiers, not model names.** `top`, `mid`, `cheap`. The reader maps their own models to tiers. Named models would go stale.
 - **Planner and critic are separate routines.** The critic may not read the plan. The check on this is weak (it trusts the critic's own source list) and the text says so.
+
+- **One principle per skill, indexed by the playbook.** The layout follows [pstack](https://github.com/cursor/plugins/tree/main/pstack): `principle-<title>` folders with a short body, an "Apply when" description and `disable-model-invocation: true`, and an index in the entry skill that names each leaf. The tenth rule of the first draft held two ideas, so it became two skills: design before code, and critic apart from planner.
+- **Where this repository and pstack differ, the repository wins.** Every skill here needs `examples/worked.md`, so each principle has a short synthetic one. Tests stay in the repository's `tests/` folder. Links may not leave a skill folder, so the principles name `focus-routines` in bold instead of linking it.
 
 ## What stays out
 
@@ -63,4 +67,4 @@ One portable folder that gives a person or an agent:
 
 ## Rollback
 
-Delete `skills/focus-routines/`, `tests/test_focus_routines.py`, and the catalog, decision, verification and attribution lines that name the skill.
+Delete `skills/focus-routines/`, the eleven `skills/principle-*/` folders listed in the README, `tests/test_focus_routines.py`, and the catalog, decision, verification and attribution lines that name the skill.

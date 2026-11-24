@@ -123,6 +123,27 @@ These are usage shapes that should apply in any workshop with more than one acco
 | Report an eval batch with four separate verdicts, p50 and p95, tasks per hour, and dollars per task | [Eval scorecard](skills/eval-scorecard/SKILL.md) |
 | Keep one phase of work active at a time, with a local check that can fail for each rule | [Focus routines](skills/focus-routines/SKILL.md) |
 
+<details>
+<summary>The eleven focus principles</summary>
+
+Short skills, one principle each, in the style of [pstack](https://github.com/cursor/plugins/tree/main/pstack). [Focus routines](skills/focus-routines/SKILL.md) indexes them and names the check that can fail each one.
+
+| Principle | Group | Rule |
+|---|---|---|
+| [finish-one-phase-before-switching](skills/principle-finish-one-phase-before-switching/SKILL.md) | attention | Apply when a second job is about to open while the first is still unfinished, or when a day has several threads open and none closed. Keep exactly one active phase and give it a hard end time. |
+| [busy-is-not-progress](skills/principle-busy-is-not-progress/SKILL.md) | attention | Apply when judging a day, a standup, or an agent's report by how many threads were touched. Judge by whether the one important thing moved. |
+| [plan-from-past-durations](skills/principle-plan-from-past-durations/SKILL.md) | planning | Apply when estimating a job, picking how much fits in a day, or promising a date. Look up how long the last similar jobs took end to end, then add time for rework. |
+| [deep-work-in-best-hours](skills/principle-deep-work-in-best-hours/SKILL.md) | planning | Apply when laying out a day or placing a meeting, a message batch or a chore. Give the important job whole blocks in your best-energy hours. |
+| [best-model-on-the-hardest-part](skills/principle-best-model-on-the-hardest-part/SKILL.md) | delegation | Apply when a run is about to start in a deep block, or when the strongest model tier is being spent on side work. In a deep block only the active phase gets the top tier. |
+| [write-the-next-step-before-stopping](skills/principle-write-the-next-step-before-stopping/SKILL.md) | planning | Apply at the end of a deep block, the end of the day, or a handoff. Write three lines for each open job: done, stuck on, next concrete step. |
+| [start-with-an-if-then-step](skills/principle-start-with-an-if-then-step/SKILL.md) | planning | Apply when writing the first step of a phase, a day plan or a handoff. Name when, where and the first action, not a topic. |
+| [fixed-times-for-messages](skills/principle-fixed-times-for-messages/SKILL.md) | attention | Apply when messages, pings or review requests keep arriving during focused work. Decide once when messages get read, instead of deciding again on every ping. |
+| [say-no-or-say-when](skills/principle-say-no-or-say-when/SKILL.md) | attention | Apply when a new ask arrives that is not the active phase. Ask for the deadline and the importance first, then answer with no or a time. |
+| [design-before-code](skills/principle-design-before-code/SKILL.md) | verification | Apply when a branch, a pull request or an agent run is about to start code. A short design file lands in a commit before the first code commit. |
+| [critic-apart-from-planner](skills/principle-critic-apart-from-planner/SKILL.md) | delegation | Apply when one agent both plans the day and judges what matters most. A fresh-context critic ranks the work without reading the plan, and a person sees both when they disagree. |
+
+</details>
+
 The catalog below is the rest of the collection: scenario, direction, proof, measurement, and the other stuck-point recipes. A later public skill could cover the preflight across accounts and live sessions, mid-task host or account switching, and isolated fresh-context calls as one package. Those methods are described here; they are not yet a standalone folder in this repository.
 
 ## When the work gets stuck
