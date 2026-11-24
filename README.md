@@ -121,6 +121,28 @@ These are usage shapes that should apply in any workshop with more than one acco
 | Report the outcome, the evidence limit, and the next decision | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
 | Turn the day's signals into one ranked brief where each owner sees only their cards, with a daily and a nightly handoff mode | [Owner-routed brief](skills/owner-routed-brief/SKILL.md) |
 | Report an eval batch with four separate verdicts, p50 and p95, tasks per hour, and dollars per task | [Eval scorecard](skills/eval-scorecard/SKILL.md) |
+| Keep one phase of work active at a time, with a local check that can fail for each rule | [Focus routines](skills/focus-routines/SKILL.md) |
+
+<details>
+<summary>The eleven focus principles</summary>
+
+Short skills, one principle each, in the style of [pstack](https://github.com/cursor/plugins/tree/main/pstack). [Focus routines](skills/focus-routines/SKILL.md) indexes them and names the check that can fail each one.
+
+| Principle | Group | Rule |
+|---|---|---|
+| [finish-one-phase-before-switching](skills/principle-finish-one-phase-before-switching/SKILL.md) | attention | Apply when a second job is about to open while the first is still unfinished, or when a day has several threads open and none closed. Keep exactly one active phase and give it a hard end time. |
+| [busy-is-not-progress](skills/principle-busy-is-not-progress/SKILL.md) | attention | Apply when judging a day, a standup, or an agent's report by how many threads were touched. Judge by whether the one important thing moved. |
+| [plan-from-past-durations](skills/principle-plan-from-past-durations/SKILL.md) | planning | Apply when estimating a job, picking how much fits in a day, or promising a date. Look up how long the last similar jobs took end to end, then add time for rework. |
+| [deep-work-in-best-hours](skills/principle-deep-work-in-best-hours/SKILL.md) | planning | Apply when laying out a day or placing a meeting, a message batch or a chore. Give the important job whole blocks in your best-energy hours. |
+| [best-model-on-the-hardest-part](skills/principle-best-model-on-the-hardest-part/SKILL.md) | delegation | Apply when a run is about to start in a deep block, or when the strongest model tier is being spent on side work. In a deep block only the active phase gets the top tier. |
+| [write-the-next-step-before-stopping](skills/principle-write-the-next-step-before-stopping/SKILL.md) | planning | Apply at the end of a deep block, the end of the day, or a handoff. Write three lines for each open job: done, stuck on, next concrete step. |
+| [start-with-an-if-then-step](skills/principle-start-with-an-if-then-step/SKILL.md) | planning | Apply when writing the first step of a phase, a day plan or a handoff. Name when, where and the first action, not a topic. |
+| [fixed-times-for-messages](skills/principle-fixed-times-for-messages/SKILL.md) | attention | Apply when messages, pings or review requests keep arriving during focused work. Decide once when messages get read, instead of deciding again on every ping. |
+| [say-no-or-say-when](skills/principle-say-no-or-say-when/SKILL.md) | attention | Apply when a new ask arrives that is not the active phase. Ask for the deadline and the importance first, then answer with no or a time. |
+| [design-before-code](skills/principle-design-before-code/SKILL.md) | verification | Apply when a branch, a pull request or an agent run is about to start code. A short design file lands in a commit before the first code commit. |
+| [critic-apart-from-planner](skills/principle-critic-apart-from-planner/SKILL.md) | delegation | Apply when one agent both plans the day and judges what matters most. A fresh-context critic ranks the work without reading the plan, and a person sees both when they disagree. |
+
+</details>
 
 The catalog below is the rest of the collection: scenario, direction, proof, measurement, and the other stuck-point recipes. A later public skill could cover the preflight across accounts and live sessions, mid-task host or account switching, and isolated fresh-context calls as one package. Those methods are described here; they are not yet a standalone folder in this repository.
 
@@ -159,6 +181,7 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | Standing instructions contradict each other, outgrow a loader limit, or promise methods that never fire | [Instruction hygiene review](skills/instruction-hygiene-review/SKILL.md) |
 | Updates arrive from many places and each person needs only their part, ranked, today or overnight | [Owner-routed brief](skills/owner-routed-brief/SKILL.md) |
 | An eval result is one pooled score, or a speedup comes from a sum of durations | [Eval scorecard](skills/eval-scorecard/SKILL.md) |
+| Many threads are open and little is finished, or code starts before a design is written | [Focus routines](skills/focus-routines/SKILL.md) |
 | Meeting or conference notes are only readable by the person who wrote them | [BLUF notes](skills/bluf-notes/SKILL.md) |
 | A pipeline needs a layer table a newcomer can follow, with a test and a key per layer | [Pipeline layer breakdown](skills/pipeline-layer-breakdown/SKILL.md) |
 | A pull request body, team-channel post, or coding-agent report needs background, cause, status and docs a newcomer can follow | [BLUF notes](skills/bluf-notes/SKILL.md) |
@@ -189,7 +212,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/install_skills.sh` is an optional, dry-run-by-default installer that links or copies skill folders into host skill folders. See [Set up on your machine](#set-up-on-your-machine).
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Thirty-two workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Thirty-three workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -212,11 +235,12 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Thirty-two written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Thirty-three written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
 - An eval scorecard that counts four verdicts apart and reports latency percentiles, tasks per hour, and dollars per task from a per-case CSV, labeling missing numbers as missing. It does not run an eval or check that the verdicts are right.
+- Focus checks: seven state-file checks, a design-first check on a branch's commit order, a tier decision helper, and an example pre-push hook. They are local and run only when called. Nothing is installed or scheduled, and they do not show that the routines shorten real work.
 - A trace-record checker and a report checker. They reject a few dishonest shapes. They do not run an architecture or certify a result.
 - An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines, or character ranges with exact offsets. It does not rank, embed, call a model, or convert PDF or HTML.
 - An offline instruction scanner for the weekly hygiene review: size against loader limits, effort above a configured cap, past-dated pending lines, missing home paths, banned-versus-allowed pairs, and duplicated copies. It reports candidates; it does not edit or judge them.

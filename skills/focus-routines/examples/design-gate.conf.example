@@ -1,0 +1,12 @@
+# Settings for the example pre-push hook. Copy next to the hook as design-gate.conf, then edit.
+# One KEY=VALUE per line. Lines that start with # are ignored. Values below are examples.
+
+# Only worktrees under these folders are checked. Separate several folders with ":". Everything else passes untouched.
+LANES_ROOTS=~/agent-worktrees
+
+# A branch whose first commit (author date) is at or before this time is grandfathered and passes.
+# Use the moment you turn the gate on, with a zone offset.
+ENABLE_TS=2031-03-03T09:00:00+00:00
+
+# The branch base is the merge-base with this ref.
+MAIN_REF=origin/main
