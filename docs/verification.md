@@ -16,6 +16,9 @@ python3 skills/match-methods/scripts/check_report.py skills/match-methods/exampl
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothesis-only.json
 python3 scripts/check_autonomy_map.py docs/autonomy-map.json
 python3 skills/eval-scorecard/scripts/scorecard.py skills/eval-scorecard/examples/cases.csv --cost-scope "model only"
+python3 skills/focus-routines/scripts/focus_check.py --selftest
+python3 skills/focus-routines/scripts/design_gate.py --selftest
+python3 skills/focus-routines/scripts/tier_route.py --selftest
 ```
 
 The packet command checks a deliberately synthetic local example. The coverage command checks mark arithmetic for another synthetic example. Neither is evidence for a real pull request. Exit 0 from the coverage scorer means the nine marks are well formed. It does not mean every prompt was supported.
@@ -33,6 +36,7 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Report records: prose that disagrees with a figure, a chart series that disagrees with its table, a numeric chart on a hypothesis-only report, and a recommendation treated as permission.
 - Instruction scan: effort above a configurable cap (negated and quoted mentions ignored), non-instruction files skipped, past-dated pending lines, missing home paths, banned-versus-allowed pairs, duplicated copies, loader-size warnings, dated reports that never overwrite, and the `--fail-on-findings` exit code. Synthetic files only.
 - Skill installer: dry run changes nothing, only existing host folders are used by default, existing folders are never overwritten, `--remove` deletes only its own links, and folder overrides and `--copy` work. Uses a temporary `HOME`.
+- Focus routines: each of the seven state checks can fail, missing data is unverified and a broken file is inconclusive; design-first order by commit position (including same-second commits), thin or deleted design files, the exemption limit and its reason, and the ledger; the tier decision in and out of a block, on a weekend, at block edges and with a stale or broken state file; and the example hook on real pushes to a throwaway bare repository (block, pass, scope, grandfathering, chaining, broken setup, delete). Synthetic state only.
 
 ## What remains human or runtime work
 
@@ -42,6 +46,7 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Whether reading a document by place improves answers or cost on real long documents; no benchmark result is included.
 - Whether a method match improves a real task. `match-methods` ships no runner and no score. Publishing it is not a product improvement.
 - Whether the collection is autonomous or self-improving. `scripts/check_autonomy_map.py` only checks that the qualitative map does not claim a number or a demonstrated path. A passing map is not that proof.
+- Whether the focus routines shorten real work, whether a done-picture is a good one, and whether a design is sound. The checks see shape, timing and commit order only. The example hook was not installed anywhere by these checks.
 - Actual host installation/discovery, model behavior, live provider compatibility, authorization, and spending controls.
 - Confidentiality and legal review. The publication scan flags common patterns but is not a complete secret or privacy audit.
 

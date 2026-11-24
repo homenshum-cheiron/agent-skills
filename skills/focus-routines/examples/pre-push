@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""Example pre-push hook: run the design-first gate on pushes from chosen folders. Read it before you copy it.
+
+To use it in ONE repository, by hand: copy this file to <git-common-dir>/hooks/pre-push and make it executable, copy
+scripts/design_gate.py next to it, and copy design-gate.conf.example next to it as design-gate.conf. If a pre-push hook
+is already there, rename it to pre-push.chained-<date> first; this hook runs it. Nothing here edits git settings.
+
+Order:
+1. Run every executable pre-push.chained-* next to this file with the same arguments and stdin. If one fails, the push fails.
+2. No design-gate.conf, or this worktree is not under a folder in LANES_ROOTS: pass silently.
+3. For each pushed ref: skip deletes; base = merge-base with MAIN_REF (else the remote sha); a branch whose first commit
+   (author date, which a rebase keeps) is at or before ENABLE_TS passes as "grandfathered"; otherwise run design_gate.check
+   on base..local with the branch's commit messages as the body.
+It reads git history only. It never pushes, fetches or edits anything.
+"""
+import datetime as dt
+import glob
+import os
+import subprocess
+import sys
+
+HOOKS = os.path.dirname(os.path.realpath(__file__))
+HOW = "write docs/design/<name>.md (or DESIGN*.md / PLAN*.md / *.mmd) in a commit before the first code commit"
+
+
+def conf():
+    """KEY=VALUE lines from design-gate.conf, or None when the file is absent (the gate is not set up: pass)."""
+    out = {"LANES_ROOTS": "", "ENABLE_TS": "", "MAIN_REF": "origin/main"}
+    try:
+        with open(os.path.join(HOOKS, "design-gate.conf")) as fh:
+            for line in fh:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    out[key.strip()] = value.strip()
+    except OSError:
+        return None
+    if os.environ.get("DESIGN_GATE_LANES"):
+        out["LANES_ROOTS"] = os.environ["DESIGN_GATE_LANES"]
+    return out
+
+
+def git(*args):
+    """stdout of a git command run in the worktree, or None when it fails."""
+    r = subprocess.run(["git", *args], capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else None
+
+
+def say(message):
+    print(message, file=sys.stderr)
+
+
+def main():
+    data = sys.stdin.buffer.read()
+    for chained in sorted(glob.glob(os.path.join(HOOKS, "pre-push.chained-*"))):
+        if os.path.isfile(chained) and os.access(chained, os.X_OK):
+            code = subprocess.run([chained, *sys.argv[1:]], input=data).returncode
+            if code:
+                return code
+    settings = conf()
+    top = git("rev-parse", "--show-toplevel")
+    if settings is None or not top:
+        return 0
+    real = os.path.realpath(top)
+    roots = [os.path.realpath(os.path.expanduser(r.strip())) for r in settings["LANES_ROOTS"].split(":") if r.strip()]
+    if not any(real.startswith(root + os.sep) for root in roots):
+        return 0   # out of scope
+    try:
+        enable = dt.datetime.fromisoformat(settings["ENABLE_TS"])
+        enable = (enable if enable.tzinfo else enable.astimezone()).timestamp()
+        sys.path.insert(0, HOOKS)
+        import design_gate
+    except Exception as e:   # a broken setup must not let an in-scope push through unchecked
+        say(f"design-gate: BLOCKED: the gate is not set up correctly ({type(e).__name__}); check design-gate.conf and design_gate.py next to the hook")
+        return 1
+    result = 0
+    for line in data.decode("utf-8", "replace").splitlines():
+        parts = line.split()
+        if len(parts) != 4:
+            continue
+        local_ref, local_sha, _, remote_sha = parts
+        if not local_sha.strip("0"):
+            continue   # deleting a remote ref
+        base = git("merge-base", local_sha, settings["MAIN_REF"])
+        if not base and remote_sha.strip("0") and git("cat-file", "-e", remote_sha + "^{commit}") is not None:
+            base = remote_sha
+        if not base:
+            say(f"design-gate: BLOCKED {local_ref}: cannot find a base ({settings['MAIN_REF']} is not in this clone). Fetch it, then push again")
+            result = 1
+            continue
+        first = git("log", "--reverse", "--format=%at", f"{base}..{local_sha}")
+        if not first:
+            continue   # nothing new on top of the base
+        if int(first.split()[0]) <= enable:
+            say("design-gate: grandfathered")
+            continue
+        body = git("log", "--format=%B", f"{base}..{local_sha}") or ""
+        try:
+            verdict, why = design_gate.check(top, base, local_sha, body)
+        except Exception as e:
+            verdict, why = "inconclusive", f"the gate could not read this branch ({type(e).__name__})"
+        if verdict != "passed":
+            say(f"design-gate: BLOCKED {local_ref}: {why}. {HOW}")
+            result = 1
+    return result
+
+
+if __name__ == "__main__":
+    sys.exit(main())
