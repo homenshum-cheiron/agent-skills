@@ -12,7 +12,7 @@ One JSON object per action, with no duplicate fields. Fields the checker reads:
 | `tip` | 1 | Commit SHA the checks and review ran on. |
 | `blast_radius` | 1 | What else it could break, and the one fact it is safe because of. |
 | `checks` | 1 | List of `{command, exit_code, observed, revision}`. `exit_code` must be the integer 0 and `revision` must equal `tip`. |
-| `review` | 1 | `{kind, author_is_reviewer, saw_author_reasoning, revision, evidence, verdict, findings}`. `verdict` must be `PASS` on this tip. A local `evidence` file must exist, name the tip SHA, and end with a line reading only `PASS`. |
+| `review` | 1 | `{kind, author_is_reviewer, saw_author_reasoning, revision, evidence, verdict, findings}`. `verdict` must be `PASS` on this tip. `evidence` must be a saved file that says `Reviewed revision: <tip>`, names no other revision, has no more `Finding:` lines than `findings` entries, and ends with a line reading only `PASS`. `findings` is required, empty when there were none. |
 | `review.findings` | 1 | List of `{title, disposition, evidence}`; disposition is fixed, rejected, duplicate, or unresolved. |
 | `post_verify` | after acting | One check object, or a list, run against the landed result. A failure returns `revert` whatever else the record says. |
 | `evidence` | optional | Pointer for the log row; defaults to `review.evidence`. |

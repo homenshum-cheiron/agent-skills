@@ -34,7 +34,7 @@ The owner moves an action between tiers in writing. An agent's or reviewer's say
 python3 skills/self-review-gate/scripts/check_gate.py gate.json --log decisions.tsv
 ```
 
-Exit 0 means act, 1 blocked, 2 needs the owner, 3 revert now. Add `--rerun --cwd <repo>` to rerun the recorded commands instead of trusting recorded exit codes: before acting it requires `<repo>` to be checked out at the tip and reruns `checks`; after acting it reruns `post_verify` and returns revert on failure. A recorded post-action failure returns revert whatever else the record says. Duplicate JSON fields are rejected. The checker verifies bookkeeping: each step is recorded, green, on the same tip, and the reviewer's saved output names the tip and ends with PASS. It does not judge the review or grant permission.
+Exit 0 means act, 1 blocked, 2 needs the owner, 3 revert now. Add `--rerun --cwd <repo>` to rerun the recorded commands instead of trusting recorded exit codes: before acting it requires `<repo>` to be a clean checkout of the tip and reruns `checks`; after acting it reruns `post_verify` and returns revert on failure. A recorded post-action failure returns revert whatever else the record says, even when the rest of the record is malformed. Duplicate JSON fields are rejected. The checker verifies bookkeeping: each step is recorded, green, on the same tip, and the reviewer's saved output names the tip and ends with PASS. It does not judge the review or grant permission.
 
 ## Done means
 

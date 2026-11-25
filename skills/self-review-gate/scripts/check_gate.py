@@ -78,22 +78,16 @@ def _categories(raw, findings):
     if not isinstance(raw, list) or not all(isinstance(c, str) for c in raw):
         findings.append("categories must be a list of strings")
         return None
-    tags = {c.strip().lower() for c in raw if c.strip()}
+    if any(not c.strip() for c in raw):
+        findings.append("categories contains a blank tag")
+        return None
+    tags = {c.strip().lower() for c in raw}
     unknown = sorted(tags - OWNER_ONLY)
     if unknown:
         findings.append("unknown categories (use the owner-only names): " + ", ".join(unknown))
         return None
     return tags
 
-
-def _evidence_file(pointer, base):
-    """Return a Path for a local evidence pointer, or None for links and commit refs."""
-    if not isinstance(pointer, str) or re.match(r"^[a-z][a-z0-9+.-]*://", pointer):
-        return None
-    if re.match(r"^(commit |pr |#)", pointer, re.I) or SHA.match(pointer):
-        return None
-    path = Path(pointer)
-    return path if path.is_absolute() else (base / path)
 
 
 def check(record: dict, base: Path | None = None) -> dict:
@@ -105,7 +99,11 @@ def check(record: dict, base: Path | None = None) -> dict:
     findings: list[str] = []
     if not isinstance(record, dict):
         return {"verdict": BLOCKED, "tier": None, "findings": ["record is not a JSON object"]}
-    result = _decide(record, base, findings)
+    try:
+        result = _decide(record, base, findings)
+    except (TypeError, AttributeError, KeyError, ValueError) as error:
+        findings.append(f"malformed record: {error}")
+        result = {"verdict": BLOCKED, "tier": record.get("tier"), "findings": findings}
     return _after(record, result["verdict"], result["tier"], result["findings"])
 
 
@@ -160,19 +158,25 @@ def _decide(record: dict, base, findings) -> dict:
         if not _nonempty(evidence):
             findings.append("review.evidence missing (path or link to the reviewer's output)")
         elif base is not None:
-            path = _evidence_file(evidence, base)
-            if path is not None:
-                if not path.is_file():
-                    findings.append(f"review.evidence file not found: {evidence}")
-                else:
-                    text = path.read_text(errors="replace")
-                    lines = [line.strip() for line in text.splitlines() if line.strip()]
-                    if not lines or lines[-1] != "PASS":
-                        findings.append("reviewer output must end with a line reading PASS")
-                    if tip and tip[:7] not in text:
-                        findings.append(f"reviewer output does not name the tip {tip[:7]}")
+            path = Path(evidence) if Path(evidence).is_absolute() else base / evidence
+            if not path.is_file():
+                findings.append(f"review.evidence file not found: {evidence}")
+            else:
+                text = path.read_text(errors="replace")
+                lines = [line.strip() for line in text.splitlines() if line.strip()]
+                if not lines or lines[-1] != "PASS":
+                    findings.append("reviewer output must end with a line reading PASS")
+                named = re.findall(r"reviewed revision:\s*([0-9a-f]{7,40})", text, re.I)
+                if not named or not tip or any(not (n.startswith(tip) or tip.startswith(n)) for n in named):
+                    findings.append(f"reviewer output must say 'Reviewed revision: {tip}' and name no other revision")
+                stated = len(re.findall(r"^\s*(?:verified )?finding:", text, re.I | re.M))
+                if stated > len(review.get("findings") or []):
+                    findings.append(f"reviewer output states {stated} findings but the record disposes of "
+                                    f"{len(review.get('findings') or [])}")
         if review.get("verdict") != "PASS":
             findings.append(f"review.verdict is {review.get('verdict')!r}; only PASS lets you act")
+        if not isinstance(review.get("findings"), list):
+            findings.append("review.findings must be a list (empty when the reviewer found nothing)")
         for i, item in enumerate(review.get("findings") or []):
             disposition = (item or {}).get("disposition")
             if disposition not in FINDING_OK:
@@ -238,6 +242,12 @@ def _rerun(record, result, cwd) -> None:
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=cwd, capture_output=True, text=True)
     if head.returncode != 0 or not head.stdout.strip().startswith(str(record.get("tip"))):
         result["findings"].append(f"--cwd is not checked out at the tip {record.get('tip')}")
+        result["verdict"] = BLOCKED
+        return
+    dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"],
+                           cwd=cwd, capture_output=True, text=True)
+    if dirty.returncode != 0 or dirty.stdout.strip():
+        result["findings"].append("--cwd has modified tracked files; rerun on a clean checkout of the tip")
         result["verdict"] = BLOCKED
         return
     for i, item in enumerate(record.get("checks") or []):

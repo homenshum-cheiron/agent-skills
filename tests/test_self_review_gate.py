@@ -103,7 +103,7 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "review").mkdir()
-            (tmp / "review/pr7-reviewer.txt").write_text("tip 3f9c2a1\nPASS\n")
+            (tmp / "review/pr7-reviewer.txt").write_text("Reviewed revision: 3f9c2a1\nPASS\n")
             good = tmp / "good.json"
             good.write_text(json.dumps(record()))
             shared = tmp / "shared.json"
@@ -156,7 +156,7 @@ class GateTests(unittest.TestCase):
 
     def test_evidence_file_saying_block_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:
-            Path(tmp, "r.txt").write_text("Finding: x\nBLOCK\n")
+            Path(tmp, "r.txt").write_text("Reviewed revision: 3f9c2a1\nFinding: x\nBLOCK\n")
             data = record()
             data["review"]["evidence"] = "r.txt"
             data["review"]["findings"] = []
@@ -171,7 +171,7 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "review").mkdir()
-            (tmp / "review/pr7-reviewer.txt").write_text("tip 3f9c2a1\nPASS\n")
+            (tmp / "review/pr7-reviewer.txt").write_text("Reviewed revision: 3f9c2a1\nPASS\n")
             data = record()
             data["checks"] = [{"command": "python3 -c 'import sys; sys.exit(0)'", "exit_code": 0, "observed": "ok", "revision": data["tip"]},
                               {"command": "python3 -c 'import sys; sys.exit(2)'", "exit_code": 0, "observed": "OK", "revision": data["tip"]}]
@@ -187,7 +187,7 @@ class GateTests(unittest.TestCase):
             self.assertEqual(gate.main([str(path)]), 1)
 
     def test_review_output_must_be_current_and_end_in_pass(self):
-        cases = {"empty.txt": "", "old.txt": "tip aaaaaaa\nPASS\n", "cut.txt": "tip 3f9c2a1\nFinding: unresolved x\n"}
+        cases = {"empty.txt": "", "old.txt": "Reviewed revision: aaaaaaa\nPASS\n", "cut.txt": "tip 3f9c2a1\nFinding: unresolved x\n"}
         with tempfile.TemporaryDirectory() as tmp:
             for name, text in cases.items():
                 Path(tmp, name).write_text(text)
@@ -214,7 +214,7 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             head = self._git_repo(tmp)
-            (tmp / "r.txt").write_text(f"tip {head[:7]}\nPASS\n")
+            (tmp / "r.txt").write_text(f"Reviewed revision: {head[:7]}\nPASS\n")
             data = record(tip=head[:7])
             for c in data["checks"]:
                 c["revision"] = head[:7]
@@ -234,7 +234,7 @@ class GateTests(unittest.TestCase):
             for c in data2["checks"]:
                 c["revision"] = "1234567"
             data2["review"]["revision"] = "1234567"
-            (tmp / "r.txt").write_text("tip 1234567\nPASS\n")
+            (tmp / "r.txt").write_text("Reviewed revision: 1234567\nPASS\n")
             path.write_text(json.dumps(data2))
             self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 1)
 
@@ -242,12 +242,59 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "review").mkdir()
-            (tmp / "review/pr7-reviewer.txt").write_text("tip 3f9c2a1\nPASS\n")
+            (tmp / "review/pr7-reviewer.txt").write_text("Reviewed revision: 3f9c2a1\nPASS\n")
             data = record(post_verify={"command": "exit 7", "exit_code": 0, "observed": "healthy"})
             path = tmp / "gate.json"
             path.write_text(json.dumps(data))
             self.assertEqual(gate.main([str(path)]), 0)
             self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 3)
+
+    def test_blank_category_blocks(self):
+        self.assertEqual(gate.check(record(categories=[" "]))["verdict"], "blocked")
+
+    def test_review_evidence_must_be_a_saved_file(self):
+        data = record()
+        data["review"]["evidence"] = "commit 3f9c2a1"
+        self.assertEqual(gate.check(data, base=PKG / "examples")["verdict"], "blocked")
+
+    def test_review_output_naming_another_revision_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "r.txt").write_text("Requested revision: 3f9c2a1\nActually reviewed revision: aaaaaaa\nPASS\n")
+            data = record()
+            data["review"]["evidence"] = "r.txt"
+            self.assertEqual(gate.check(data, base=Path(tmp))["verdict"], "blocked")
+
+    def test_findings_list_required_and_must_cover_stated_findings(self):
+        data = record()
+        del data["review"]["findings"]
+        self.assertEqual(gate.check(data)["verdict"], "blocked")
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "r.txt").write_text("Reviewed revision: 3f9c2a1\nVerified finding: a\nFinding: b\nPASS\n")
+            data = record()
+            data["review"]["evidence"] = "r.txt"
+            self.assertEqual(gate.check(data, base=Path(tmp))["verdict"], "blocked")
+
+    def test_malformed_review_still_reverts_on_failed_post(self):
+        data = record(post_verify={"command": "x", "exit_code": 7, "observed": "failed"})
+        data["review"]["kind"] = []
+        self.assertEqual(gate.check(data)["verdict"], "revert")
+        data = record()
+        data["review"]["kind"] = []
+        self.assertEqual(gate.check(data)["verdict"], "blocked")
+
+    def test_rerun_refuses_a_dirty_checkout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            head = self._git_repo(tmp)
+            (tmp / "r.txt").write_text(f"Reviewed revision: {head[:7]}\nPASS\n")
+            data = record(tip=head[:7])
+            for c in data["checks"]:
+                c.update(revision=head[:7], command="true")
+            data["review"].update(revision=head[:7], evidence="r.txt")
+            path = tmp / "gate.json"
+            path.write_text(json.dumps(data))
+            (tmp / "f").write_text("modified")
+            self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 1)
 
 
 if __name__ == "__main__":

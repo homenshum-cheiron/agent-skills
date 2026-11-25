@@ -1,12 +1,7 @@
-Synthetic reviewer output for the worked example (invented).
+Synthetic reviewer output for the worked example (invented). One file per reviewed tip.
 
-Round 1, tip 2d81b0e
-Finding: post_verify accepted "0" (a string) as a passing exit code.
-Command: python3 skills/self-review-gate/scripts/check_gate.py probe-string-exit.json
-Printed: act (tier 1). Required: revert (tier 1).
-Verdict line: BLOCK (round 1)
-
-Round 2, tip 3f9c2a1
-Reran the probe: revert (tier 1). Validator and suite green.
+Reviewed revision: 3f9c2a1
+Reran the round-one probe for a string exit code: the checker now prints revert (tier 1).
+Validator and suite green on this revision.
 No verified findings.
 PASS
