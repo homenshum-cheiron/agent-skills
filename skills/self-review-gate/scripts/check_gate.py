@@ -13,6 +13,7 @@ import argparse
 import datetime as _dt
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -56,20 +57,51 @@ def _checks_pass(checks, label, tip, findings):
         if not _nonempty(check.get("command")):
             findings.append(f"{where}: command missing")
             ok = False
-        if check.get("exit_code") != 0:
-            findings.append(f"{where}: exit_code is {check.get('exit_code')!r}, not 0")
+        code = check.get("exit_code")
+        if type(code) is not int or code != 0:  # bool and "0" are not exit codes
+            findings.append(f"{where}: exit_code is {code!r}, not the integer 0")
             ok = False
         if not _nonempty(check.get("observed")):
             findings.append(f"{where}: observed output missing")
             ok = False
-        if tip and check.get("revision") not in (None, tip):
-            findings.append(f"{where}: ran on {check.get('revision')}, not the tip {tip}")
+        if tip and check.get("revision") != tip:
+            findings.append(f"{where}: ran on {check.get('revision')!r}, not the tip {tip}")
             ok = False
     return ok
 
 
-def check(record: dict) -> dict:
-    """Return {'verdict', 'tier', 'findings'} for one gate record."""
+def _categories(raw, findings):
+    if raw is None:
+        return set()
+    if isinstance(raw, str):
+        raw = [raw]
+    if not isinstance(raw, list) or not all(isinstance(c, str) for c in raw):
+        findings.append("categories must be a list of strings")
+        return None
+    tags = {c.strip().lower() for c in raw if c.strip()}
+    unknown = sorted(tags - OWNER_ONLY)
+    if unknown:
+        findings.append("unknown categories (use the owner-only names): " + ", ".join(unknown))
+        return None
+    return tags
+
+
+def _evidence_file(pointer, base):
+    """Return a Path for a local evidence pointer, or None for links and commit refs."""
+    if not isinstance(pointer, str) or re.match(r"^[a-z][a-z0-9+.-]*://", pointer):
+        return None
+    if re.match(r"^(commit |pr |#)", pointer, re.I) or SHA.match(pointer):
+        return None
+    path = Path(pointer)
+    return path if path.is_absolute() else (base / path)
+
+
+def check(record: dict, base: Path | None = None) -> dict:
+    """Return {'verdict', 'tier', 'findings'} for one gate record.
+
+    base is the folder local evidence pointers resolve against; when it is
+    None, evidence files are not looked up.
+    """
     findings: list[str] = []
     if not isinstance(record, dict):
         return {"verdict": BLOCKED, "tier": None, "findings": ["record is not a JSON object"]}
@@ -79,8 +111,10 @@ def check(record: dict) -> dict:
         findings.append("tier must be 0, 1, or 2")
         return {"verdict": BLOCKED, "tier": tier, "findings": findings}
 
-    categories = set(record.get("categories") or [])
-    owner_hits = sorted(categories & OWNER_ONLY)
+    categories = _categories(record.get("categories"), findings)
+    if categories is None:
+        return _after(record, BLOCKED, tier, findings)
+    owner_hits = sorted(categories)
     if owner_hits:
         findings.append("owner-only categories: " + ", ".join(owner_hits))
     if record.get("reversible") is not True:
@@ -119,8 +153,18 @@ def check(record: dict) -> dict:
             findings.append("reviewer must judge the diff and evidence, not the author's reasoning")
         if tip and review.get("revision") != tip:
             findings.append(f"review covers {review.get('revision')!r}, not the tip {tip}")
-        if not _nonempty(review.get("evidence")):
+        evidence = review.get("evidence")
+        if not _nonempty(evidence):
             findings.append("review.evidence missing (path or link to the reviewer's output)")
+        elif base is not None:
+            path = _evidence_file(evidence, base)
+            if path is not None:
+                if not path.is_file():
+                    findings.append(f"review.evidence file not found: {evidence}")
+                elif any(line.strip() == "BLOCK" for line in path.read_text(errors="replace").splitlines()):
+                    findings.append("reviewer output says BLOCK; fix, re-review the new tip, and record PASS")
+        if review.get("verdict") != "PASS":
+            findings.append(f"review.verdict is {review.get('verdict')!r}; only PASS lets you act")
         for i, item in enumerate(review.get("findings") or []):
             disposition = (item or {}).get("disposition")
             if disposition not in FINDING_OK:
@@ -135,7 +179,7 @@ def check(record: dict) -> dict:
 def _after(record, verdict, tier, findings):
     """Apply the post-action check when one is recorded."""
     post = record.get("post_verify")
-    if verdict == ACT and post is not None:
+    if post is not None:  # the action already happened, so a failure means revert
         post_findings: list[str] = []
         if not _checks_pass(post if isinstance(post, list) else [post], "post_verify", None, post_findings):
             findings.extend(post_findings)
@@ -166,13 +210,23 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("record", type=Path, help="gate record JSON")
     parser.add_argument("--log", type=Path, help="append a row to this decisions TSV")
+    parser.add_argument("--rerun", action="store_true",
+                        help="rerun each recorded check command in --cwd and require exit 0")
+    parser.add_argument("--cwd", type=Path, default=Path.cwd(), help="folder for --rerun")
     args = parser.parse_args(argv)
     try:
         record = json.loads(args.record.read_text())
     except (OSError, json.JSONDecodeError) as error:
         print(f"blocked: cannot read record: {error}")
         return EXIT[BLOCKED]
-    result = check(record)
+    result = check(record, base=args.record.resolve().parent)
+    if args.rerun and result["verdict"] == ACT:
+        for i, item in enumerate(record.get("checks") or []):
+            done = subprocess.run(item["command"], shell=True, cwd=args.cwd,
+                                  capture_output=True, text=True)
+            if done.returncode != 0:
+                result["findings"].append(f"rerun checks[{i}] exited {done.returncode}: {item['command']}")
+                result["verdict"] = BLOCKED
     if args.log:
         log_row(args.log, record, result)
     print(f"{result['verdict']} (tier {result['tier']})")

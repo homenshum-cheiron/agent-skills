@@ -11,10 +11,10 @@ One JSON object per action. Fields the checker reads:
 | `revert` | 0, 1 | The exact command or steps that undo the action. |
 | `tip` | 1 | Commit SHA the checks and review ran on. |
 | `blast_radius` | 1 | What else it could break, and the one fact it is safe because of. |
-| `checks` | 1 | List of `{command, exit_code, observed, revision}`. |
-| `review` | 1 | `{kind, author_is_reviewer, saw_author_reasoning, revision, evidence, findings}`. |
+| `checks` | 1 | List of `{command, exit_code, observed, revision}`. `exit_code` must be the integer 0 and `revision` must equal `tip`. |
+| `review` | 1 | `{kind, author_is_reviewer, saw_author_reasoning, revision, evidence, verdict, findings}`. `verdict` must be `PASS` on this tip. A local `evidence` file must exist and must not contain a line reading only `BLOCK`. |
 | `review.findings` | 1 | List of `{title, disposition, evidence}`; disposition is fixed, rejected, duplicate, or unresolved. |
-| `post_verify` | after acting | One check object, or a list, run against the landed result. |
+| `post_verify` | after acting | One check object, or a list, run against the landed result. A failure returns `revert` whatever else the record says. |
 | `evidence` | optional | Pointer for the log row; defaults to `review.evidence`. |
 
-Owner-only categories: external-send, shared-merge, secret, paid-over-cap, delete-user-data, kill-process, infra-restart, answer-key, force-push, skip-checks, permission-change.
+`categories` is a list of strings. An unknown tag blocks, so a typo cannot slip past. Owner-only categories: external-send, shared-merge, secret, paid-over-cap, delete-user-data, kill-process, infra-restart, answer-key, force-push, skip-checks, permission-change.

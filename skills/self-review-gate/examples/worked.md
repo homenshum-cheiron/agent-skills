@@ -10,7 +10,7 @@ All names, numbers, and revisions here are invented.
 
 **Real check.** On tip `3f9c2a1`: the validator printed `37 skills checked; 0 issues.` and the suite printed `Ran 130 tests ... OK`.
 
-**Second opinion.** A different model got the diff, the one-line intent, and the check output, with no chat history. It reported one finding with a repro: a `post_verify` entry with `"exit_code": "0"` (a string) passed. The agent reproduced it, fixed the comparison, added `test_post_verify_string_exit`, reran both checks on the new tip, and sent the new diff back. The reviewer answered PASS.
+**Second opinion.** A different model got the diff, the one-line intent, and the check output, with no chat history. It reported one finding with a repro: a `post_verify` entry with `"exit_code": "0"` (a string) passed. The agent reproduced it, fixed the comparison, added `test_post_verify_string_exit`, reran both checks on the new tip, and sent the new diff back. The reviewer answered PASS, and its raw output is saved at `examples/review/pr7-reviewer.txt`, which the checker reads.
 
 **Record and act.** `check_gate.py examples/gate-record.json --log decisions.tsv` printed `act (tier 1)` and appended a `gate` row. The agent merged.
 

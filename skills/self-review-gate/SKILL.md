@@ -34,7 +34,7 @@ The owner moves an action between tiers in writing. An agent's or reviewer's say
 python3 skills/self-review-gate/scripts/check_gate.py gate.json --log decisions.tsv
 ```
 
-Exit 0 means act, 1 blocked, 2 needs the owner, 3 revert now. The checker verifies bookkeeping: each step is recorded, green, on the same tip, with evidence pointers. It does not run checks, judge the review, or grant permission.
+Exit 0 means act, 1 blocked, 2 needs the owner, 3 revert now. Add `--rerun --cwd <repo>` to rerun each recorded check command instead of trusting the recorded exit code. The checker verifies bookkeeping: each step is recorded, green, on the same tip, with a reviewer verdict of PASS and evidence files that exist. It does not judge the review or grant permission.
 
 ## Done means
 

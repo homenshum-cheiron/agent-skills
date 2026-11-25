@@ -102,6 +102,8 @@ class GateTests(unittest.TestCase):
     def test_cli_exit_codes_and_log_row(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
+            (tmp / "review").mkdir()
+            (tmp / "review/pr7-reviewer.txt").write_text("PASS\n")
             good = tmp / "good.json"
             good.write_text(json.dumps(record()))
             shared = tmp / "shared.json"
@@ -119,6 +121,64 @@ class GateTests(unittest.TestCase):
     def test_log_cells_cannot_start_a_formula(self):
         self.assertEqual(gate._cell("=SUM(A1)"), "'=SUM(A1)")
         self.assertEqual(gate._cell("a\tb\nc"), "a b c")
+
+    def test_scalar_or_padded_owner_tag_still_needs_owner(self):
+        self.assertEqual(gate.check(record(categories="external-send"))["verdict"], "needs-owner")
+        self.assertEqual(gate.check(record(categories=[" External-Send "]))["verdict"], "needs-owner")
+
+    def test_unknown_category_blocks(self):
+        self.assertEqual(gate.check(record(categories=["external_send"]))["verdict"], "blocked")
+
+    def test_check_without_revision_blocks(self):
+        data = record()
+        del data["checks"][0]["revision"]
+        self.assertEqual(gate.check(data)["verdict"], "blocked")
+        data["checks"][0]["revision"] = None
+        self.assertEqual(gate.check(data)["verdict"], "blocked")
+
+    def test_boolean_exit_code_is_not_success(self):
+        data = record()
+        data["checks"][0]["exit_code"] = False
+        self.assertEqual(gate.check(data)["verdict"], "blocked")
+        data = record(post_verify={"command": "x", "exit_code": False, "observed": "failed"})
+        self.assertEqual(gate.check(data)["verdict"], "revert")
+
+    def test_review_verdict_must_be_pass(self):
+        data = record()
+        del data["review"]["verdict"]
+        self.assertEqual(gate.check(data)["verdict"], "blocked")
+
+    def test_missing_evidence_file_blocks_when_base_given(self):
+        data = record()
+        data["review"]["evidence"] = "review/missing.txt"
+        self.assertEqual(gate.check(data, base=PKG / "examples")["verdict"], "blocked")
+        self.assertEqual(gate.check(record(), base=PKG / "examples")["verdict"], "act")
+
+    def test_evidence_file_saying_block_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "r.txt").write_text("Finding: x\nBLOCK\n")
+            data = record()
+            data["review"]["evidence"] = "r.txt"
+            data["review"]["findings"] = []
+            self.assertEqual(gate.check(data, base=Path(tmp))["verdict"], "blocked")
+
+    def test_failed_post_verify_reverts_even_when_record_is_stale(self):
+        data = record(post_verify={"command": "x", "exit_code": 1, "observed": "FAILED"})
+        data["review"]["revision"] = "bbbbbbb"
+        self.assertEqual(gate.check(data)["verdict"], "revert")
+
+    def test_rerun_catches_a_fabricated_check(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "review").mkdir()
+            (tmp / "review/pr7-reviewer.txt").write_text("PASS\n")
+            data = record()
+            data["checks"] = [{"command": "python3 -c 'import sys; sys.exit(0)'", "exit_code": 0, "observed": "ok", "revision": data["tip"]},
+                              {"command": "python3 -c 'import sys; sys.exit(2)'", "exit_code": 0, "observed": "OK", "revision": data["tip"]}]
+            path = tmp / "gate.json"
+            path.write_text(json.dumps(data))
+            self.assertEqual(gate.main([str(path)]), 0)
+            self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 1)
 
 
 if __name__ == "__main__":
