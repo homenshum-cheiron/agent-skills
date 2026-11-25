@@ -162,6 +162,11 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | Meeting or conference notes are only readable by the person who wrote them | [BLUF notes](skills/bluf-notes/SKILL.md) |
 | A pipeline needs a layer table a newcomer can follow, with a test and a key per layer | [Pipeline layer breakdown](skills/pipeline-layer-breakdown/SKILL.md) |
 | A pull request body, team-channel post, or coding-agent report needs background, cause, status and docs a newcomer can follow | [BLUF notes](skills/bluf-notes/SKILL.md) |
+| A work reply buries the ask, the done verdict, or what went wrong | [BLUF notes](skills/bluf-notes/SKILL.md) |
+| A worker or subagent brief is a list of steps, or is missing why, limits, or checks | [Worker brief](skills/worker-brief/SKILL.md) |
+| A meeting has ended and action items would otherwise stay as a to-do list | [Meeting action drafts](skills/meeting-action-drafts/SKILL.md) |
+| A retriever or prompt is about to be tuned on the same questions it will be graded on | [Frozen holdout eval](skills/frozen-holdout-eval/SKILL.md) |
+| Meeting notes or transcripts live only in a chat app or a host that deletes them | [Transcript capture](skills/transcript-capture/SKILL.md) |
 
 Each folder is self-contained. Read its `SKILL.md`, then only the examples or references that the task needs. The examples are synthetic.
 
@@ -221,6 +226,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 - An offline document reader that outlines one local text file, finds exact strings, and reads sections, pages, lines, or character ranges with exact offsets. It does not rank, embed, call a model, or convert PDF or HTML.
 - An offline instruction scanner for the weekly hygiene review: size against loader limits, effort above a configured cap, past-dated pending lines, missing home paths, banned-versus-allowed pairs, and duplicated copies. It reports candidates; it does not edit or judge them.
 - An optional skill installer that never overwrites and removes only its own links.
+- A four-line work-reply checker and a four-part worker-brief checker. They reject a few missing-label and missing-reason shapes. They do not judge the quality of the work.
 - Repository checks for package structure, the README catalog, and local links, plus unit tests.
 
 **Not implemented:** a live orchestration service, a model router, spend enforcement, distributed locking or fencing, a production monitor, an auto-fix agent, or a recursive self-improvement loop. `pipeline-inefficiency-loop` is a written procedure for a person or an agent to follow lap by lap. It does not run a loop, and it does not demonstrate repeated improvement. An example handoff, ledger line, coverage score, or HTML mock does not create those systems.

@@ -16,6 +16,7 @@ python3 skills/match-methods/scripts/check_report.py skills/match-methods/exampl
 python3 skills/match-methods/scripts/check_report.py skills/match-methods/examples/report-hypothesis-only.json
 python3 scripts/check_autonomy_map.py docs/autonomy-map.json
 python3 skills/eval-scorecard/scripts/scorecard.py skills/eval-scorecard/examples/cases.csv --cost-scope "model only"
+python3 skills/worker-brief/scripts/lint_brief.py skills/worker-brief/examples/worked.md
 ```
 
 The packet command checks a deliberately synthetic local example. The coverage command checks mark arithmetic for another synthetic example. Neither is evidence for a real pull request. Exit 0 from the coverage scorer means the nine marks are well formed. It does not mean every prompt was supported.
@@ -33,6 +34,7 @@ The packet command checks a deliberately synthetic local example. The coverage c
 - Report records: prose that disagrees with a figure, a chart series that disagrees with its table, a numeric chart on a hypothesis-only report, and a recommendation treated as permission.
 - Instruction scan: effort above a configurable cap (negated and quoted mentions ignored), non-instruction files skipped, past-dated pending lines, missing home paths, banned-versus-allowed pairs, duplicated copies, loader-size warnings, dated reports that never overwrite, and the `--fail-on-findings` exit code. Synthetic files only.
 - Skill installer: dry run changes nothing, only existing host folders are used by default, existing folders are never overwritten, `--remove` deletes only its own links, and folder overrides and `--copy` work. Uses a temporary `HOME`.
+- Work-reply and worker-brief checkers: missing or reordered labels, a Done? line that does not start with Yes / No / Partly, a buried decision block, a problem or guardrail line with no reason, a Job section that is mostly numbered steps, and a long reply with no write-up path. Synthetic examples only.
 
 ## What remains human or runtime work
 

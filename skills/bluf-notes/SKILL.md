@@ -45,6 +45,10 @@ Rules for this shape:
 - Agent reports lead with the verdict (done, blocked, partly done) before the items, and state anything not verified as unverified.
 - Chat posts use the platform's markdown; long logs and diffs go in a collapsed block or a link, not inline.
 
+## Chat replies that report on work
+
+Start every work reply with **Needs you**, **Done?**, **How**, and **Problems**, in that order. Details and the checker: [chat replies](references/chat-replies.md).
+
 ## Plain-English rules
 
 - Complete sentences only. No headline fragments, arrows, slash-joined lists or "label: value" shorthand inside sentences (the Cause / Status / Docs sub-bullet labels above are the one exception).

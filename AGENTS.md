@@ -16,4 +16,4 @@ Follow the destination project's declared review gates. Do not invent a stricter
 
 Do not republish an uncleared private collection, including a longer personal list of principles. Examples stay synthetic.
 
-PR bodies, team-channel posts and reports back to the owner follow the bluf-notes engineering write-up format. See [skills/bluf-notes/SKILL.md](skills/bluf-notes/SKILL.md).
+PR bodies, team-channel posts and reports back to the owner follow the bluf-notes engineering write-up format. See [skills/bluf-notes/SKILL.md](skills/bluf-notes/SKILL.md). Work replies that report on a task start with Needs you, Done?, How, and Problems; see the chat-replies section of that skill. Briefs for a worker or subagent use the four parts in [skills/worker-brief/SKILL.md](skills/worker-brief/SKILL.md).
