@@ -105,7 +105,11 @@ def check(record: dict, base: Path | None = None) -> dict:
     findings: list[str] = []
     if not isinstance(record, dict):
         return {"verdict": BLOCKED, "tier": None, "findings": ["record is not a JSON object"]}
+    result = _decide(record, base, findings)
+    return _after(record, result["verdict"], result["tier"], result["findings"])
 
+
+def _decide(record: dict, base, findings) -> dict:
     tier = record.get("tier")
     if tier not in (0, 1, 2):
         findings.append("tier must be 0, 1, or 2")
@@ -113,7 +117,7 @@ def check(record: dict, base: Path | None = None) -> dict:
 
     categories = _categories(record.get("categories"), findings)
     if categories is None:
-        return _after(record, BLOCKED, tier, findings)
+        return {"verdict": BLOCKED, "tier": tier, "findings": findings}
     owner_hits = sorted(categories)
     if owner_hits:
         findings.append("owner-only categories: " + ", ".join(owner_hits))
@@ -127,8 +131,7 @@ def check(record: dict, base: Path | None = None) -> dict:
     if tier == 0:
         if not _nonempty(record.get("revert")):
             findings.append("revert path missing")
-        verdict = ACT if not findings else BLOCKED
-        return _after(record, verdict, 0, findings)
+        return {"verdict": ACT if not findings else BLOCKED, "tier": 0, "findings": findings}
 
     # Tier 1: every step must be present and green before acting.
     tip = record.get("tip")
@@ -161,8 +164,13 @@ def check(record: dict, base: Path | None = None) -> dict:
             if path is not None:
                 if not path.is_file():
                     findings.append(f"review.evidence file not found: {evidence}")
-                elif any(line.strip() == "BLOCK" for line in path.read_text(errors="replace").splitlines()):
-                    findings.append("reviewer output says BLOCK; fix, re-review the new tip, and record PASS")
+                else:
+                    text = path.read_text(errors="replace")
+                    lines = [line.strip() for line in text.splitlines() if line.strip()]
+                    if not lines or lines[-1] != "PASS":
+                        findings.append("reviewer output must end with a line reading PASS")
+                    if tip and tip[:7] not in text:
+                        findings.append(f"reviewer output does not name the tip {tip[:7]}")
         if review.get("verdict") != "PASS":
             findings.append(f"review.verdict is {review.get('verdict')!r}; only PASS lets you act")
         for i, item in enumerate(review.get("findings") or []):
@@ -172,8 +180,7 @@ def check(record: dict, base: Path | None = None) -> dict:
             elif disposition in {"fixed", "rejected"} and not _nonempty((item or {}).get("evidence")):
                 findings.append(f"review.findings[{i}] is {disposition} without evidence")
 
-    verdict = ACT if not findings else BLOCKED
-    return _after(record, verdict, 1, findings)
+    return {"verdict": ACT if not findings else BLOCKED, "tier": 1, "findings": findings}
 
 
 def _after(record, verdict, tier, findings):
@@ -206,6 +213,40 @@ def log_row(path: Path, record: dict, result: dict) -> None:
         handle.write("\t".join(_cell(c) for c in row) + "\n")
 
 
+def _no_duplicates(pairs):
+    keys = [key for key, _ in pairs]
+    duplicates = sorted({key for key in keys if keys.count(key) > 1})
+    if duplicates:
+        raise ValueError("duplicate fields: " + ", ".join(duplicates))
+    return dict(pairs)
+
+
+def _run(command, cwd) -> int:
+    return subprocess.run(command, shell=True, cwd=cwd, capture_output=True, text=True).returncode
+
+
+def _rerun(record, result, cwd) -> None:
+    """Rerun post_verify (revert on failure) and, before acting, the checks on the tip."""
+    post = record.get("post_verify")
+    for i, item in enumerate(post if isinstance(post, list) else ([post] if post else [])):
+        code = _run(item.get("command", ""), cwd)
+        if code != 0:
+            result["findings"].append(f"rerun post_verify[{i}] exited {code}")
+            result["verdict"] = REVERT
+    if result["verdict"] != ACT or record.get("tier") != 1 or post:
+        return  # after acting, the tip is no longer checked out; post_verify covers it
+    head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=cwd, capture_output=True, text=True)
+    if head.returncode != 0 or not head.stdout.strip().startswith(str(record.get("tip"))):
+        result["findings"].append(f"--cwd is not checked out at the tip {record.get('tip')}")
+        result["verdict"] = BLOCKED
+        return
+    for i, item in enumerate(record.get("checks") or []):
+        code = _run(item["command"], cwd)
+        if code != 0:
+            result["findings"].append(f"rerun checks[{i}] exited {code}: {item['command']}")
+            result["verdict"] = BLOCKED
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("record", type=Path, help="gate record JSON")
@@ -215,18 +256,13 @@ def main(argv=None) -> int:
     parser.add_argument("--cwd", type=Path, default=Path.cwd(), help="folder for --rerun")
     args = parser.parse_args(argv)
     try:
-        record = json.loads(args.record.read_text())
-    except (OSError, json.JSONDecodeError) as error:
+        record = json.loads(args.record.read_text(), object_pairs_hook=_no_duplicates)
+    except (OSError, ValueError) as error:
         print(f"blocked: cannot read record: {error}")
         return EXIT[BLOCKED]
     result = check(record, base=args.record.resolve().parent)
-    if args.rerun and result["verdict"] == ACT:
-        for i, item in enumerate(record.get("checks") or []):
-            done = subprocess.run(item["command"], shell=True, cwd=args.cwd,
-                                  capture_output=True, text=True)
-            if done.returncode != 0:
-                result["findings"].append(f"rerun checks[{i}] exited {done.returncode}: {item['command']}")
-                result["verdict"] = BLOCKED
+    if args.rerun:
+        _rerun(record, result, args.cwd)
     if args.log:
         log_row(args.log, record, result)
     print(f"{result['verdict']} (tier {result['tier']})")

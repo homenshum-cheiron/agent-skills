@@ -103,7 +103,7 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "review").mkdir()
-            (tmp / "review/pr7-reviewer.txt").write_text("PASS\n")
+            (tmp / "review/pr7-reviewer.txt").write_text("tip 3f9c2a1\nPASS\n")
             good = tmp / "good.json"
             good.write_text(json.dumps(record()))
             shared = tmp / "shared.json"
@@ -171,7 +171,7 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "review").mkdir()
-            (tmp / "review/pr7-reviewer.txt").write_text("PASS\n")
+            (tmp / "review/pr7-reviewer.txt").write_text("tip 3f9c2a1\nPASS\n")
             data = record()
             data["checks"] = [{"command": "python3 -c 'import sys; sys.exit(0)'", "exit_code": 0, "observed": "ok", "revision": data["tip"]},
                               {"command": "python3 -c 'import sys; sys.exit(2)'", "exit_code": 0, "observed": "OK", "revision": data["tip"]}]
@@ -179,6 +179,75 @@ class GateTests(unittest.TestCase):
             path.write_text(json.dumps(data))
             self.assertEqual(gate.main([str(path)]), 0)
             self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 1)
+
+    def test_duplicate_fields_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "dup.json")
+            path.write_text('{"action": "send", "tier": 0, "categories": ["external-send"], "categories": [], "reversible": true, "revert": "x"}')
+            self.assertEqual(gate.main([str(path)]), 1)
+
+    def test_review_output_must_be_current_and_end_in_pass(self):
+        cases = {"empty.txt": "", "old.txt": "tip aaaaaaa\nPASS\n", "cut.txt": "tip 3f9c2a1\nFinding: unresolved x\n"}
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, text in cases.items():
+                Path(tmp, name).write_text(text)
+                data = record()
+                data["review"]["evidence"] = name
+                self.assertEqual(gate.check(data, base=Path(tmp))["verdict"], "blocked", name)
+
+    def test_recorded_post_failure_reverts_before_any_other_rule(self):
+        failed = {"command": "x", "exit_code": 7, "observed": "unhealthy"}
+        for change in ({"tier": 2}, {"categories": ["external-send"]}, {"reversible": False}, {"tier": 9}):
+            data = record(post_verify=failed, **change)
+            self.assertEqual(gate.check(data)["verdict"], "revert", change)
+
+    def _git_repo(self, tmp):
+        import subprocess
+        subprocess.run(["git", "init", "-q", str(tmp)], check=True)
+        Path(tmp, "f").write_text("1")
+        subprocess.run(["git", "-C", str(tmp), "add", "f"], check=True)
+        subprocess.run(["git", "-C", str(tmp), "-c", "user.name=t", "-c", "user.email=t@example.invalid",
+                        "commit", "-q", "-m", "c"], check=True)
+        return subprocess.run(["git", "-C", str(tmp), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+
+    def test_rerun_requires_the_tip_checked_out(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            head = self._git_repo(tmp)
+            (tmp / "r.txt").write_text(f"tip {head[:7]}\nPASS\n")
+            data = record(tip=head[:7])
+            for c in data["checks"]:
+                c["revision"] = head[:7]
+                c["command"] = "true"
+            data["review"].update(revision=head[:7], evidence="r.txt")
+            path = tmp / "gate.json"
+            path.write_text(json.dumps(data))
+            self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 0)
+            data["checks"][1]["command"] = "exit 2"  # recorded as passing, actually fails at the tip
+            path.write_text(json.dumps(data))
+            self.assertEqual(gate.main([str(path)]), 0)
+            self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 1)
+            data["checks"][1]["command"] = "true"
+            path.write_text(json.dumps(data))
+            data2 = json.loads(path.read_text())
+            data2["tip"] = "1234567"
+            for c in data2["checks"]:
+                c["revision"] = "1234567"
+            data2["review"]["revision"] = "1234567"
+            (tmp / "r.txt").write_text("tip 1234567\nPASS\n")
+            path.write_text(json.dumps(data2))
+            self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 1)
+
+    def test_rerun_reruns_post_verify(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "review").mkdir()
+            (tmp / "review/pr7-reviewer.txt").write_text("tip 3f9c2a1\nPASS\n")
+            data = record(post_verify={"command": "exit 7", "exit_code": 0, "observed": "healthy"})
+            path = tmp / "gate.json"
+            path.write_text(json.dumps(data))
+            self.assertEqual(gate.main([str(path)]), 0)
+            self.assertEqual(gate.main([str(path), "--rerun", "--cwd", str(tmp)]), 3)
 
 
 if __name__ == "__main__":
