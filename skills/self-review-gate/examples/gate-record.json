@@ -1,0 +1,38 @@
+{
+  "action": "Squash-merge pull request 7 into main on a repository only the owner controls",
+  "tier": 1,
+  "reversible": true,
+  "categories": [],
+  "revert": "git revert -m 1 <merge-sha> && git push origin main",
+  "tip": "3f9c2a1",
+  "blast_radius": "Adds one skill folder and one test file; no existing script changes. Safe because the validator and suite cover every file the diff touches.",
+  "checks": [
+    {
+      "command": "python3 scripts/validate_repo.py",
+      "exit_code": 0,
+      "observed": "37 skills checked; 0 issues.",
+      "revision": "3f9c2a1"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "exit_code": 0,
+      "observed": "Ran 130 tests ... OK",
+      "revision": "3f9c2a1"
+    }
+  ],
+  "review": {
+    "kind": "other-model",
+    "author_is_reviewer": false,
+    "saw_author_reasoning": false,
+    "revision": "3f9c2a1",
+    "evidence": "review/pr7-reviewer.txt",
+    "findings": [
+      {
+        "title": "Post-merge check accepted a non-zero exit as a string",
+        "disposition": "fixed",
+        "evidence": "commit 3f9c2a1, test_post_verify_string_exit"
+      }
+    ],
+    "verdict": "PASS"
+  }
+}

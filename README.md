@@ -130,6 +130,7 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | The plan is a list of components, not an outcome | [Scenario first](skills/scenario-first/SKILL.md) |
 | Background, behavior, or the expected interface is still unclear | [Direction before work](skills/direction-before-work/SKILL.md) |
 | A change looks plausible, but the relevant check was not run | [Proof before review](skills/proof-before-review/SKILL.md) |
+| A delegated, reversible action is waiting on the owner's sign-off | [Self-review gate](skills/self-review-gate/SKILL.md) |
 | A pull-request body, a bot approval, or a CI status is being over-read | [Proof before review](skills/proof-before-review/SKILL.md) |
 | Several people or agents might write the same branch | [One-writer handoff](skills/one-writer-handoff/SKILL.md) |
 | A session is ending, or only some of the work is free to start | [One-writer handoff](skills/one-writer-handoff/SKILL.md) |
@@ -194,7 +195,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/install_skills.sh` is an optional, dry-run-by-default installer that links or copies skill folders into host skill folders. See [Set up on your machine](#set-up-on-your-machine).
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Thirty-two workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Thirty-seven workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -217,8 +218,9 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Thirty-two written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Thirty-seven written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
+- An offline self-review gate checker that sorts an action into a tier, checks that the recorded tests and an independent review ran on the same tip with every finding disposed, appends a decision-log row, and says act, blocked, needs the owner, or revert. It does not run checks or grant permission.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
 - An eval scorecard that counts four verdicts apart and reports latency percentiles, tasks per hour, and dollars per task from a per-case CSV, labeling missing numbers as missing. It does not run an eval or check that the verdicts are right.

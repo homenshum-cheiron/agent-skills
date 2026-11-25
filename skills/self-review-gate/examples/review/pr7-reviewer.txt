@@ -1,0 +1,7 @@
+Synthetic reviewer output for the worked example (invented). One file per reviewed tip.
+
+Reviewed revision: 3f9c2a1
+Reran the round-one probe for a string exit code: the checker now prints revert (tier 1).
+Validator and suite green on this revision.
+No verified findings.
+PASS
