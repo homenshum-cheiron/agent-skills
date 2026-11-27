@@ -147,6 +147,7 @@ The catalog below is the rest of the collection: scenario, direction, proof, mea
 | An update lists activity, or a message is about to be sent | [Outcome-first updates](skills/outcome-first-updates/SKILL.md) |
 | A long answer needs to be scannable | [Scan long answers](skills/scan-long-answers/SKILL.md) |
 | A written procedure and the actual goal disagree, including when people and feelings are the subject | [First principles](skills/first-principles/SKILL.md) |
+| The user wants a repeating work or life process automated, or has dumped how they usually do it | [Goal-first automation](skills/goal-first-automation/SKILL.md) |
 | Search found the document but not the deciding passage | [Walk the document](skills/walk-the-document/SKILL.md) |
 | A big feature or new service needs one proposal a reviewer can take without asking | [System design proposal](skills/system-design-proposal/SKILL.md) |
 | A failure is about to be met with a new model, catalog, or heavier pipeline | [Match methods](skills/match-methods/SKILL.md) |
@@ -194,7 +195,7 @@ The short version of [the decision log](docs/decisions.md):
 - `scripts/install_skills.sh` is an optional, dry-run-by-default installer that links or copies skill folders into host skill folders. See [Set up on your machine](#set-up-on-your-machine).
 - The root [LICENSE](LICENSE) is MIT for original content. Third-party projects keep their own licenses.
 
-Thirty-two workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
+Thirty-seven workflow folders live under `skills/`. The table above is the catalog: some workflows have more than one row because the same skill answers more than one stuck point.
 
 ## Try one skill
 
@@ -217,7 +218,7 @@ These skills do not grant permission to publish, spend, modify production, or se
 
 ## What is implemented here
 
-- Thirty-two written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
+- Thirty-seven written workflows, one per folder under `skills/`, each with a worked synthetic example. Matching a method is guidance only. It does not run an experiment or certify a product gain.
 - An offline proof-packet checker that verifies declared check status, revision match, and local evidence hashes. It does not independently judge the evidence.
 - An offline coverage scorer for nine pull-request prompts. It checks that a claimed report matches supported/applicable. It does not certify quality.
 - An interval calculator that separates summed work from wall-clock coverage.
