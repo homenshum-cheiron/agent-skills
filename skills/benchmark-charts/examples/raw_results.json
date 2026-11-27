@@ -1,0 +1,578 @@
+{
+  "title": "TicketFix-4: tool-loop vs baseline",
+  "summary": "Synthetic four-ticket issue-fixing bench used to prove the benchmark chart kit. All figures are invented.",
+  "last_updated": "2026-11-27T03:45:00-08:00",
+  "score_unit": "cases passed",
+  "subunit_kind": "test",
+  "highlight_arm": "tool_loop",
+  "baseline_arm": "baseline",
+  "pass_labels": [
+    "pass"
+  ],
+  "sources": [
+    {
+      "id": "synth_run",
+      "label": "Synthetic TicketFix-4 run log",
+      "path": "examples/raw_results.json",
+      "kind": "synthetic",
+      "note": "Invented numbers for a demo. Not a real eval."
+    }
+  ],
+  "arms": [
+    {
+      "id": "baseline",
+      "label": "Baseline agent (1 Oct)",
+      "role": "baseline",
+      "date": "2026-10-01"
+    },
+    {
+      "id": "tool_loop",
+      "label": "Tool-loop agent (15 Oct)",
+      "role": "highlight",
+      "date": "2026-10-15"
+    },
+    {
+      "id": "compact",
+      "label": "Compact-context design",
+      "role": "projected",
+      "date": null
+    }
+  ],
+  "stage_names": {
+    "tokens": [
+      "planner",
+      "worker",
+      "tools"
+    ],
+    "time": [
+      "planner",
+      "worker",
+      "tools"
+    ],
+    "cost": [
+      "planner",
+      "worker",
+      "tools"
+    ]
+  },
+  "story_steps": [
+    {
+      "id": "baseline",
+      "title": "The baseline run",
+      "body": "On the four frozen tickets the baseline agent passed 1 of 4 cases, spent $17.50 and took 44.0 minutes of wall time."
+    },
+    {
+      "id": "tool_loop",
+      "title": "The tool-loop run",
+      "body": "The tool-loop agent passed 2 of 4 cases, spent $4.17 and took 14.6 minutes. AUTH-01 stayed a pass. SEARCH-02 flipped from fail to pass."
+    },
+    {
+      "id": "cost",
+      "title": "Where the dollars went",
+      "body": "Of the $13.33 cut, $10.48 came from worker tokens, $2.25 from the planner, and $0.60 from tools. These are sums across cases, not a pooled score."
+    },
+    {
+      "id": "left",
+      "title": "What is still open",
+      "body": "MIGRATE-03 still misses the perms test. REPORT-04 still misses the schedule test. The compact-context cost is an estimate; its score is not measured."
+    }
+  ],
+  "waterfall": {
+    "title": "How total cost falls from baseline to tool-loop",
+    "source": "synth_run",
+    "start_label": "Baseline total",
+    "end_label": "Tool-loop total",
+    "steps": [
+      {
+        "label": "Planner tokens",
+        "delta": -2.25
+      },
+      {
+        "label": "Worker tokens",
+        "delta": -10.48
+      },
+      {
+        "label": "Tool calls",
+        "delta": -0.6
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "AUTH-01",
+      "label": "Login session refresh",
+      "results": {
+        "baseline": {
+          "verdict": "pass",
+          "source": "synth_run",
+          "passed": 5,
+          "n": 5,
+          "cost_usd": 2.4,
+          "cost_by_stage": {
+            "planner": 0.4,
+            "worker": 1.85,
+            "tools": 0.15
+          },
+          "wall_s": 312,
+          "time_by_stage": {
+            "planner": 40,
+            "worker": 240,
+            "tools": 32
+          },
+          "tokens_by_stage": {
+            "planner": 82000,
+            "worker": 410000,
+            "tools": 28000
+          },
+          "subunits": [
+            {
+              "id": "login",
+              "label": "pass"
+            },
+            {
+              "id": "session",
+              "label": "pass"
+            },
+            {
+              "id": "refresh",
+              "label": "pass"
+            },
+            {
+              "id": "logout",
+              "label": "pass"
+            },
+            {
+              "id": "lockout",
+              "label": "pass"
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "pass",
+          "source": "synth_run",
+          "passed": 5,
+          "n": 5,
+          "cost_usd": 0.62,
+          "cost_by_stage": {
+            "planner": 0.1,
+            "worker": 0.44,
+            "tools": 0.08
+          },
+          "wall_s": 140,
+          "time_by_stage": {
+            "planner": 18,
+            "worker": 102,
+            "tools": 20
+          },
+          "tokens_by_stage": {
+            "planner": 18000,
+            "worker": 92000,
+            "tools": 14000
+          },
+          "subunits": [
+            {
+              "id": "login",
+              "label": "pass"
+            },
+            {
+              "id": "session",
+              "label": "pass"
+            },
+            {
+              "id": "refresh",
+              "label": "pass"
+            },
+            {
+              "id": "logout",
+              "label": "pass"
+            },
+            {
+              "id": "lockout",
+              "label": "pass"
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "source": "synth_run",
+          "n": 5,
+          "cost_usd": {
+            "status": "estimate",
+            "low": 0.4,
+            "high": 0.55,
+            "value": 0.55
+          }
+        }
+      }
+    },
+    {
+      "id": "SEARCH-02",
+      "label": "Catalog query filters",
+      "results": {
+        "baseline": {
+          "verdict": "fail",
+          "source": "synth_run",
+          "passed": 4,
+          "n": 6,
+          "cost_usd": 3.1,
+          "cost_by_stage": {
+            "planner": 0.5,
+            "worker": 2.4,
+            "tools": 0.2
+          },
+          "wall_s": 510,
+          "time_by_stage": {
+            "planner": 55,
+            "worker": 410,
+            "tools": 45
+          },
+          "tokens_by_stage": {
+            "planner": 110000,
+            "worker": 680000,
+            "tools": 45000
+          },
+          "subunits": [
+            {
+              "id": "exact",
+              "label": "pass"
+            },
+            {
+              "id": "prefix",
+              "label": "pass"
+            },
+            {
+              "id": "filter",
+              "label": "pass"
+            },
+            {
+              "id": "sort",
+              "label": "pass"
+            },
+            {
+              "id": "empty",
+              "label": "fail"
+            },
+            {
+              "id": "pagination",
+              "label": "fail"
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "pass",
+          "source": "synth_run",
+          "passed": 6,
+          "n": 6,
+          "cost_usd": 0.88,
+          "cost_by_stage": {
+            "planner": 0.12,
+            "worker": 0.64,
+            "tools": 0.12
+          },
+          "wall_s": 188,
+          "time_by_stage": {
+            "planner": 22,
+            "worker": 140,
+            "tools": 26
+          },
+          "tokens_by_stage": {
+            "planner": 22000,
+            "worker": 140000,
+            "tools": 20000
+          },
+          "subunits": [
+            {
+              "id": "exact",
+              "label": "pass"
+            },
+            {
+              "id": "prefix",
+              "label": "pass"
+            },
+            {
+              "id": "filter",
+              "label": "pass"
+            },
+            {
+              "id": "sort",
+              "label": "pass"
+            },
+            {
+              "id": "empty",
+              "label": "pass"
+            },
+            {
+              "id": "pagination",
+              "label": "pass"
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "source": "synth_run",
+          "n": 6,
+          "cost_usd": {
+            "status": "estimate",
+            "low": 0.6,
+            "high": 0.8,
+            "value": 0.8
+          }
+        }
+      }
+    },
+    {
+      "id": "MIGRATE-03",
+      "label": "Schema migration",
+      "results": {
+        "baseline": {
+          "verdict": "fail",
+          "source": "synth_run",
+          "passed": 5,
+          "n": 8,
+          "cost_usd": 6.8,
+          "cost_by_stage": {
+            "planner": 1.1,
+            "worker": 5.2,
+            "tools": 0.5
+          },
+          "wall_s": 980,
+          "time_by_stage": {
+            "planner": 90,
+            "worker": 790,
+            "tools": 100
+          },
+          "tokens_by_stage": {
+            "planner": 195000,
+            "worker": 1420000,
+            "tools": 88000
+          },
+          "subunits": [
+            {
+              "id": "up",
+              "label": "pass"
+            },
+            {
+              "id": "down",
+              "label": "pass"
+            },
+            {
+              "id": "dry_run",
+              "label": "pass"
+            },
+            {
+              "id": "backup",
+              "label": "pass"
+            },
+            {
+              "id": "conflict",
+              "label": "fail"
+            },
+            {
+              "id": "rollback",
+              "label": "fail"
+            },
+            {
+              "id": "seed",
+              "label": "pass"
+            },
+            {
+              "id": "perms",
+              "label": "fail"
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "fail",
+          "source": "synth_run",
+          "passed": 7,
+          "n": 8,
+          "cost_usd": 1.45,
+          "cost_by_stage": {
+            "planner": 0.18,
+            "worker": 1.07,
+            "tools": 0.2
+          },
+          "wall_s": 290,
+          "time_by_stage": {
+            "planner": 30,
+            "worker": 220,
+            "tools": 40
+          },
+          "tokens_by_stage": {
+            "planner": 35000,
+            "worker": 310000,
+            "tools": 30000
+          },
+          "subunits": [
+            {
+              "id": "up",
+              "label": "pass"
+            },
+            {
+              "id": "down",
+              "label": "pass"
+            },
+            {
+              "id": "dry_run",
+              "label": "pass"
+            },
+            {
+              "id": "backup",
+              "label": "pass"
+            },
+            {
+              "id": "conflict",
+              "label": "pass"
+            },
+            {
+              "id": "rollback",
+              "label": "pass"
+            },
+            {
+              "id": "seed",
+              "label": "pass"
+            },
+            {
+              "id": "perms",
+              "label": "fail"
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "source": "synth_run",
+          "n": 8,
+          "cost_usd": {
+            "status": "estimate",
+            "low": 1.1,
+            "high": 1.4,
+            "value": 1.4
+          }
+        }
+      }
+    },
+    {
+      "id": "REPORT-04",
+      "label": "Weekly digest export",
+      "results": {
+        "baseline": {
+          "verdict": "fail",
+          "source": "synth_run",
+          "passed": 4,
+          "n": 7,
+          "cost_usd": 5.2,
+          "cost_by_stage": {
+            "planner": 0.8,
+            "worker": 3.95,
+            "tools": 0.45
+          },
+          "wall_s": 840,
+          "time_by_stage": {
+            "planner": 70,
+            "worker": 690,
+            "tools": 80
+          },
+          "tokens_by_stage": {
+            "planner": 150000,
+            "worker": 980000,
+            "tools": 62000
+          },
+          "subunits": [
+            {
+              "id": "csv",
+              "label": "pass"
+            },
+            {
+              "id": "pdf",
+              "label": "pass"
+            },
+            {
+              "id": "empty",
+              "label": "pass"
+            },
+            {
+              "id": "timezone",
+              "label": "fail"
+            },
+            {
+              "id": "totals",
+              "label": "fail"
+            },
+            {
+              "id": "access",
+              "label": "pass"
+            },
+            {
+              "id": "schedule",
+              "label": "fail"
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "fail",
+          "source": "synth_run",
+          "passed": 6,
+          "n": 7,
+          "cost_usd": 1.22,
+          "cost_by_stage": {
+            "planner": 0.15,
+            "worker": 0.77,
+            "tools": 0.3
+          },
+          "wall_s": 260,
+          "time_by_stage": {
+            "planner": 24,
+            "worker": 200,
+            "tools": 36
+          },
+          "tokens_by_stage": {
+            "planner": 28000,
+            "worker": 210000,
+            "tools": 24000
+          },
+          "subunits": [
+            {
+              "id": "csv",
+              "label": "pass"
+            },
+            {
+              "id": "pdf",
+              "label": "pass"
+            },
+            {
+              "id": "empty",
+              "label": "pass"
+            },
+            {
+              "id": "timezone",
+              "label": "pass"
+            },
+            {
+              "id": "totals",
+              "label": "pass"
+            },
+            {
+              "id": "access",
+              "label": "pass"
+            },
+            {
+              "id": "schedule",
+              "label": "fail"
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "source": "synth_run",
+          "n": 7,
+          "cost_usd": {
+            "status": "estimate",
+            "low": 0.9,
+            "high": 1.2,
+            "value": 1.2
+          }
+        }
+      }
+    }
+  ]
+}

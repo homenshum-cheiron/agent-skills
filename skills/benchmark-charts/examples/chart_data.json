@@ -1,0 +1,1445 @@
+{
+  "schema_version": "1.0.0",
+  "title": "TicketFix-4: tool-loop vs baseline",
+  "summary": "Synthetic four-ticket issue-fixing bench used to prove the benchmark chart kit. All figures are invented.",
+  "last_updated": "2026-11-27T03:45:00-08:00",
+  "score_unit": "cases passed",
+  "subunit_kind": "test",
+  "highlight_arm": "tool_loop",
+  "baseline_arm": "baseline",
+  "pass_labels": [
+    "pass"
+  ],
+  "arms": [
+    {
+      "id": "baseline",
+      "label": "Baseline agent (1 Oct)",
+      "role": "baseline",
+      "date": "2026-10-01"
+    },
+    {
+      "id": "tool_loop",
+      "label": "Tool-loop agent (15 Oct)",
+      "role": "highlight",
+      "date": "2026-10-15"
+    },
+    {
+      "id": "compact",
+      "label": "Compact-context design",
+      "role": "projected",
+      "date": null
+    }
+  ],
+  "sources": [
+    {
+      "id": "synth_run",
+      "label": "Synthetic TicketFix-4 run log",
+      "path": "examples/raw_results.json",
+      "kind": "synthetic",
+      "note": "Invented numbers for a demo. Not a real eval."
+    }
+  ],
+  "stage_names": {
+    "tokens": [
+      "planner",
+      "worker",
+      "tools"
+    ],
+    "time": [
+      "planner",
+      "worker",
+      "tools"
+    ],
+    "cost": [
+      "planner",
+      "worker",
+      "tools"
+    ]
+  },
+  "cases": [
+    {
+      "id": "AUTH-01",
+      "label": "Login session refresh",
+      "results": {
+        "baseline": {
+          "verdict": "pass",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 5,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 5,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 2.4,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 312,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 82000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 410000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 28000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 40,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 240,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 32,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.4,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 1.85,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.15,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "login",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "session",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "refresh",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "logout",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "lockout",
+              "label": "pass",
+              "passed": true
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "pass",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 5,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 5,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 0.62,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 140,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 18000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 92000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 14000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 18,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 102,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 20,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.1,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 0.44,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.08,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "login",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "session",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "refresh",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "logout",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "lockout",
+              "label": "pass",
+              "passed": true
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "score": {
+            "passed": {
+              "status": "not_measured",
+              "value": null,
+              "display": "not measured"
+            },
+            "n": {
+              "status": "measured",
+              "value": 5,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "estimate",
+            "value": 0.55,
+            "source": "synth_run",
+            "low": 0.4,
+            "high": 0.55,
+            "unit": "usd",
+            "display": "$0.40\u2013$0.55 ESTIMATE"
+          },
+          "wall_s": {
+            "status": "not_measured",
+            "value": null,
+            "display": "not measured"
+          }
+        }
+      }
+    },
+    {
+      "id": "SEARCH-02",
+      "label": "Catalog query filters",
+      "results": {
+        "baseline": {
+          "verdict": "fail",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 4,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 6,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 3.1,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 510,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 110000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 680000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 45000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 55,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 410,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 45,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.5,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 2.4,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.2,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "exact",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "prefix",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "filter",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "sort",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "empty",
+              "label": "fail",
+              "passed": false
+            },
+            {
+              "id": "pagination",
+              "label": "fail",
+              "passed": false
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "pass",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 6,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 6,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 0.88,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 188,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 22000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 140000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 20000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 22,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 140,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 26,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.12,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 0.64,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.12,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "exact",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "prefix",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "filter",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "sort",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "empty",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "pagination",
+              "label": "pass",
+              "passed": true
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "score": {
+            "passed": {
+              "status": "not_measured",
+              "value": null,
+              "display": "not measured"
+            },
+            "n": {
+              "status": "measured",
+              "value": 6,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "estimate",
+            "value": 0.8,
+            "source": "synth_run",
+            "low": 0.6,
+            "high": 0.8,
+            "unit": "usd",
+            "display": "$0.60\u2013$0.80 ESTIMATE"
+          },
+          "wall_s": {
+            "status": "not_measured",
+            "value": null,
+            "display": "not measured"
+          }
+        }
+      }
+    },
+    {
+      "id": "MIGRATE-03",
+      "label": "Schema migration",
+      "results": {
+        "baseline": {
+          "verdict": "fail",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 5,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 8,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 6.8,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 980,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 195000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 1420000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 88000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 90,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 790,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 100,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 1.1,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 5.2,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.5,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "up",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "down",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "dry_run",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "backup",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "conflict",
+              "label": "fail",
+              "passed": false
+            },
+            {
+              "id": "rollback",
+              "label": "fail",
+              "passed": false
+            },
+            {
+              "id": "seed",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "perms",
+              "label": "fail",
+              "passed": false
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "fail",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 7,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 8,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 1.45,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 290,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 35000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 310000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 30000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 30,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 220,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 40,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.18,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 1.07,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.2,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "up",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "down",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "dry_run",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "backup",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "conflict",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "rollback",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "seed",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "perms",
+              "label": "fail",
+              "passed": false
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "score": {
+            "passed": {
+              "status": "not_measured",
+              "value": null,
+              "display": "not measured"
+            },
+            "n": {
+              "status": "measured",
+              "value": 8,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "estimate",
+            "value": 1.4,
+            "source": "synth_run",
+            "low": 1.1,
+            "high": 1.4,
+            "unit": "usd",
+            "display": "$1.10\u2013$1.40 ESTIMATE"
+          },
+          "wall_s": {
+            "status": "not_measured",
+            "value": null,
+            "display": "not measured"
+          }
+        }
+      }
+    },
+    {
+      "id": "REPORT-04",
+      "label": "Weekly digest export",
+      "results": {
+        "baseline": {
+          "verdict": "fail",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 4,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 7,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 5.2,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 840,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 150000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 980000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 62000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 70,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 690,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 80,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.8,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 3.95,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.45,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "csv",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "pdf",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "empty",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "timezone",
+              "label": "fail",
+              "passed": false
+            },
+            {
+              "id": "totals",
+              "label": "fail",
+              "passed": false
+            },
+            {
+              "id": "access",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "schedule",
+              "label": "fail",
+              "passed": false
+            }
+          ]
+        },
+        "tool_loop": {
+          "verdict": "fail",
+          "score": {
+            "passed": {
+              "status": "measured",
+              "value": 6,
+              "source": "synth_run"
+            },
+            "n": {
+              "status": "measured",
+              "value": 7,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "measured",
+            "value": 1.22,
+            "source": "synth_run",
+            "unit": "usd"
+          },
+          "wall_s": {
+            "status": "measured",
+            "value": 260,
+            "source": "synth_run",
+            "unit": "s"
+          },
+          "tokens_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 28000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 210000,
+              "source": "synth_run",
+              "unit": "tokens"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 24000,
+              "source": "synth_run",
+              "unit": "tokens"
+            }
+          },
+          "time_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 24,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 200,
+              "source": "synth_run",
+              "unit": "s"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 36,
+              "source": "synth_run",
+              "unit": "s"
+            }
+          },
+          "cost_by_stage": {
+            "planner": {
+              "status": "measured",
+              "value": 0.15,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "worker": {
+              "status": "measured",
+              "value": 0.77,
+              "source": "synth_run",
+              "unit": "usd"
+            },
+            "tools": {
+              "status": "measured",
+              "value": 0.3,
+              "source": "synth_run",
+              "unit": "usd"
+            }
+          },
+          "subunits": [
+            {
+              "id": "csv",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "pdf",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "empty",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "timezone",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "totals",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "access",
+              "label": "pass",
+              "passed": true
+            },
+            {
+              "id": "schedule",
+              "label": "fail",
+              "passed": false
+            }
+          ]
+        },
+        "compact": {
+          "verdict": "not_measured",
+          "score": {
+            "passed": {
+              "status": "not_measured",
+              "value": null,
+              "display": "not measured"
+            },
+            "n": {
+              "status": "measured",
+              "value": 7,
+              "source": "synth_run"
+            }
+          },
+          "cost_usd": {
+            "status": "estimate",
+            "value": 1.2,
+            "source": "synth_run",
+            "low": 0.9,
+            "high": 1.2,
+            "unit": "usd",
+            "display": "$0.90\u2013$1.20 ESTIMATE"
+          },
+          "wall_s": {
+            "status": "not_measured",
+            "value": null,
+            "display": "not measured"
+          }
+        }
+      }
+    }
+  ],
+  "story_steps": [
+    {
+      "id": "baseline",
+      "title": "The baseline run",
+      "body": "On the four frozen tickets the baseline agent passed 1 of 4 cases, spent $17.50 and took 44.0 minutes of wall time."
+    },
+    {
+      "id": "tool_loop",
+      "title": "The tool-loop run",
+      "body": "The tool-loop agent passed 2 of 4 cases, spent $4.17 and took 14.6 minutes. AUTH-01 stayed a pass. SEARCH-02 flipped from fail to pass."
+    },
+    {
+      "id": "cost",
+      "title": "Where the dollars went",
+      "body": "Of the $13.33 cut, $10.48 came from worker tokens, $2.25 from the planner, and $0.60 from tools. These are sums across cases, not a pooled score."
+    },
+    {
+      "id": "left",
+      "title": "What is still open",
+      "body": "MIGRATE-03 still misses the perms test. REPORT-04 still misses the schedule test. The compact-context cost is an estimate; its score is not measured."
+    }
+  ],
+  "sums": {
+    "note": "Additive sums for the headline strip only. These are not a pooled quality score. Case verdicts stay per case; nested subunit counts are a sum across cases and must not be used as the headline score.",
+    "subunits_passed_not_a_score": true,
+    "cost_usd": {
+      "baseline": {
+        "status": "measured",
+        "value": 17.5,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.baseline.cost_usd",
+          "cases.SEARCH-02.baseline.cost_usd",
+          "cases.MIGRATE-03.baseline.cost_usd",
+          "cases.REPORT-04.baseline.cost_usd"
+        ],
+        "formula": "sum(cost_usd over cases)",
+        "unit": "usd"
+      },
+      "tool_loop": {
+        "status": "measured",
+        "value": 4.17,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.tool_loop.cost_usd",
+          "cases.SEARCH-02.tool_loop.cost_usd",
+          "cases.MIGRATE-03.tool_loop.cost_usd",
+          "cases.REPORT-04.tool_loop.cost_usd"
+        ],
+        "formula": "sum(cost_usd over cases)",
+        "unit": "usd"
+      },
+      "compact": {
+        "status": "estimate",
+        "value": 3.95,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.compact.cost_usd",
+          "cases.SEARCH-02.compact.cost_usd",
+          "cases.MIGRATE-03.compact.cost_usd",
+          "cases.REPORT-04.compact.cost_usd"
+        ],
+        "formula": "sum(cost_usd over cases)",
+        "unit": "usd",
+        "low": 3.0,
+        "high": 3.95,
+        "display": "$3.00\u2013$3.95 ESTIMATE"
+      }
+    },
+    "wall_s": {
+      "baseline": {
+        "status": "measured",
+        "value": 2642.0,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.baseline.wall_s",
+          "cases.SEARCH-02.baseline.wall_s",
+          "cases.MIGRATE-03.baseline.wall_s",
+          "cases.REPORT-04.baseline.wall_s"
+        ],
+        "formula": "sum(wall_s over cases)",
+        "unit": "s"
+      },
+      "tool_loop": {
+        "status": "measured",
+        "value": 878.0,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.tool_loop.wall_s",
+          "cases.SEARCH-02.tool_loop.wall_s",
+          "cases.MIGRATE-03.tool_loop.wall_s",
+          "cases.REPORT-04.tool_loop.wall_s"
+        ],
+        "formula": "sum(wall_s over cases)",
+        "unit": "s"
+      },
+      "compact": {
+        "status": "not_measured",
+        "value": null,
+        "display": "not measured"
+      }
+    },
+    "cases_passed": {
+      "baseline": {
+        "status": "measured",
+        "value": 1,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.baseline.verdict",
+          "cases.SEARCH-02.baseline.verdict",
+          "cases.MIGRATE-03.baseline.verdict",
+          "cases.REPORT-04.baseline.verdict"
+        ],
+        "formula": "count of case verdicts equal to pass",
+        "unit": "cases"
+      },
+      "tool_loop": {
+        "status": "measured",
+        "value": 2,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.tool_loop.verdict",
+          "cases.SEARCH-02.tool_loop.verdict",
+          "cases.MIGRATE-03.tool_loop.verdict",
+          "cases.REPORT-04.tool_loop.verdict"
+        ],
+        "formula": "count of case verdicts equal to pass",
+        "unit": "cases"
+      },
+      "compact": {
+        "status": "not_measured",
+        "value": null,
+        "display": "not measured"
+      }
+    },
+    "subunits_passed": {
+      "baseline": {
+        "status": "measured",
+        "value": 18,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.baseline.score.passed",
+          "cases.SEARCH-02.baseline.score.passed",
+          "cases.MIGRATE-03.baseline.score.passed",
+          "cases.REPORT-04.baseline.score.passed"
+        ],
+        "formula": "sum of per-case subunit passes (not a pooled score)",
+        "unit": "tests"
+      },
+      "tool_loop": {
+        "status": "measured",
+        "value": 24,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.tool_loop.score.passed",
+          "cases.SEARCH-02.tool_loop.score.passed",
+          "cases.MIGRATE-03.tool_loop.score.passed",
+          "cases.REPORT-04.tool_loop.score.passed"
+        ],
+        "formula": "sum of per-case subunit passes (not a pooled score)",
+        "unit": "tests"
+      },
+      "compact": {
+        "status": "not_measured",
+        "value": null,
+        "display": "not measured"
+      }
+    },
+    "subunits_n": {
+      "baseline": {
+        "status": "measured",
+        "value": 26,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.baseline.score.passed",
+          "cases.SEARCH-02.baseline.score.passed",
+          "cases.MIGRATE-03.baseline.score.passed",
+          "cases.REPORT-04.baseline.score.passed"
+        ],
+        "formula": "sum of per-case subunit counts (not a pooled score)",
+        "unit": "tests"
+      },
+      "tool_loop": {
+        "status": "measured",
+        "value": 26,
+        "source": "derived",
+        "derived_from": [
+          "cases.AUTH-01.tool_loop.score.passed",
+          "cases.SEARCH-02.tool_loop.score.passed",
+          "cases.MIGRATE-03.tool_loop.score.passed",
+          "cases.REPORT-04.tool_loop.score.passed"
+        ],
+        "formula": "sum of per-case subunit counts (not a pooled score)",
+        "unit": "tests"
+      },
+      "compact": {
+        "status": "not_measured",
+        "value": null,
+        "display": "not measured"
+      }
+    },
+    "cost_cut_pct": {
+      "status": "measured",
+      "value": 76.2,
+      "source": "derived",
+      "derived_from": [
+        "sums.cost_usd.baseline",
+        "sums.cost_usd.tool_loop"
+      ],
+      "formula": "(baseline - highlight) / baseline * 100",
+      "unit": "pct"
+    },
+    "time_cut_pct": {
+      "status": "measured",
+      "value": 66.8,
+      "source": "derived",
+      "derived_from": [
+        "sums.wall_s.baseline",
+        "sums.wall_s.tool_loop"
+      ],
+      "formula": "(baseline - highlight) / baseline * 100",
+      "unit": "pct"
+    }
+  },
+  "waterfall": {
+    "title": "How total cost falls from baseline to tool-loop",
+    "source": "synth_run",
+    "start_label": "Baseline total",
+    "start_value": {
+      "status": "measured",
+      "value": 17.5,
+      "source": "derived",
+      "derived_from": [
+        "cases.AUTH-01.baseline.cost_usd",
+        "cases.SEARCH-02.baseline.cost_usd",
+        "cases.MIGRATE-03.baseline.cost_usd",
+        "cases.REPORT-04.baseline.cost_usd"
+      ],
+      "formula": "sum(cost_usd over cases)",
+      "unit": "usd"
+    },
+    "end_label": "Tool-loop total",
+    "steps": [
+      {
+        "label": "Planner tokens",
+        "delta": {
+          "status": "measured",
+          "value": -2.25,
+          "source": "synth_run",
+          "unit": "usd"
+        }
+      },
+      {
+        "label": "Worker tokens",
+        "delta": {
+          "status": "measured",
+          "value": -10.48,
+          "source": "synth_run",
+          "unit": "usd"
+        }
+      },
+      {
+        "label": "Tool calls",
+        "delta": {
+          "status": "measured",
+          "value": -0.6,
+          "source": "synth_run",
+          "unit": "usd"
+        }
+      }
+    ]
+  }
+}

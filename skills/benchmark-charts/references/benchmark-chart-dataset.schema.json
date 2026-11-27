@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/benchmark-chart-dataset.schema.json",
+  "title": "BenchmarkChartDataset",
+  "description": "Per-case nested results for an eval, benchmark or A/B comparison. Pooled scores are never the headline quality figure. Every number traces to a source or a named formula. Estimates are flagged. Missing values are not_measured.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "title", "score_unit", "subunit_kind", "highlight_arm", "baseline_arm", "pass_labels", "arms", "cases", "sources"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string" },
+    "last_updated": { "type": "string" },
+    "score_unit": { "type": "string", "minLength": 1, "description": "Unit for the case-level quality headline, e.g. cases passed. Not a pooled subunit rate." },
+    "subunit_kind": { "type": "string", "minLength": 1, "description": "Name of the nested unit inside a case, e.g. test, market, item." },
+    "highlight_arm": { "type": "string", "minLength": 1 },
+    "baseline_arm": { "type": "string", "minLength": 1 },
+    "pass_labels": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "arms": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "role"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["baseline", "highlight", "comparison", "projected"] },
+          "date": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "path": { "type": "string" },
+          "url": { "type": "string" },
+          "kind": { "enum": ["measured", "synthetic", "derived", "estimate"] },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "stage_names": {
+      "type": "object",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "results"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string" },
+          "results": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": { "$ref": "#/$defs/armResult" }
+          }
+        }
+      }
+    },
+    "sums": { "$ref": "#/$defs/sums" },
+    "waterfall": { "$ref": "#/$defs/waterfall" },
+    "story_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "body"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "verdict", "source"],
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" },
+          "verdict": { "enum": ["confirmed", "inference", "unverified"] },
+          "source": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["measured", "estimate", "not_measured"] },
+        "value": { "type": ["number", "null"] },
+        "low": { "type": "number" },
+        "high": { "type": "number" },
+        "unit": { "type": "string" },
+        "source": { "type": "string" },
+        "derived_from": { "type": "array", "items": { "type": "string" } },
+        "formula": { "type": "string" },
+        "display": { "type": "string" }
+      }
+    },
+    "subunit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "passed": { "type": ["boolean", "null"] }
+      }
+    },
+    "armResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "score"],
+      "properties": {
+        "verdict": { "enum": ["pass", "fail", "incomplete", "not_measured"] },
+        "score": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["passed", "n"],
+          "properties": {
+            "passed": { "$ref": "#/$defs/metric" },
+            "n": { "$ref": "#/$defs/metric" }
+          }
+        },
+        "cost_usd": { "$ref": "#/$defs/metric" },
+        "wall_s": { "$ref": "#/$defs/metric" },
+        "tokens_by_stage": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "time_by_stage": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "cost_by_stage": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "subunits": { "type": "array", "items": { "$ref": "#/$defs/subunit" } }
+      }
+    },
+    "sums": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["note", "cost_usd", "wall_s", "cases_passed"],
+      "properties": {
+        "note": { "type": "string", "minLength": 20 },
+        "cost_usd": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "wall_s": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "cases_passed": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "subunits_passed": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "subunits_n": { "type": "object", "additionalProperties": { "$ref": "#/$defs/metric" } },
+        "cost_cut_pct": { "$ref": "#/$defs/metric" },
+        "time_cut_pct": { "$ref": "#/$defs/metric" },
+        "subunits_passed_not_a_score": { "const": true }
+      }
+    },
+    "waterfall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "source", "start_label", "start_value", "steps", "end_label"],
+      "properties": {
+        "title": { "type": "string" },
+        "source": { "type": "string" },
+        "start_label": { "type": "string" },
+        "start_value": { "$ref": "#/$defs/metric" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "delta"],
+            "properties": {
+              "label": { "type": "string" },
+              "delta": { "$ref": "#/$defs/metric" }
+            }
+          }
+        },
+        "end_label": { "type": "string" }
+      }
+    }
+  }
+}
